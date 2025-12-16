@@ -10,6 +10,7 @@ interface Props {
 const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
   const [documents, setDocuments] = useState<DocumentItem[]>([]);
   const [expandedHistory, setExpandedHistory] = useState<string | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
   useEffect(() => {
     setDocuments(StorageService.getDocuments());
@@ -65,12 +66,30 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
             )}
 
             <div className="flex flex-col space-y-2 mt-4">
-              <button className="w-full py-2 px-4 bg-corporate-800 hover:bg-corporate-900 text-white rounded-lg transition-colors flex items-center justify-center space-x-2">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                </svg>
-                <span>{language === 'en' ? 'Download Current' : '下载当前版本'}</span>
-              </button>
+              {currentVersion && (
+                <div className="flex space-x-2">
+                  <a
+                    href={`/${currentVersion.name}`}
+                    download
+                    className="flex-1 py-2 px-4 bg-corporate-800 hover:bg-corporate-900 text-white rounded-lg transition-colors flex items-center justify-center space-x-2"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                    </svg>
+                    <span>{language === 'en' ? 'Download Current' : '下载当前版本'}</span>
+                  </a>
+
+                  <button
+                    onClick={() => setPreviewUrl(`/${currentVersion.name}`)}
+                    className="py-2 px-4 border border-accent-500 text-accent-600 rounded-lg hover:bg-accent-50 transition-colors flex items-center space-x-2"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A2 2 0 0122 9.618v4.764a2 2 0 01-2.447 1.894L15 14v-4zM3 6v12a2 2 0 002 2h8l6-6V6a2 2 0 00-2-2H5a2 2 0 00-2 2z" />
+                    </svg>
+                    <span>{language === 'en' ? 'Preview' : '在线预览'}</span>
+                  </button>
+                </div>
+              )}
 
               {isAdmin && (
                 <div className="relative group">
@@ -104,12 +123,12 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
                 
                 {expandedHistory === doc.id && (
                   <ul className="mt-2 space-y-2">
-                    {history.map(h => (
-                      <li key={h.version} className="flex justify-between items-center text-xs text-slate-400 bg-slate-50 p-2 rounded">
-                        <span>v{h.version} - {h.date}</span>
-                        <a href="#" className="text-accent-500 hover:underline">{language === 'en' ? 'View' : '查看'}</a>
-                      </li>
-                    ))}
+                        {history.map(h => (
+                          <li key={h.version} className="flex justify-between items-center text-xs text-slate-400 bg-slate-50 p-2 rounded">
+                            <span>v{h.version} - {h.date}</span>
+                            <a href={`/${h.name}`} target="_blank" rel="noopener noreferrer" className="text-accent-500 hover:underline">{language === 'en' ? 'View' : '查看'}</a>
+                          </li>
+                        ))}
                   </ul>
                 )}
               </div>
@@ -117,6 +136,17 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
           </div>
         );
       })}
+          {previewUrl && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+              <div className="w-11/12 md:w-3/4 lg:w-2/3 h-4/5 bg-white rounded-lg shadow-lg overflow-hidden">
+                <div className="flex items-center justify-between p-3 border-b">
+                  <div className="text-sm font-semibold">{language === 'en' ? 'Preview' : '在线预览'}</div>
+                  <button onClick={() => setPreviewUrl(null)} className="text-slate-500 hover:text-slate-800">✕</button>
+                </div>
+                <iframe src={previewUrl} className="w-full h-full" title="Document Preview" />
+              </div>
+            </div>
+          )}
     </div>
   );
 };

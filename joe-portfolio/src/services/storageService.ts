@@ -9,7 +9,37 @@ export const getDocuments = (): DocumentItem[] => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(INITIAL_DOCUMENTS));
     return INITIAL_DOCUMENTS;
   }
-  return JSON.parse(stored);
+
+  try {
+    const parsed: DocumentItem[] = JSON.parse(stored);
+
+    // Merge any new initial documents or updates from code into stored data
+    let updated = false;
+    INITIAL_DOCUMENTS.forEach(initDoc => {
+      const idx = parsed.findIndex(d => d.id === initDoc.id);
+      if (idx === -1) {
+        parsed.push(initDoc);
+        updated = true;
+      } else {
+        const storedCurrent = parsed[idx].versions.find(v => v.isCurrent)?.name;
+        const initCurrent = initDoc.versions.find(v => v.isCurrent)?.name;
+        if (initCurrent && storedCurrent !== initCurrent) {
+          // replace versions for this doc with the initial definition (keeps intended demo files)
+          parsed[idx].versions = initDoc.versions;
+          updated = true;
+        }
+      }
+    });
+
+    if (updated) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(parsed));
+    }
+
+    return parsed;
+  } catch (e) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(INITIAL_DOCUMENTS));
+    return INITIAL_DOCUMENTS;
+  }
 };
 
 export const uploadNewVersion = (docId: string, file: File): DocumentItem[] => {

@@ -191,7 +191,8 @@ export const INITIAL_DOCUMENTS: DocumentItem[] = [
     title: { en: "Portfolio Presentation", zh: "作品集演示" },
     type: "portfolio",
     versions: [
-      { version: 1, date: "2023-09-01", name: "Portfolio_Highlights.pdf", size: "4.5 MB", isCurrent: true }
+      { version: 2, date: "2025-12-16", name: "Coursera_Certificate_ZYX.pdf", size: "0.6 MB", isCurrent: true },
+      { version: 1, date: "2023-09-01", name: "Portfolio_Highlights.pdf", size: "4.5 MB", isCurrent: false }
     ]
   },
   {
@@ -200,6 +201,15 @@ export const INITIAL_DOCUMENTS: DocumentItem[] = [
     type: "certificate",
     versions: [
       { version: 1, date: "2021-06-01", name: "Degree_Cert.pdf", size: "0.8 MB", isCurrent: true }
+    ]
+  }
+  ,
+  {
+    id: 'doc-4',
+    title: { en: "Coursera Certificate", zh: "Coursera 证书" },
+    type: "certificate",
+    versions: [
+      { version: 1, date: "2025-12-16", name: "Coursera_Certificate_ZYX.pdf", size: "0.6 MB", isCurrent: true }
     ]
   }
 ];
