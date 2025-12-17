@@ -71,6 +71,16 @@ export interface FileVersion {
 export interface DocumentItem {
   id: string;
   title: { en: string; zh: string };
-  type: 'resume' | 'certificate' | 'portfolio';
+  subtitle: { en: string; zh: string }; // New: Course Name or Issuer
+  type: 'resume' | 'certificate' | 'portfolio' | 'coursework';
+  thumbnailUrl: string; // New: For visuals
+  previewUrl?: string; // New: For online preview
   versions: FileVersion[];
+}
+
+export interface DocumentCategory {
+  id: string;
+  title: { en: string; zh: string };
+  coverImage: string;
+  items: DocumentItem[];
 }
