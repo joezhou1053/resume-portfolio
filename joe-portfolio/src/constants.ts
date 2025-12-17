@@ -181,14 +181,14 @@ export const INITIAL_DOCUMENTS: DocumentCategory[] = [
   {
     id: 'cat-resume',
     title: { en: "Professional Resume", zh: "个人简历" },
-    coverImage: "https://images.unsplash.com/photo-1586281380349-632531db7ed4?q=80&w=600&auto=format&fit=crop",
+    coverImage: "https://images.unsplash.com/photo-1559526324-593bc073d938?q=80&w=1200&auto=format&fit=crop",
     items: [
       {
         id: 'doc-resume-en',
         title: { en: "Joe Zhou - English Resume", zh: "周永祥 - 英文简历" },
         subtitle: { en: "Professional CV", zh: "专业版" },
         type: "resume",
-        thumbnailUrl: "https://images.unsplash.com/photo-1606326608606-aa0b62935f2b?q=80&w=400&auto=format&fit=crop",
+        thumbnailUrl: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=400&auto=format&fit=crop",
         versions: [
           { version: 3, date: "2023-11-01", name: "Joe_Zhou_Resume_En_v3.pdf", size: "1.2 MB", isCurrent: true },
           { version: 2, date: "2023-05-20", name: "Joe_Zhou_Resume_En_v2.pdf", size: "1.2 MB", isCurrent: false }
@@ -199,7 +199,7 @@ export const INITIAL_DOCUMENTS: DocumentCategory[] = [
         title: { en: "Joe Zhou - Chinese Resume", zh: "周永祥 - 中文简历" },
         subtitle: { en: "Professional CV", zh: "专业版" },
         type: "resume",
-        thumbnailUrl: "https://images.unsplash.com/photo-1512314889357-e157c22f938d?q=80&w=400&auto=format&fit=crop",
+        thumbnailUrl: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=400&auto=format&fit=crop",
         versions: [
           { version: 2, date: "2023-10-15", name: "Joe_Zhou_Resume_Zh_v2.pdf", size: "1.3 MB", isCurrent: true }
         ]
@@ -272,14 +272,14 @@ export const INITIAL_DOCUMENTS: DocumentCategory[] = [
   {
     id: 'cat-degree',
     title: { en: "OSU Degree Certificate", zh: "OSU 学位证书" },
-    coverImage: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=600&auto=format&fit=crop",
+    coverImage: "/osu-logo.svg",
     items: [
       {
         id: 'doc-degree-osu',
         title: { en: "Bachelor of Science", zh: "理学学士学位" },
         subtitle: { en: "The Ohio State University", zh: "颁发机构：OSU" },
         type: "certificate",
-        thumbnailUrl: "https://images.unsplash.com/photo-1635350644168-5264b3602d18?q=80&w=400&auto=format&fit=crop",
+        thumbnailUrl: "/osu-logo.svg",
         versions: [
           { version: 1, date: "2021-06-01", name: "OSU_Diploma.pdf", size: "0.8 MB", isCurrent: true }
         ]

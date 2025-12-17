@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800">
+  <defs>
+    <linearGradient id="g" x1="0" x2="1">
+      <stop offset="0" stop-color="#c00000"/>
+      <stop offset="1" stop-color="#800000"/>
+    </linearGradient>
+  </defs>
+  <rect width="100%" height="100%" fill="#fff"/>
+  <g transform="translate(100,100)">
+    <rect x="0" y="0" width="1000" height="600" rx="24" fill="url(#g)" />
+    <text x="500" y="360" font-family="Arial, Helvetica, sans-serif" font-size="220" font-weight="700" fill="#fff" text-anchor="middle">OSU</text>
+    <text x="500" y="460" font-family="Arial, Helvetica, sans-serif" font-size="40" fill="#fff" text-anchor="middle">The Ohio State University</text>
+  </g>
+</svg>

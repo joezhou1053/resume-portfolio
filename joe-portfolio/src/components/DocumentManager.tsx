@@ -100,18 +100,29 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
             {language === 'en' ? 'Back to Categories' : '返回分类'}
           </button>
           
-          <h2 className="text-2xl font-bold text-corporate-900">{activeCategory.title[language]}</h2>
+          <h2 className="text-2xl font-bold text-corporate-900 md:absolute md:left-1/2 md:transform md:-translate-x-1/2 md:z-10">
+            {activeCategory.title[language]}
+          </h2>
           
-          <div className="relative w-full md:w-64">
-             <input 
-               type="text" 
-               placeholder={language === 'en' ? "Search by course or title..." : "搜索课程或标题..."}
-               value={searchQuery}
-               onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1); }}
-               className="w-full pl-10 pr-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-accent-500 focus:border-transparent outline-none text-sm"
-             />
-             <svg className="w-4 h-4 text-slate-400 absolute left-3 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-          </div>
+          {(() => {
+            // Hide search box for categories that don't need search (resume / degree)
+            const noSearchCategories = ['cat-resume', 'cat-degree'];
+            const showSearch = !noSearchCategories.includes(activeCategory.id);
+            if (!showSearch) return null;
+
+            return (
+              <div className="relative w-full md:w-64">
+                <input
+                  type="text"
+                  placeholder={language === 'en' ? "Search by course or title..." : "搜索课程或标题..."}
+                  value={searchQuery}
+                  onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1); }}
+                  className="w-full pl-10 pr-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-accent-500 focus:border-transparent outline-none text-sm"
+                />
+                <svg className="w-4 h-4 text-slate-400 absolute left-3 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+              </div>
+            );
+          })()}
         </div>
 
         {/* Grid */}
@@ -124,7 +135,12 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
                   {/* Thumbnail Area */}
                   <div className="h-40 bg-slate-100 relative overflow-hidden">
                     {doc.thumbnailUrl ? (
-                      <img src={doc.thumbnailUrl} alt={doc.title[language]} className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500" />
+                      <img
+                        src={doc.thumbnailUrl}
+                        alt={doc.title[language]}
+                        onError={(e) => { (e.currentTarget as HTMLImageElement).src = 'https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=400&auto=format&fit=crop'; }}
+                        className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
+                      />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center bg-slate-50 text-slate-300">
                         <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
@@ -229,7 +245,12 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
         >
           {/* Background Image with Overlay */}
           <div className="absolute inset-0">
-            <img src={cat.coverImage} alt="" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+            <img
+              src={cat.coverImage}
+              alt=""
+              onError={(e) => { (e.currentTarget as HTMLImageElement).src = 'https://images.unsplash.com/photo-1496307042754-b4aa456c4a2d?q=80&w=1200&auto=format&fit=crop'; }}
+              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+            />
             <div className="absolute inset-0 bg-gradient-to-t from-corporate-900/90 to-corporate-900/40 group-hover:to-corporate-900/50 transition-colors" />
           </div>
           

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import type { Language, AppContent } from './types';
 import { CONTENT_EN, CONTENT_ZH } from './constants';
 import * as StorageService from './services/storageService';
+import { useMemo } from 'react';
 import SkillsChart from './components/SkillsChart';
 import DocumentManager from './components/DocumentManager';
 
@@ -10,11 +11,24 @@ const App: React.FC = () => {
   const [content, setContent] = useState<AppContent>(CONTENT_ZH);
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [degreeThumb, setDegreeThumb] = useState<string | null>(null);
 
   useEffect(() => {
     setContent(lang === 'en' ? CONTENT_EN : CONTENT_ZH);
     setIsAdmin(StorageService.checkAdmin());
   }, [lang]);
+
+  useEffect(() => {
+    // Try to find the OSU degree document thumbnail and set it for education card
+    try {
+      const cats = StorageService.getDocuments();
+      const degreeCat = cats.find(c => c.id === 'cat-degree');
+      const doc = degreeCat?.items.find(i => i.id === 'doc-degree-osu');
+      if (doc && 'thumbnailUrl' in doc) setDegreeThumb(doc.thumbnailUrl || null);
+    } catch (e) {
+      // ignore
+    }
+  }, []);
 
   const toggleLanguage = () => {
     setLang(prev => prev === 'en' ? 'zh' : 'en');
@@ -201,10 +215,17 @@ const App: React.FC = () => {
                 {content.education.map((edu, idx) => (
                   <div key={idx} className="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
                     <div className="flex items-center mb-4">
-                      <div className="w-12 h-12 bg-red-100 text-red-700 rounded-lg flex items-center justify-center font-bold text-xl mr-4">
-                        O
-                      </div>
-                      <div>
+                              {degreeThumb ? (
+                                <img
+                                  src={degreeThumb}
+                                  alt="degree"
+                                  onError={(e) => { (e.currentTarget as HTMLImageElement).src = 'https://images.unsplash.com/photo-1496307042754-b4aa456c4a2d?q=80&w=400&auto=format&fit=crop'; }}
+                                  className="w-12 h-12 rounded-lg object-cover mr-4"
+                                />
+                              ) : (
+                                <div className="w-12 h-12 bg-red-100 text-red-700 rounded-lg flex items-center justify-center font-bold text-xl mr-4">O</div>
+                              )}
+                              <div>
                         <h3 className="font-bold text-lg text-slate-900">{edu.school}</h3>
                         <p className="text-sm text-slate-500">{edu.degree} - {edu.major}</p>
                       </div>

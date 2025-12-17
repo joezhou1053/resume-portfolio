@@ -27,12 +27,12 @@ const SkillsChart: React.FC<Props> = ({ language }) => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
       {/* Radar Chart for Core Competencies */}
-      <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+      <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200 min-w-0">
         <h3 className="text-lg font-bold text-corporate-800 mb-6 text-center">
           {language === 'en' ? 'Competency Matrix' : '能力维度分析'}
         </h3>
         <div className="h-64 w-full">
-          <ResponsiveContainer width="100%" height="100%">
+          <ResponsiveContainer width="100%" height={256}>
             <RadarChart cx="50%" cy="50%" outerRadius="80%" data={radarData}>
               <PolarGrid stroke="#e2e8f0" />
               <PolarAngleAxis dataKey="subject" tick={{ fill: '#475569', fontSize: 12 }} />
@@ -51,12 +51,12 @@ const SkillsChart: React.FC<Props> = ({ language }) => {
       </div>
 
       {/* Bar Chart for Technical Tools */}
-      <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+      <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200 min-w-0">
         <h3 className="text-lg font-bold text-corporate-800 mb-6 text-center">
           {language === 'en' ? 'Technical Proficiency' : '技术工具熟练度'}
         </h3>
         <div className="h-64 w-full">
-          <ResponsiveContainer width="100%" height="100%">
+          <ResponsiveContainer width="100%" height={256}>
             <BarChart layout="vertical" data={toolsData} margin={{ top: 5, right: 30, left: 40, bottom: 5 }}>
               <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} stroke="#f1f5f9"/>
               <XAxis type="number" domain={[0, 100]} hide />
