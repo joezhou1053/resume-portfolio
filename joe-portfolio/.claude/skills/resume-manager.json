@@ -1,0 +1,61 @@
+{
+  "name": "resume-manager",
+  "description": "管理周永祥个人简历网站的文档。当用户说'周永祥的简历'、'帮我添加简历文档'、'管理简历'、'上传简历PDF'或任何与简历/证书/作品集管理相关的请求时，应该调用此skill。功能：自动保存PDF到public目录，更新constants.ts中的INITIAL_DOCUMENTS数组，管理文档版本，维护中英双语信息。",
+  "author": "Claude Code for Joe Zhou",
+  "version": "1.0.0",
+  "keywords": ["resume", "周永祥", "简历", "portfolio", "document-management", "证书", "文档管理", "PDF"],
+  "triggers": ["周永祥的简历", "帮我添加简历", "管理简历文档", "上传简历PDF", "添加证书", "简历管理"],
+  "wakeWord": "周永祥的简历",
+  "config": {
+    "projectPath": "C:\\Users\\64528\\Desktop\\MyResume\\joe-portfolio",
+    "publicPath": "C:\\Users\\64528\\Desktop\\MyResume\\joe-portfolio\\public",
+    "constantsPath": "C:\\Users\\64528\\Desktop\\MyResume\\joe-portfolio\\src\\constants.ts",
+    "readmeZhPath": "C:\\Users\\64528\\Desktop\\MyResume\\README.md",
+    "readmeEnPath": "C:\\Users\\64528\\Desktop\\MyResume\\README.en.md"
+  },
+  "documentTypes": {
+    "resume": {
+      "en": "Professional Resume",
+      "zh": "个人简历",
+      "categoryId": "cat-resume"
+    },
+    "portfolio": {
+      "en": "Portfolio Presentation",
+      "zh": "作品集演示",
+      "categoryId": "cat-portfolio"
+    },
+    "degree": {
+      "en": "OSU Degree Certificate",
+      "zh": "OSU 学位证书",
+      "categoryId": "cat-degree"
+    },
+    "coursera": {
+      "en": "Coursera Certificates",
+      "zh": "Coursera 职业证书",
+      "categoryId": "cat-coursera"
+    }
+  },
+  "instructions": {
+    "wakeResponse": "你好！我是周永祥的简历管理助手。我可以帮你管理简历网站中的文档和证书。\n\n请发送你要添加的PDF文件，我会引导你完成以下步骤：\n1. 确定文档类型（简历/作品集/证书）\n2. 设置文档标题（中英文）\n3. 管理版本号\n4. 自动更新代码和README\n\n准备好了吗？请发送你的PDF文件。",
+    "workflow": [
+      "接收用户发送的PDF文件",
+      "将文件保存到 public 目录",
+      "询问文档类型（简历/作品集/学位证书/Coursera证书）",
+      "询问文档标题（中英文）",
+      "询问副标题（可选）",
+      "检查现有版本号，自动递增",
+      "更新 constants.ts 中的 INITIAL_DOCUMENTS",
+      "更新 README.md 和 README.en.md"
+    ],
+    "questions": {
+      "documentType": "这个PDF是什么类型的文档？\n1. 简历 (resume)\n2. 作品集 (portfolio)\n3. 学位证书 (degree)\n4. Coursera证书 (coursera)",
+      "language": "这个简历/文档是哪个语言版本？\n1. 英文版\n2. 中文版\n3. 中英双语",
+      "titleEn": "请输入文档的英文标题（例如：Joe Zhou - English Resume）",
+      "titleZh": "请输入文档的中文标题（例如：周永祥 - 英文简历）",
+      "subtitleEn": "请输入英文副标题（可选，例如：Professional CV）",
+      "subtitleZh": "请输入中文副标题（可选，例如：专业版）",
+      "versionCheck": "检测到该文档已有版本，当前最新版本是第 {version} 版。是否要创建新版本？",
+      "confirm": "请确认信息：\n- 文档类型：{type}\n- 英文标题：{titleEn}\n- 中文标题：{titleZh}\n- 版本：{version}\n- 文件名：{filename}\n\n确认添加吗？(是/否)"
+    }
+  }
+}

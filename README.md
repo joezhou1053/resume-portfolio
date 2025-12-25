@@ -1,80 +1,87 @@
-# Joe 作品集（joe-portfolio）
+## Joe 个人简历 & 作品集（joe-portfolio）
 
-## 项目简介
-这是一个基于 Vite + React + TypeScript 的个人作品集/简历项目模版，用于在线展示个人信息和技能图表。项目使用 Tailwind CSS 做样式，结构清晰，便于扩展和部署。
+### 项目简介
 
-## 主要功能
-- 静态前端展示个人简历与项目作品
-- 技能可视化（饼图/雷达或自定义图表）
-- 文档/资源管理组件（上传/浏览/下载）
+这是周永祥（Joe Zhou）的个人在线简历与作品集网站，基于 **Vite + React + TypeScript** 构建，使用 **Tailwind CSS** 与 **Recharts** 实现现代化 UI 和技能可视化。网站支持 **中英文切换**，并内置一个文档 / 证书管理区，用于集中展示简历、作品、学位证书和 Coursera 等职业证书。
 
-## 目录结构（简化视图）
+### 主要特性
 
-```
+- **中英文双语切换**：一键在中文 / 英文页面之间切换（导航栏右上角按钮）。  
+- **职业经历时间线**：展示在中国电信福富科技的需求分析工作经历及多个项目亮点。  
+- **教育背景卡片**：展示 OSU 金融学本科学位及相关课程、荣誉。  
+- **技能可视化**：通过雷达图 + 横向柱状图展示金融、数据分析、工具熟练度等维度。  
+- **文档与证书管理**：
+  - 分类展示：简历、作品集、OSU 学位、Coursera 证书等；
+  - 支持模拟在线预览、下载提示；
+  - 通过本地存储（localStorage）记录文档信息。
+- **“仅本人可编辑”模式（Admin 模式）**：
+  - 页脚有一个隐蔽的 `π` 按钮可切换管理员模式；
+  - 管理员模式下可以为文档上传新的版本（仅保存在当前浏览器，方便演示“版本管理”概念）。
+
+### 技术栈
+
+- **前端框架**：React 19 + TypeScript  
+- **构建工具**：Vite  
+- **样式**：Tailwind CSS，自定义 `corporate-*`、`accent-*` 等主题色  
+- **数据可视化**：Recharts（雷达图、柱状图）  
+- **状态与存储**：React Hooks（`useState` / `useEffect`）+ 本地存储封装 `storageService.ts`
+
+### 目录结构（简化）
+
+```bash
 joe-portfolio/
-  ├─ public/                 # 静态资源（favicon、静态图片等）
+  ├─ public/                 # 静态资源（OSU logo、证书 PDF、静态图片等）
   ├─ src/
-  │   ├─ assets/             # 图片、字体等静态资源
-  │   ├─ components/         # React 组件
-  │   │   ├─ DocumentManager.tsx
-  │   │   └─ SkillsChart.tsx
-  │   ├─ services/           # 封装的服务（如本地存储）
-  │   │   └─ storageService.ts
-  │   ├─ App.tsx
+  │   ├─ assets/             # 额外图片、图标
+  │   ├─ components/
+  │   │   ├─ DocumentManager.tsx   # 文档/证书管理 UI 与分页、搜索等
+  │   │   └─ SkillsChart.tsx       # 技能可视化图表
+  │   ├─ services/
+  │   │   └─ storageService.ts     # 基于 localStorage 的数据读写与版本管理
+  │   ├─ constants.ts        # 中英文文案、经历、教育、文档初始数据
+  │   ├─ App.tsx             # 页面整体布局 / 导航 / 各个 Section
   │   ├─ main.tsx
   │   └─ index.css
   ├─ index.html
   ├─ package.json
   ├─ vite.config.ts
   ├─ tailwind.config.js
-  └─ tsconfig.json
+  └─ tsconfig*.json
 ```
 
-## 关键文件说明
-- `index.html`：应用入口页面。  
-- `package.json`：依赖与脚本（运行、构建等）。  
-- `vite.config.ts`：Vite 配置。  
-- `src/main.tsx`：React 应用挂载入口。  
-- `src/App.tsx`：主视图容器。  
-- `src/components/DocumentManager.tsx`：文档/资源管理相关组件。  
-- `src/components/SkillsChart.tsx`：技能图表组件。  
-- `src/services/storageService.ts`：本地存储封装（例如保存设置或上传记录）。
+### 本地运行与构建
 
-## 本地运行（常用步骤）
-
-1. 安装依赖：
+在 `joe-portfolio` 目录下：
 
 ```bash
-npm install
+npm install          # 安装依赖
+npm run dev          # 启动开发环境（含 HMR）
+npm run build        # 生产构建（先 tsc，再 vite build）
+npm run preview      # 本地预览构建结果
 ```
 
-2. 启动开发服务器（热重载）：
+脚本定义可在 `package.json` 的 `scripts` 中查看和修改。
 
-```bash
-npm run dev
-```
+### 如何修改为你自己的简历
 
-3. 本地预览构建产物：
+- **文字内容 / 经历 / 项目**：  
+  - 集中定义在 `src/constants.ts` 中的 `CONTENT_ZH` 和 `CONTENT_EN`；  
+  - 修改其中的 `hero`（抬头、自我介绍）、`experience`（工作经历）、`education`（教育背景）、`skills`（硬技能 / 软技能 / 语言）即可。
+- **文档和证书列表**：  
+  - 在 `constants.ts` 的 `INITIAL_DOCUMENTS` 中维护；  
+  - 每个分类（简历、作品集、证书等）以及其下 `versions` 数组可按你自己的文件名与日期调整。
+- **联系信息 / Footer**：  
+  - 在 `App.tsx` 底部 Footer 中，可以替换姓名、邮箱、LinkedIn 链接等。
+- **配色与样式**：  
+  - Tailwind 配色主要集中在 `tailwind.config.js` 中的自定义颜色；
+  - 想要更“商务”或“科技”风格，可以在该文件中统一调整色值，再运行 `npm run dev` 查看效果。
 
-```bash
-npm run build
-npm run preview
-```
+### 部署建议
 
-（如果脚本名不同，请检查 `package.json` 中的 `scripts`）
+- 可以将 `npm run build` 生成的 `dist/` 目录部署到任意静态托管平台，例如：  
+  - GitHub Pages  
+  - Netlify  
+  - Vercel  
+- 若放在子路径下（如 GitHub Pages 仓库名路径），记得按需调整 `vite.config.ts` 中的 `base` 配置。
 
-## 开发建议
-- 组件划分：将独立功能拆成更小的组件，方便复用与测试。  
-- 样式：项目已使用 Tailwind，建议通过 `tailwind.config.js` 统一颜色与间距。  
-- 数据：若未来需要持久化或多人协作，考虑加入轻量后端或使用第三方托管（如 GitHub Pages / Netlify / Vercel）。
-
-## 如何定制简历内容
-- 个人信息/项目数据通常在 `src` 下某个常量文件（如 `constants.ts`）或组件的 props 中维护，直接替换或扩展数组即可。  
-- 图片与静态资源放到 `public/` 或 `src/assets/`，组件中按需引用。
-
-## 其他/联系方式
-如需我帮你：
-- 将 README 翻成英文版；
-- 增加部署脚本（GitHub Actions）；
-- 改造为可编辑的简历 CMS；
-请告诉我你想做的下一步。
+如需把本项目进一步改造成在线可编辑的“简历 CMS”、接入后端或缩减为“只展示简历的一页式 Landing Page”，可以在此基础上继续扩展。

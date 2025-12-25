@@ -20,6 +20,27 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
     setCategories(StorageService.getDocuments());
   }, []);
 
+  // Get file URL for download/preview
+  const getFileUrl = (doc: DocumentItem) => {
+    const currentVersion = doc.versions.find(v => v.isCurrent);
+    if (!currentVersion) return null;
+    return `/${currentVersion.name}`;
+  };
+
+  // Handle download
+  const handleDownload = (doc: DocumentItem) => {
+    const url = getFileUrl(doc);
+    if (!url) return;
+
+    const currentVersion = doc.versions.find(v => v.isCurrent);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = currentVersion?.name || 'document.pdf';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>, docId: string) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
@@ -49,27 +70,36 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
 
   // 1. Online Preview Modal
   if (previewDoc) {
+    const fileUrl = getFileUrl(previewDoc);
+
     return (
       <div className="fixed inset-0 z-[60] bg-slate-900/90 flex flex-col animate-fade-in p-4 md:p-8">
         <div className="flex justify-between items-center mb-4 text-white">
           <h3 className="text-xl font-bold">{previewDoc.title[language]} - {language === 'en' ? 'Preview' : '在线预览'}</h3>
-          <button onClick={() => setPreviewDoc(null)} className="p-2 hover:bg-white/10 rounded-full transition-colors">
-            <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
-          </button>
-        </div>
-        <div className="flex-grow bg-white rounded-lg shadow-2xl overflow-hidden flex items-center justify-center relative">
-          {/* Mock Preview Content */}
-          <div className="text-center p-8">
-             <div className="mb-6 mx-auto w-24 h-24 bg-slate-100 rounded-full flex items-center justify-center text-slate-400">
-               <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
-             </div>
-             <p className="text-slate-500 mb-2">{language === 'en' ? 'This is a preview simulation for:' : '此为模拟预览界面：'}</p>
-             <h2 className="text-2xl font-bold text-slate-800 mb-4">{previewDoc.title[language]}</h2>
-             <p className="text-sm text-slate-400">File: {previewDoc.versions.find(v => v.isCurrent)?.name}</p>
-             <button className="mt-8 px-6 py-2 bg-accent-600 text-white rounded hover:bg-accent-700 transition-colors" onClick={() => setPreviewDoc(null)}>
-                {language === 'en' ? 'Close Preview' : '关闭预览'}
-             </button>
+          <div className="flex gap-2">
+            <button
+              onClick={() => handleDownload(previewDoc)}
+              className="px-4 py-2 bg-accent-600 hover:bg-accent-700 rounded-lg transition-colors text-sm font-medium"
+            >
+              {language === 'en' ? 'Download' : '下载'}
+            </button>
+            <button onClick={() => setPreviewDoc(null)} className="p-2 hover:bg-white/10 rounded-full transition-colors">
+              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
           </div>
+        </div>
+        <div className="flex-grow bg-white rounded-lg shadow-2xl overflow-hidden relative">
+          {fileUrl ? (
+            <iframe
+              src={fileUrl}
+              className="w-full h-full"
+              title="PDF Preview"
+            />
+          ) : (
+            <div className="flex items-center justify-center h-full">
+              <p className="text-slate-500">{language === 'en' ? 'File not found' : '文件未找到'}</p>
+            </div>
+          )}
         </div>
       </div>
     );
@@ -162,16 +192,16 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
                     
                     <div className="mt-auto pt-4 space-y-2">
                        <div className="grid grid-cols-2 gap-2">
-                         <button 
+                         <button
                             onClick={() => setPreviewDoc(doc)}
                             className="flex items-center justify-center px-3 py-2 bg-slate-50 text-slate-700 rounded hover:bg-slate-100 transition-colors text-xs font-medium border border-slate-200"
                          >
                            <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
                            {language === 'en' ? 'Preview' : '预览'}
                          </button>
-                         <button 
+                         <button
                             className="flex items-center justify-center px-3 py-2 bg-corporate-800 text-white rounded hover:bg-corporate-900 transition-colors text-xs font-medium"
-                            onClick={() => alert(language === 'en' ? `Downloading ${currentVersion?.name}...` : `正在下载 ${currentVersion?.name}...`)}
+                            onClick={() => handleDownload(doc)}
                          >
                            <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
                            {language === 'en' ? 'Download' : '下载'}

@@ -190,7 +190,8 @@ export const INITIAL_DOCUMENTS: DocumentCategory[] = [
         type: "resume",
         thumbnailUrl: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=400&auto=format&fit=crop",
         versions: [
-          { version: 3, date: "2023-11-01", name: "Joe_Zhou_Resume_En_v3.pdf", size: "1.2 MB", isCurrent: true },
+          { version: 4, date: "2025-12-25", name: "Joe_Zhou_Resume_En_v4.pdf", size: "1.3 MB", isCurrent: true },
+          { version: 3, date: "2023-11-01", name: "Joe_Zhou_Resume_En_v3.pdf", size: "1.2 MB", isCurrent: false },
           { version: 2, date: "2023-05-20", name: "Joe_Zhou_Resume_En_v2.pdf", size: "1.2 MB", isCurrent: false }
         ]
       },
@@ -369,6 +370,16 @@ export const INITIAL_DOCUMENTS: DocumentCategory[] = [
         thumbnailUrl: "https://images.unsplash.com/photo-1569396116180-210c182bedb8?q=80&w=400&auto=format&fit=crop",
         versions: [
           { version: 1, date: "2022-06-01", name: "SQL_Cert.pdf", size: "1.0 MB", isCurrent: true }
+        ]
+      },
+      {
+        id: 'cert-edhec-investment',
+        title: { en: "Investment Management with Python and Machine Learning", zh: "Python与机器学习在投资管理中的应用" },
+        subtitle: { en: "EDHEC Business School", zh: "机构: EDHEC 商学院" },
+        type: "certificate",
+        thumbnailUrl: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=400&auto=format&fit=crop",
+        versions: [
+          { version: 1, date: "2024-12-19", name: "EDHEC_Investment_Management_Cert.pdf", size: "1.2 MB", isCurrent: true }
         ]
       }
     ]
