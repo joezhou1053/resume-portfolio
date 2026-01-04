@@ -15,6 +15,7 @@ const ITEMS_PER_PAGE = 6;
 const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
   const [categories, setCategories] = useState<DocumentCategory[]>([]);
   const [activeCategory, setActiveCategory] = useState<DocumentCategory | null>(null);
+  const [activeDocument, setActiveDocument] = useState<DocumentItem | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [previewDoc, setPreviewDoc] = useState<DocumentItem | null>(null);
@@ -328,6 +329,123 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
     );
   }
 
+  // 3. Certificate/Document Detail View (with assets)
+  if (activeDocument) {
+    return (
+      <div className="animate-fade-in min-h-[600px]">
+        <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+          <button onClick={() => setActiveDocument(null)} className="flex items-center text-slate-500 hover:text-corporate-800 transition-colors font-medium">
+            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+            {language === 'en' ? 'Back to List' : '返回列表'}
+          </button>
+          <h2 className="text-2xl font-bold text-corporate-900">{activeDocument.title[language]}</h2>
+          <div className="w-64"></div>
+        </div>
+
+        <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
+          {/* Document Header */}
+          <div className="p-8 bg-gradient-to-r from-corporate-800 to-corporate-900 text-white">
+            <div className="flex items-center space-x-4">
+              <div className="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center">
+                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+              </div>
+              <div>
+                <h3 className="text-2xl font-bold">{activeDocument.title[language]}</h3>
+                <p className="text-slate-300">{activeDocument.subtitle[language]}</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Assets Section */}
+          <div className="p-8">
+            <h4 className="text-lg font-bold text-slate-900 mb-6 flex items-center">
+              <svg className="w-5 h-5 mr-2 text-accent-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" /></svg>
+              {language === 'en' ? 'Document Assets' : '文档资源'}
+            </h4>
+
+            {activeDocument.assets && activeDocument.assets.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {activeDocument.assets.map(asset => (
+                  <div key={asset.id} className="group bg-white border border-slate-100 rounded-2xl p-5 hover:border-accent-200 hover:shadow-lg transition-all">
+                    <div className="flex items-start justify-between mb-4">
+                      <div className="bg-slate-50 p-3 rounded-xl group-hover:bg-accent-50 transition-colors">
+                        {getAssetIcon(asset.type)}
+                      </div>
+                      <div className="flex space-x-1">
+                        {asset.url && asset.type === 'image' && (
+                          <button
+                            onClick={() => setPreviewAsset(asset)}
+                            className="p-2 text-slate-400 hover:text-accent-600 hover:bg-accent-50 rounded-lg transition-all"
+                            title={language === 'en' ? 'Quick Look' : '快速预览'}
+                          >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+                          </button>
+                        )}
+                        {asset.url && (
+                          <button
+                            onClick={() => {
+                              const extension = asset.type === 'image' ? 'jpg' :
+                                              asset.type === 'code' ? 'tsx' : asset.type;
+                              handleDownload(asset.url, `${asset.name[language]}.${extension}`);
+                            }}
+                            className="p-2 text-slate-400 hover:text-corporate-800 hover:bg-slate-100 rounded-lg transition-all"
+                            title={language === 'en' ? 'Download' : '下载'}
+                          >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                    <div>
+                      <h5 className="font-bold text-slate-800 mb-1 group-hover:text-accent-700 transition-colors">{asset.name[language]}</h5>
+                      <p className="text-sm text-slate-500 mb-3">{asset.description[language]}</p>
+                      <div className="flex justify-between items-center text-xs text-slate-400">
+                        <span className="font-bold uppercase">{asset.type}</span>
+                        <span className="font-medium">{asset.size}</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-12 bg-slate-50 rounded-2xl">
+                <svg className="w-16 h-16 text-slate-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" /></svg>
+                <p className="text-slate-500">{language === 'en' ? 'No additional assets available' : '暂无额外资源'}</p>
+              </div>
+            )}
+          </div>
+
+          {/* Download Current Version */}
+          {activeDocument.versions.length > 0 && (
+            <div className="px-8 pb-8">
+              <div className="bg-corporate-50 rounded-xl p-6 border border-corporate-100">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h5 className="font-bold text-corporate-900 mb-1">{language === 'en' ? 'Current Version' : '当前版本'}</h5>
+                    <p className="text-sm text-slate-500">v{activeDocument.versions.find(v => v.isCurrent)?.version} - {activeDocument.versions.find(v => v.isCurrent)?.date}</p>
+                  </div>
+                  <button
+                    onClick={() => {
+                      const currentVersion = activeDocument.versions.find(v => v.isCurrent);
+                      if (currentVersion) {
+                        const fileUrl = `/${currentVersion.name}`;
+                        handleDownload(fileUrl, currentVersion.name);
+                      }
+                    }}
+                    className="px-6 py-3 bg-corporate-800 text-white rounded-xl hover:bg-corporate-900 transition-all font-semibold shadow-lg flex items-center space-x-2"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                    <span>{language === 'en' ? 'Download Document' : '下载文档'}</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
+
   // Fallback to Category View or General Detail View
   if (activeCategory) {
     const filteredItems = activeCategory.items.filter(item => {
@@ -368,8 +486,15 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
                   <p className="text-xs font-semibold text-accent-600 uppercase tracking-wider mb-1">{doc.subtitle[language]}</p>
                   <h3 className="font-bold text-slate-800 mb-4 line-clamp-2">{doc.title[language]}</h3>
                   <div className="mt-auto grid grid-cols-2 gap-2">
-                    <button onClick={() => setPreviewDoc(doc)} className="flex items-center justify-center px-3 py-2 bg-slate-50 text-slate-700 rounded-lg hover:bg-slate-100 transition-colors text-xs font-medium border border-slate-200">
-                      {language === 'en' ? 'Preview' : '预览'}
+                    <button onClick={() => {
+                      // If document has assets, open detail view, otherwise open preview modal
+                      if (doc.assets && doc.assets.length > 0) {
+                        setActiveDocument(doc);
+                      } else {
+                        setPreviewDoc(doc);
+                      }
+                    }} className="flex items-center justify-center px-3 py-2 bg-slate-50 text-slate-700 rounded-lg hover:bg-slate-100 transition-colors text-xs font-medium border border-slate-200">
+                      {language === 'en' ? (doc.assets && doc.assets.length > 0 ? 'View Details' : 'Preview') : (doc.assets && doc.assets.length > 0 ? '查看详情' : '预览')}
                     </button>
                     <button
                       onClick={() => {

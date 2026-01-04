@@ -294,6 +294,9 @@ export const INITIAL_DOCUMENTS: DocumentCategory[] = [
         subtitle: { en: "The Ohio State University", zh: "颁发机构：OSU" },
         type: "certificate",
         thumbnailUrl: "/osu-logo.svg",
+        assets: [
+          { id: 'osu-diploma-img', name: { en: "Graduation Certificate", zh: "毕业证书" }, type: "image", size: "2.5 MB", description: { en: "Official graduation certificate from The Ohio State University", zh: "俄亥俄州立大学正式毕业证书" }, url: "/osu-diploma.jpg" }
+        ],
         versions: [{ version: 1, date: "2021-06-01", name: "OSU_Diploma.pdf", size: "0.8 MB", isCurrent: true }]
       },
       {
