@@ -1,5 +1,41 @@
 export type Language = 'en' | 'zh';
 
+export interface ProjectAsset {
+  id: string;
+  name: { en: string; zh: string };
+  type: 'pdf' | 'excel' | 'word' | 'tableau' | 'python' | 'notebook' | 'visio';
+  size: string;
+  description: { en: string; zh: string };
+}
+
+export interface DocumentItem {
+  id: string;
+  title: { en: string; zh: string };
+  subtitle: { en: string; zh: string };
+  type: 'resume' | 'certificate' | 'portfolio' | 'coursework';
+  thumbnailUrl: string;
+  projectSummary?: { en: string; zh: string }; // For portfolio items
+  highlights?: { en: string[]; zh: string[] }; // Key achievements for HR
+  assets?: ProjectAsset[]; // Sub-files for portfolio
+  versions: FileVersion[];
+}
+
+export interface FileVersion {
+  version: number;
+  date: string;
+  name: string;
+  size: string;
+  isCurrent: boolean;
+}
+
+export interface DocumentCategory {
+  id: string;
+  title: { en: string; zh: string };
+  coverImage: string;
+  items: DocumentItem[];
+}
+
+// Rest of the existing interfaces (Project, Experience, etc.) remain same
 export interface Project {
   name: string;
   role: string;
@@ -58,29 +94,4 @@ export interface AppContent {
     soft: string[];
     languages: string[];
   };
-}
-
-export interface FileVersion {
-  version: number;
-  date: string;
-  name: string;
-  size: string;
-  isCurrent: boolean;
-}
-
-export interface DocumentItem {
-  id: string;
-  title: { en: string; zh: string };
-  subtitle: { en: string; zh: string }; // New: Course Name or Issuer
-  type: 'resume' | 'certificate' | 'portfolio' | 'coursework';
-  thumbnailUrl: string; // New: For visuals
-  previewUrl?: string; // New: For online preview
-  versions: FileVersion[];
-}
-
-export interface DocumentCategory {
-  id: string;
-  title: { en: string; zh: string };
-  coverImage: string;
-  items: DocumentItem[];
 }

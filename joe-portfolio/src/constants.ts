@@ -20,7 +20,7 @@ export const CONTENT_EN: AppContent = {
     education: "Education",
     skills: "Technical & Professional Competency",
     portfolio: "Project Highlights",
-    documents: "Document Management"
+    documents: "Documents & Certifications"
   },
   experience: [
     {
@@ -95,7 +95,7 @@ export const CONTENT_ZH: AppContent = {
     skills: "技能分析",
     portfolio: "作品集",
     contact: "联系我",
-    downloadResume: "下载简历"
+    downloadResume: "文档中心"
   },
   hero: {
     greeting: "你好，我是周永祥 (Joe Zhou)",
@@ -176,114 +176,93 @@ export const CONTENT_ZH: AppContent = {
   }
 };
 
-// Using high-quality placeholder images from Unsplash source
 export const INITIAL_DOCUMENTS: DocumentCategory[] = [
   {
     id: 'cat-resume',
     title: { en: "Professional Resume", zh: "个人简历" },
-    coverImage: "https://images.unsplash.com/photo-1559526324-593bc073d938?q=80&w=1200&auto=format&fit=crop",
+    coverImage: "https://images.unsplash.com/photo-1586281380349-632531db7ed4?q=80&w=600&auto=format&fit=crop",
     items: [
       {
         id: 'doc-resume-en',
         title: { en: "Joe Zhou - English Resume", zh: "周永祥 - 英文简历" },
         subtitle: { en: "Professional CV", zh: "专业版" },
         type: "resume",
-        thumbnailUrl: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=400&auto=format&fit=crop",
-        versions: [
-          { version: 4, date: "2025-12-25", name: "Joe_Zhou_Resume_En_v4.pdf", size: "1.3 MB", isCurrent: true },
-          { version: 3, date: "2023-11-01", name: "Joe_Zhou_Resume_En_v3.pdf", size: "1.2 MB", isCurrent: false },
-          { version: 2, date: "2023-05-20", name: "Joe_Zhou_Resume_En_v2.pdf", size: "1.2 MB", isCurrent: false }
-        ]
+        thumbnailUrl: "https://images.unsplash.com/photo-1606326608606-aa0b62935f2b?q=80&w=400&auto=format&fit=crop",
+        versions: [{ version: 3, date: "2023-11-01", name: "Joe_Zhou_Resume_En_v3.pdf", size: "1.2 MB", isCurrent: true }]
       },
       {
         id: 'doc-resume-zh',
         title: { en: "Joe Zhou - Chinese Resume", zh: "周永祥 - 中文简历" },
         subtitle: { en: "Professional CV", zh: "专业版" },
         type: "resume",
-        thumbnailUrl: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=400&auto=format&fit=crop",
-        versions: [
-          { version: 2, date: "2023-10-15", name: "Joe_Zhou_Resume_Zh_v2.pdf", size: "1.3 MB", isCurrent: true }
-        ]
+        thumbnailUrl: "https://images.unsplash.com/photo-1512314889357-e157c22f938d?q=80&w=400&auto=format&fit=crop",
+        versions: [{ version: 2, date: "2023-10-15", name: "Joe_Zhou_Resume_Zh_v2.pdf", size: "1.3 MB", isCurrent: true }]
       }
     ]
   },
   {
     id: 'cat-portfolio',
     title: { en: "Portfolio Presentation", zh: "作品集演示" },
-    coverImage: "https://images.unsplash.com/photo-1542626991-cbc4e32524cc?q=80&w=600&auto=format&fit=crop",
+    coverImage: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=600&auto=format&fit=crop",
     items: [
       {
-        id: 'port-1',
-        title: { en: "Options Strategy Report", zh: "期权策略分析报告" },
-        subtitle: { en: "FIN 4221 - Investments", zh: "课程: 投资学" },
-        type: "portfolio",
-        thumbnailUrl: "https://images.unsplash.com/photo-1611974765270-ca12586343bb?q=80&w=400&auto=format&fit=crop",
-        versions: [{ version: 1, date: "2021-04-10", name: "Options_Analysis.pdf", size: "3.5 MB", isCurrent: true }]
-      },
-      {
-        id: 'port-2',
-        title: { en: "DCF Valuation Model", zh: "DCF 现金流折现模型" },
-        subtitle: { en: "FIN 4211 - Corp Finance", zh: "课程: 公司金融" },
-        type: "portfolio",
-        thumbnailUrl: "https://images.unsplash.com/photo-1543286386-713df548e9cc?q=80&w=400&auto=format&fit=crop",
-        versions: [{ version: 1, date: "2020-11-20", name: "Valuation_Model.xlsx", size: "1.8 MB", isCurrent: true }]
-      },
-      {
-        id: 'port-3',
-        title: { en: "Business Requirements Spec", zh: "商业需求规格说明书(BRD)" },
-        subtitle: { en: "China Telecom Project", zh: "中国电信项目" },
+        id: 'port-brd-telecom',
+        title: { en: "Business Requirements Spec (BRD)", zh: "商业需求规格说明书 (BRD)" },
+        subtitle: { en: "China Telecom Project", zh: "项目：中国电信" },
         type: "portfolio",
         thumbnailUrl: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?q=80&w=400&auto=format&fit=crop",
-        versions: [{ version: 1, date: "2022-03-15", name: "Project_BRD_Sample.pdf", size: "2.1 MB", isCurrent: true }]
+        projectSummary: {
+          en: "Comprehensive digital transformation for China Telecom's capital expenditure tracking system.",
+          zh: "针对中国电信资本开支跟踪系统的全面数字化转型方案，涵盖全流程需求闭环管理。"
+        },
+        highlights: {
+          en: ["Streamlined 12+ complex approval workflows", "Reduced reporting latency by 30%", "Ensured 100% requirements traceability"],
+          zh: ["梳理并优化12个以上的复杂审批流程", "报表生成延迟降低30%", "实现100%需求可追溯性"]
+        },
+        assets: [
+          { id: 'a1', name: { en: "Main BRD Document", zh: "核心 BRD 文档" }, type: "pdf", size: "2.5 MB", description: { en: "The complete requirements specification.", zh: "完整的需求规格说明书。" } },
+          { id: 'a2', name: { en: "Workflow Visio Diagrams", zh: "业务流程 Visio 图集" }, type: "visio", size: "1.8 MB", description: { en: "End-to-end business process models.", zh: "端到端的业务流程模型。" } },
+          { id: 'a3', name: { en: "User Manual Draft", zh: "用户操作手册草案" }, type: "word", size: "4.2 MB", description: { en: "Instructional guide for system end-users.", zh: "针对系统最终用户的操作指南。" } },
+          { id: 'a4', name: { en: "Traceability Matrix", zh: "需求跟踪矩阵" }, type: "excel", size: "0.8 MB", description: { en: "Excel-based RTM for QA and Dev tracking.", zh: "基于 Excel 的 RTM 跟踪表。" } }
+        ],
+        versions: [{ version: 2, date: "2023-03-15", name: "Telecom_Project_Bundle.zip", size: "9.3 MB", isCurrent: true }]
       },
       {
-        id: 'port-4',
+        id: 'port-tableau-dash',
         title: { en: "Data Visualization Dashboard", zh: "数据可视化仪表盘" },
-        subtitle: { en: "Tableau Sample", zh: "Tableau 案例" },
+        subtitle: { en: "Tableau Sample", zh: "项目：Tableau 案例" },
         type: "portfolio",
         thumbnailUrl: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=400&auto=format&fit=crop",
-        versions: [{ version: 1, date: "2023-01-10", name: "Dashboard_Screenshot.png", size: "1.5 MB", isCurrent: true }]
-      },
-      {
-        id: 'port-5',
-        title: { en: "Market Research Slides", zh: "市场调研 PPT" },
-        subtitle: { en: "BUS 3200", zh: "课程: 商业分析" },
-        type: "portfolio",
-        thumbnailUrl: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=400&auto=format&fit=crop",
-        versions: [{ version: 1, date: "2021-02-15", name: "Market_Research.pptx", size: "5.2 MB", isCurrent: true }]
-      },
-      {
-        id: 'port-6',
-        title: { en: "Python Trading Algo", zh: "Python 交易算法演示" },
-        subtitle: { en: "Personal Project", zh: "个人项目" },
-        type: "portfolio",
-        thumbnailUrl: "https://images.unsplash.com/photo-1642543492481-44e81e3914a7?q=80&w=400&auto=format&fit=crop",
-        versions: [{ version: 1, date: "2023-08-01", name: "Algo_Snippet.py", size: "0.2 MB", isCurrent: true }]
-      },
-      {
-        id: 'port-7',
-        title: { en: "SQL Audit Scripts", zh: "SQL 审计脚本合集" },
-        subtitle: { en: "Data Auditing", zh: "数据稽核" },
-        type: "portfolio",
-        thumbnailUrl: "https://images.unsplash.com/photo-1569396116180-210c182bedb8?q=80&w=400&auto=format&fit=crop",
-        versions: [{ version: 1, date: "2022-11-20", name: "Audit_Queries.sql", size: "0.5 MB", isCurrent: true }]
+        projectSummary: {
+          en: "Advanced monitoring dashboard for construction progress and safety management.",
+          zh: "用于施工进度监控和安全管理的综合数据可视化面板，支持多维度实时穿透。"
+        },
+        highlights: {
+          en: ["Interactive KPI tracking", "Automated data cleaning with Python", "Real-time construction site monitoring"],
+          zh: ["交互式 KPI 跟踪", "利用 Python 实现自动化数据清洗", "实时施工现场监控分析"]
+        },
+        assets: [
+          { id: 't1', name: { en: "Tableau Workbook (.twbx)", zh: "Tableau 工作簿 (.twbx)" }, type: "tableau", size: "12.4 MB", description: { en: "The interactive visualization source file.", zh: "交互式可视化源文件。" } },
+          { id: 't2', name: { en: "Data Cleaning Script", zh: "数据清洗 Python 脚本" }, type: "python", size: "0.2 MB", description: { en: "Automated ETL process for raw datasets.", zh: "针对原始数据集的自动化 ETL 流程。" } },
+          { id: 't3', name: { en: "Exploratory Analysis", zh: "探索性数据分析 (EDA)" }, type: "notebook", size: "3.5 MB", description: { en: "Jupyter Notebook showing data logic.", zh: "展示数据逻辑的 Jupyter Notebook。" } },
+          { id: 't4', name: { en: "Data Dictionary", zh: "数据字典说明" }, type: "excel", size: "0.5 MB", description: { en: "Definitions for all data fields used.", zh: "所用数据字段的详细定义说明。" } }
+        ],
+        versions: [{ version: 1, date: "2023-01-10", name: "Tableau_Case_Study.zip", size: "16.6 MB", isCurrent: true }]
       }
     ]
   },
   {
     id: 'cat-degree',
     title: { en: "OSU Degree Certificate", zh: "OSU 学位证书" },
-    coverImage: "/osu-logo.svg",
+    coverImage: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=600&auto=format&fit=crop",
     items: [
       {
         id: 'doc-degree-osu',
         title: { en: "Bachelor of Science", zh: "理学学士学位" },
         subtitle: { en: "The Ohio State University", zh: "颁发机构：OSU" },
         type: "certificate",
-        thumbnailUrl: "/osu-logo.svg",
-        versions: [
-          { version: 1, date: "2021-06-01", name: "OSU_Diploma.pdf", size: "0.8 MB", isCurrent: true }
-        ]
+        thumbnailUrl: "https://images.unsplash.com/photo-1635350644168-5264b3602d18?q=80&w=400&auto=format&fit=crop",
+        versions: [{ version: 1, date: "2021-06-01", name: "OSU_Diploma.pdf", size: "0.8 MB", isCurrent: true }]
       },
       {
         id: 'doc-trans-osu',
@@ -291,9 +270,7 @@ export const INITIAL_DOCUMENTS: DocumentCategory[] = [
         subtitle: { en: "The Ohio State University", zh: "颁发机构：OSU" },
         type: "certificate",
         thumbnailUrl: "https://images.unsplash.com/photo-1596495577886-d920f1fb7238?q=80&w=400&auto=format&fit=crop",
-        versions: [
-          { version: 1, date: "2021-06-15", name: "OSU_Transcript.pdf", size: "1.1 MB", isCurrent: true }
-        ]
+        versions: [{ version: 1, date: "2021-06-15", name: "OSU_Transcript.pdf", size: "1.1 MB", isCurrent: true }]
       }
     ]
   },
@@ -308,79 +285,7 @@ export const INITIAL_DOCUMENTS: DocumentCategory[] = [
         subtitle: { en: "Google / Coursera", zh: "机构: Google" },
         type: "certificate",
         thumbnailUrl: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=400&auto=format&fit=crop",
-        versions: [
-          { version: 1, date: "2023-08-15", name: "Google_Data_Cert.pdf", size: "1.5 MB", isCurrent: true }
-        ]
-      },
-      {
-        id: 'cert-python-finance',
-        title: { en: "Python for Finance", zh: "Python 金融应用" },
-        subtitle: { en: "Yale University", zh: "机构: 耶鲁大学" },
-        type: "certificate",
-        thumbnailUrl: "https://images.unsplash.com/photo-1611974765270-ca12586343bb?q=80&w=400&auto=format&fit=crop",
-        versions: [
-          { version: 1, date: "2022-12-01", name: "Python_Finance_Cert.pdf", size: "1.1 MB", isCurrent: true }
-        ]
-      },
-      {
-        id: 'cert-fin-markets',
-        title: { en: "Financial Markets", zh: "金融市场基础" },
-        subtitle: { en: "Yale University", zh: "机构: 耶鲁大学" },
-        type: "certificate",
-        thumbnailUrl: "https://images.unsplash.com/photo-1642543492481-44e81e3914a7?q=80&w=400&auto=format&fit=crop",
-        versions: [
-          { version: 1, date: "2022-10-01", name: "Fin_Markets_Cert.pdf", size: "0.9 MB", isCurrent: true }
-        ]
-      },
-      {
-        id: 'cert-business-stats',
-        title: { en: "Business Statistics", zh: "商业统计学" },
-        subtitle: { en: "Rice University", zh: "机构: 莱斯大学" },
-        type: "certificate",
-        thumbnailUrl: "https://images.unsplash.com/photo-1543286386-713df548e9cc?q=80&w=400&auto=format&fit=crop",
-        versions: [
-          { version: 1, date: "2023-01-20", name: "Business_Stats.pdf", size: "1.0 MB", isCurrent: true }
-        ]
-      },
-       {
-        id: 'cert-excel-advanced',
-        title: { en: "Excel Skills for Business", zh: "商务 Excel 高级技能" },
-        subtitle: { en: "Macquarie University", zh: "机构: 麦考瑞大学" },
-        type: "certificate",
-        thumbnailUrl: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=400&auto=format&fit=crop",
-        versions: [
-          { version: 1, date: "2021-09-10", name: "Excel_Expert.pdf", size: "1.2 MB", isCurrent: true }
-        ]
-      },
-       {
-        id: 'cert-tableau',
-        title: { en: "Data Visualization with Tableau", zh: "Tableau 数据可视化" },
-        subtitle: { en: "UC Davis", zh: "机构: 加州大学戴维斯分校" },
-        type: "certificate",
-        thumbnailUrl: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=400&auto=format&fit=crop",
-        versions: [
-          { version: 1, date: "2022-04-15", name: "Tableau_Cert.pdf", size: "1.4 MB", isCurrent: true }
-        ]
-      },
-       {
-        id: 'cert-sql',
-        title: { en: "SQL for Data Science", zh: "数据科学 SQL 基础" },
-        subtitle: { en: "UC Davis", zh: "机构: 加州大学戴维斯分校" },
-        type: "certificate",
-        thumbnailUrl: "https://images.unsplash.com/photo-1569396116180-210c182bedb8?q=80&w=400&auto=format&fit=crop",
-        versions: [
-          { version: 1, date: "2022-06-01", name: "SQL_Cert.pdf", size: "1.0 MB", isCurrent: true }
-        ]
-      },
-      {
-        id: 'cert-edhec-investment',
-        title: { en: "Investment Management with Python and Machine Learning", zh: "Python与机器学习在投资管理中的应用" },
-        subtitle: { en: "EDHEC Business School", zh: "机构: EDHEC 商学院" },
-        type: "certificate",
-        thumbnailUrl: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=400&auto=format&fit=crop",
-        versions: [
-          { version: 1, date: "2024-12-19", name: "EDHEC_Investment_Management_Cert.pdf", size: "1.2 MB", isCurrent: true }
-        ]
+        versions: [{ version: 1, date: "2023-08-15", name: "Google_Data_Cert.pdf", size: "1.5 MB", isCurrent: true }]
       }
     ]
   }

@@ -1,5 +1,6 @@
+
 import React, { useState, useEffect } from 'react';
-import type { DocumentCategory, DocumentItem, Language } from '../types';
+import type { DocumentCategory, DocumentItem, ProjectAsset, Language } from '../types';
 import * as StorageService from '../services/storageService';
 
 interface Props {
@@ -15,38 +16,17 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [previewDoc, setPreviewDoc] = useState<DocumentItem | null>(null);
+  const [previewAsset, setPreviewAsset] = useState<ProjectAsset | null>(null);
 
   useEffect(() => {
     setCategories(StorageService.getDocuments());
   }, []);
-
-  // Get file URL for download/preview
-  const getFileUrl = (doc: DocumentItem) => {
-    const currentVersion = doc.versions.find(v => v.isCurrent);
-    if (!currentVersion) return null;
-    return `/${currentVersion.name}`;
-  };
-
-  // Handle download
-  const handleDownload = (doc: DocumentItem) => {
-    const url = getFileUrl(doc);
-    if (!url) return;
-
-    const currentVersion = doc.versions.find(v => v.isCurrent);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = currentVersion?.name || 'document.pdf';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>, docId: string) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
       const updatedCats = StorageService.uploadNewVersion(docId, file);
       setCategories([...updatedCats]);
-      // Update active category ref as well to reflect changes immediately in UI
       if (activeCategory) {
         const updatedActive = updatedCats.find(c => c.id === activeCategory.id) || null;
         setActiveCategory(updatedActive);
@@ -55,244 +35,264 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
     }
   };
 
-  const enterCategory = (cat: DocumentCategory) => {
-    setActiveCategory(cat);
-    setCurrentPage(1);
-    setSearchQuery('');
+  const getAssetIcon = (type: string) => {
+    switch (type) {
+      case 'pdf': return <svg className="w-5 h-5 text-red-500" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" /></svg>;
+      case 'excel': return <svg className="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" /></svg>;
+      case 'python':
+      case 'notebook': return <svg className="w-5 h-5 text-blue-500" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" /></svg>;
+      case 'tableau': return <svg className="w-5 h-5 text-orange-500" fill="currentColor" viewBox="0 0 20 20"><path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z" /><path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z" /></svg>;
+      default: return <svg className="w-5 h-5 text-slate-400" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" /></svg>;
+    }
   };
 
-  const goBack = () => {
-    setActiveCategory(null);
-    setPreviewDoc(null);
-  };
-
-  // -- Render Logic --
-
-  // 1. Online Preview Modal
-  if (previewDoc) {
-    const fileUrl = getFileUrl(previewDoc);
+  // 1. Asset Preview Modal
+  if (previewAsset || previewDoc) {
+    const title = previewAsset ? previewAsset.name[language] : (previewDoc ? previewDoc.title[language] : "");
+    const filename = previewAsset ? `asset_${previewAsset.id}.${previewAsset.type}` : (previewDoc?.versions.find(v => v.isCurrent)?.name || "");
 
     return (
-      <div className="fixed inset-0 z-[60] bg-slate-900/90 flex flex-col animate-fade-in p-4 md:p-8">
+      <div className="fixed inset-0 z-[60] bg-slate-900/95 flex flex-col animate-fade-in p-4 md:p-8">
         <div className="flex justify-between items-center mb-4 text-white">
-          <h3 className="text-xl font-bold">{previewDoc.title[language]} - {language === 'en' ? 'Preview' : '在线预览'}</h3>
-          <div className="flex gap-2">
-            <button
-              onClick={() => handleDownload(previewDoc)}
-              className="px-4 py-2 bg-accent-600 hover:bg-accent-700 rounded-lg transition-colors text-sm font-medium"
-            >
-              {language === 'en' ? 'Download' : '下载'}
-            </button>
-            <button onClick={() => setPreviewDoc(null)} className="p-2 hover:bg-white/10 rounded-full transition-colors">
-              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
-            </button>
+          <div className="flex items-center space-x-3">
+             <div className="bg-white/10 p-2 rounded">
+                {previewAsset ? getAssetIcon(previewAsset.type) : <svg className="w-6 h-6 text-accent-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>}
+             </div>
+             <div>
+               <h3 className="text-xl font-bold leading-tight">{title}</h3>
+               <p className="text-xs text-slate-400">{filename}</p>
+             </div>
           </div>
+          <button onClick={() => { setPreviewAsset(null); setPreviewDoc(null); }} className="p-2 hover:bg-white/10 rounded-full transition-colors text-slate-300">
+            <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+          </button>
         </div>
-        <div className="flex-grow bg-white rounded-lg shadow-2xl overflow-hidden relative">
-          {fileUrl ? (
-            <iframe
-              src={fileUrl}
-              className="w-full h-full"
-              title="PDF Preview"
-            />
-          ) : (
-            <div className="flex items-center justify-center h-full">
-              <p className="text-slate-500">{language === 'en' ? 'File not found' : '文件未找到'}</p>
-            </div>
-          )}
+
+        <div className="flex-grow bg-white rounded-xl shadow-2xl overflow-hidden flex items-center justify-center relative">
+          <div className="text-center p-12 max-w-lg">
+             <div className="mb-8 mx-auto w-24 h-24 bg-accent-50 rounded-2xl flex items-center justify-center text-accent-500 animate-pulse">
+               {previewAsset ? getAssetIcon(previewAsset.type) : <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>}
+             </div>
+             <h4 className="text-2xl font-bold text-slate-800 mb-4">
+                {language === 'en' ? 'Interactive Preview Engine' : '交互式预览引擎'}
+             </h4>
+             <p className="text-slate-500 mb-8 leading-relaxed">
+                {language === 'en'
+                  ? "We are preparing a secure sandbox environment to display this file's contents while protecting intellectual property."
+                  : "正在准备安全沙箱环境以展示文件内容，同时确保相关知识产权受到保护。"}
+             </p>
+             <div className="flex justify-center space-x-4">
+                <button
+                  className="px-6 py-3 bg-corporate-800 text-white rounded-lg hover:bg-corporate-900 transition-all font-semibold shadow-lg"
+                  onClick={() => alert(language === 'en' ? `Downloading ${filename}...` : `正在下载 ${filename}...`)}
+                >
+                  {language === 'en' ? 'Download for Offline View' : '下载到本地查看'}
+                </button>
+                <button
+                  className="px-6 py-3 border border-slate-200 text-slate-600 rounded-lg hover:bg-slate-50 transition-all"
+                  onClick={() => { setPreviewAsset(null); setPreviewDoc(null); }}
+                >
+                  {language === 'en' ? 'Back' : '返回'}
+                </button>
+             </div>
+          </div>
         </div>
       </div>
     );
   }
 
-  // 2. Detail View (Inside a Category)
+  // 2. Portfolio Detail View (Project Explorer)
+  if (activeCategory && activeCategory.id === 'cat-portfolio') {
+    const filteredItems = activeCategory.items.filter(item => {
+      const q = searchQuery.toLowerCase();
+      return item.title[language].toLowerCase().includes(q) || item.subtitle[language].toLowerCase().includes(q);
+    });
+
+    return (
+      <div className="animate-fade-in min-h-[600px]">
+        <div className="flex flex-col md:flex-row justify-between items-center mb-10 gap-4">
+          <button onClick={() => setActiveCategory(null)} className="flex items-center text-slate-500 hover:text-corporate-800 transition-colors font-medium">
+            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+            {language === 'en' ? 'Case Studies' : '返回案例库'}
+          </button>
+          <div className="relative w-full md:w-64">
+             <input
+               type="text" placeholder={language === 'en' ? "Search projects..." : "搜索项目案例..."}
+               value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
+               className="w-full pl-10 pr-4 py-2 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-accent-500 outline-none text-sm"
+             />
+             <svg className="w-4 h-4 text-slate-400 absolute left-3 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+          </div>
+        </div>
+
+        <div className="space-y-12">
+          {filteredItems.map(project => (
+            <div key={project.id} className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden flex flex-col lg:flex-row">
+              {/* Left Column: Context (HR Attention) */}
+              <div className="lg:w-1/3 p-8 bg-slate-50 border-r border-slate-100 flex flex-col">
+                 <div className="mb-6">
+                   <div className="flex items-center space-x-2 text-accent-600 font-bold text-xs uppercase tracking-widest mb-2">
+                     <span className="w-2 h-2 rounded-full bg-accent-600"></span>
+                     <span>{project.subtitle[language]}</span>
+                   </div>
+                   <h3 className="text-2xl font-black text-slate-900 leading-tight mb-4">{project.title[language]}</h3>
+                   <p className="text-slate-600 text-sm leading-relaxed mb-6 italic">
+                     "{project.projectSummary?.[language]}"
+                   </p>
+
+                   <div className="space-y-4">
+                     <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+                       {language === 'en' ? 'Core Impact' : '核心价值/产出'}
+                     </h4>
+                     <ul className="space-y-3">
+                       {project.highlights?.[language].map((h, i) => (
+                         <li key={i} className="flex items-start text-sm text-slate-700 font-medium">
+                           <svg className="w-4 h-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                           {h}
+                         </li>
+                       ))}
+                     </ul>
+                   </div>
+                 </div>
+
+                 <div className="mt-auto pt-6 border-t border-slate-200">
+                    <button
+                      onClick={() => alert(language === 'en' ? `Preparing ${project.versions[0].name}...` : `正在准备 ${project.versions[0].name}...`)}
+                      className="w-full py-4 bg-corporate-800 text-white rounded-2xl hover:bg-corporate-900 transition-all flex items-center justify-center space-x-3 shadow-lg shadow-corporate-800/20 font-bold"
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                      <span>{language === 'en' ? 'Download Full Project Bundle' : '下载项目全套附件包'}</span>
+                    </button>
+                    <p className="text-center text-[10px] text-slate-400 mt-2">
+                      {language === 'en' ? 'Includes all documentation, scripts & source files' : '包含所有相关文档、脚本及原始文件'}
+                    </p>
+                 </div>
+              </div>
+
+              {/* Right Column: File Explorer (Technical Proof) */}
+              <div className="lg:w-2/3 p-8 bg-white">
+                <div className="flex justify-between items-center mb-6">
+                  <h4 className="text-sm font-bold text-slate-900 flex items-center">
+                    <svg className="w-5 h-5 mr-2 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" /></svg>
+                    {language === 'en' ? 'Project Resource Explorer' : '项目资源库'}
+                  </h4>
+                  <span className="text-xs text-slate-400">{project.assets?.length} {language === 'en' ? 'Files' : '个资源'}</span>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {project.assets?.map(asset => (
+                    <div key={asset.id} className="group bg-white border border-slate-100 rounded-2xl p-4 hover:border-accent-200 hover:shadow-md transition-all flex flex-col justify-between">
+                       <div className="flex items-start justify-between mb-4">
+                          <div className="bg-slate-50 p-3 rounded-xl group-hover:bg-accent-50 transition-colors">
+                             {getAssetIcon(asset.type)}
+                          </div>
+                          <div className="flex space-x-1">
+                            <button
+                              onClick={() => setPreviewAsset(asset)}
+                              className="p-2 text-slate-400 hover:text-accent-600 hover:bg-accent-50 rounded-lg transition-all"
+                              title={language === 'en' ? 'Quick Look' : '快速预览'}
+                            >
+                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+                            </button>
+                            <button
+                              onClick={() => alert(`Downloading ${asset.name[language]}...`)}
+                              className="p-2 text-slate-400 hover:text-corporate-800 hover:bg-slate-100 rounded-lg transition-all"
+                              title={language === 'en' ? 'Download File' : '下载文件'}
+                            >
+                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                            </button>
+                          </div>
+                       </div>
+                       <div>
+                         <h5 className="font-bold text-slate-800 text-sm mb-1 group-hover:text-accent-700 transition-colors">{asset.name[language]}</h5>
+                         <p className="text-[11px] text-slate-500 line-clamp-2 leading-relaxed">{asset.description[language]}</p>
+                       </div>
+                       <div className="mt-3 pt-3 border-t border-slate-50 flex justify-between items-center">
+                         <span className="text-[10px] font-bold text-slate-300 uppercase">{asset.type}</span>
+                         <span className="text-[10px] font-medium text-slate-400">{asset.size}</span>
+                       </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  // Fallback to Category View or General Detail View
   if (activeCategory) {
     const filteredItems = activeCategory.items.filter(item => {
       const q = searchQuery.toLowerCase();
-      return (
-        item.title[language].toLowerCase().includes(q) ||
-        item.subtitle[language].toLowerCase().includes(q)
-      );
+      return item.title[language].toLowerCase().includes(q) || item.subtitle[language].toLowerCase().includes(q);
     });
-
-    const totalPages = Math.ceil(filteredItems.length / ITEMS_PER_PAGE);
-    const paginatedItems = filteredItems.slice(
-      (currentPage - 1) * ITEMS_PER_PAGE,
-      currentPage * ITEMS_PER_PAGE
-    );
 
     return (
       <div className="animate-fade-in min-h-[500px]">
-        {/* Header Bar */}
         <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
-          <button onClick={goBack} className="flex items-center text-slate-500 hover:text-corporate-800 transition-colors self-start md:self-auto">
+          <button onClick={() => setActiveCategory(null)} className="flex items-center text-slate-500 hover:text-corporate-800 transition-colors self-start md:self-auto">
             <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
             {language === 'en' ? 'Back to Categories' : '返回分类'}
           </button>
-          
-          <h2 className="text-2xl font-bold text-corporate-900 md:absolute md:left-1/2 md:transform md:-translate-x-1/2 md:z-10">
-            {activeCategory.title[language]}
-          </h2>
-          
-          {(() => {
-            // Hide search box for categories that don't need search (resume / degree)
-            const noSearchCategories = ['cat-resume', 'cat-degree'];
-            const showSearch = !noSearchCategories.includes(activeCategory.id);
-            if (!showSearch) return null;
-
-            return (
-              <div className="relative w-full md:w-64">
-                <input
-                  type="text"
-                  placeholder={language === 'en' ? "Search by course or title..." : "搜索课程或标题..."}
-                  value={searchQuery}
-                  onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1); }}
-                  className="w-full pl-10 pr-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-accent-500 focus:border-transparent outline-none text-sm"
-                />
-                <svg className="w-4 h-4 text-slate-400 absolute left-3 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-              </div>
-            );
-          })()}
+          <h2 className="text-2xl font-bold text-corporate-900">{activeCategory.title[language]}</h2>
+          <div className="relative w-full md:w-64">
+             <input
+               type="text" placeholder={language === 'en' ? "Search..." : "搜索..."}
+               value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
+               className="w-full pl-10 pr-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-accent-500 outline-none text-sm"
+             />
+             <svg className="w-4 h-4 text-slate-400 absolute left-3 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+          </div>
         </div>
 
-        {/* Grid */}
-        {paginatedItems.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {paginatedItems.map(doc => {
-              const currentVersion = doc.versions.find(v => v.isCurrent);
-              return (
-                <div key={doc.id} className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-md transition-all group flex flex-col h-full">
-                  {/* Thumbnail Area */}
-                  <div className="h-40 bg-slate-100 relative overflow-hidden">
-                    {doc.thumbnailUrl ? (
-                      <img
-                        src={doc.thumbnailUrl}
-                        alt={doc.title[language]}
-                        onError={(e) => { (e.currentTarget as HTMLImageElement).src = 'https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=400&auto=format&fit=crop'; }}
-                        className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center bg-slate-50 text-slate-300">
-                        <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-                      </div>
-                    )}
-                    <div className="absolute top-2 right-2 bg-white/90 backdrop-blur text-xs font-bold px-2 py-1 rounded text-corporate-800 shadow-sm">
-                      v{currentVersion?.version}
-                    </div>
-                  </div>
-
-                  {/* Content Area */}
-                  <div className="p-5 flex-grow flex flex-col">
-                    <p className="text-xs font-semibold text-accent-600 uppercase tracking-wider mb-1">
-                      {doc.subtitle[language]}
-                    </p>
-                    <h3 className="font-bold text-slate-800 mb-2 line-clamp-2" title={doc.title[language]}>
-                      {doc.title[language]}
-                    </h3>
-                    
-                    <div className="mt-auto pt-4 space-y-2">
-                       <div className="grid grid-cols-2 gap-2">
-                         <button
-                            onClick={() => setPreviewDoc(doc)}
-                            className="flex items-center justify-center px-3 py-2 bg-slate-50 text-slate-700 rounded hover:bg-slate-100 transition-colors text-xs font-medium border border-slate-200"
-                         >
-                           <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
-                           {language === 'en' ? 'Preview' : '预览'}
-                         </button>
-                         <button
-                            className="flex items-center justify-center px-3 py-2 bg-corporate-800 text-white rounded hover:bg-corporate-900 transition-colors text-xs font-medium"
-                            onClick={() => handleDownload(doc)}
-                         >
-                           <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
-                           {language === 'en' ? 'Download' : '下载'}
-                         </button>
-                       </div>
-
-                       {isAdmin && (
-                         <div className="relative overflow-hidden group/upload mt-2 text-center">
-                            <input type="file" onChange={(e) => handleFileUpload(e, doc.id)} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
-                            <span className="text-xs text-slate-400 hover:text-accent-500 cursor-pointer underline decoration-dotted">
-                              {language === 'en' ? 'Update Version' : '更新版本'}
-                            </span>
-                         </div>
-                       )}
-                    </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredItems.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE).map(doc => {
+            const currentVersion = doc.versions.find(v => v.isCurrent);
+            return (
+              <div key={doc.id} className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-md transition-all group flex flex-col h-full">
+                <div className="h-40 bg-slate-100 relative overflow-hidden">
+                  <img src={doc.thumbnailUrl} alt="" className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500" />
+                  <div className="absolute top-2 right-2 bg-white/90 backdrop-blur text-xs font-bold px-2 py-1 rounded text-corporate-800 shadow-sm">
+                    v{currentVersion?.version}
                   </div>
                 </div>
-              );
-            })}
-          </div>
-        ) : (
-          <div className="text-center py-20 bg-slate-50 rounded-xl border border-dashed border-slate-200 text-slate-400">
-             <p>{language === 'en' ? 'No documents found matching your search.' : '未找到匹配的文档。'}</p>
-          </div>
-        )}
-
-        {/* Pagination */}
-        {totalPages > 1 && (
-          <div className="flex justify-center items-center mt-10 space-x-2">
-            <button 
-              onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-              disabled={currentPage === 1}
-              className="px-3 py-1 rounded border border-slate-200 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-50"
-            >
-              &larr;
-            </button>
-            {Array.from({ length: totalPages }).map((_, i) => (
-              <button
-                key={i}
-                onClick={() => setCurrentPage(i + 1)}
-                className={`w-8 h-8 rounded text-sm font-medium transition-colors ${
-                  currentPage === i + 1 
-                  ? 'bg-corporate-800 text-white' 
-                  : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
-                }`}
-              >
-                {i + 1}
-              </button>
-            ))}
-            <button 
-              onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-              disabled={currentPage === totalPages}
-              className="px-3 py-1 rounded border border-slate-200 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-50"
-            >
-              &rarr;
-            </button>
-          </div>
-        )}
+                <div className="p-5 flex-grow flex flex-col">
+                  <p className="text-xs font-semibold text-accent-600 uppercase tracking-wider mb-1">{doc.subtitle[language]}</p>
+                  <h3 className="font-bold text-slate-800 mb-4 line-clamp-2">{doc.title[language]}</h3>
+                  <div className="mt-auto grid grid-cols-2 gap-2">
+                    <button onClick={() => setPreviewDoc(doc)} className="flex items-center justify-center px-3 py-2 bg-slate-50 text-slate-700 rounded-lg hover:bg-slate-100 transition-colors text-xs font-medium border border-slate-200">
+                      {language === 'en' ? 'Preview' : '预览'}
+                    </button>
+                    <button
+                      onClick={() => alert(`Downloading ${currentVersion?.name}...`)}
+                      className="flex items-center justify-center px-3 py-2 bg-corporate-800 text-white rounded-lg hover:bg-corporate-900 transition-colors text-xs font-medium"
+                    >
+                      {language === 'en' ? 'Download' : '下载'}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </div>
     );
   }
 
-  // 3. Category View (Default)
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 animate-fade-in">
       {categories.map((cat) => (
-        <div 
-          key={cat.id} 
-          onClick={() => enterCategory(cat)}
-          className="group relative h-64 rounded-2xl overflow-hidden cursor-pointer shadow-md hover:shadow-xl transition-all transform hover:-translate-y-1"
-        >
-          {/* Background Image with Overlay */}
+        <div key={cat.id} onClick={() => setActiveCategory(cat)} className="group relative h-64 rounded-3xl overflow-hidden cursor-pointer shadow-md hover:shadow-xl transition-all transform hover:-translate-y-1">
           <div className="absolute inset-0">
-            <img
-              src={cat.coverImage}
-              alt=""
-              onError={(e) => { (e.currentTarget as HTMLImageElement).src = 'https://images.unsplash.com/photo-1496307042754-b4aa456c4a2d?q=80&w=1200&auto=format&fit=crop'; }}
-              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-corporate-900/90 to-corporate-900/40 group-hover:to-corporate-900/50 transition-colors" />
+            <img src={cat.coverImage} alt="" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+            <div className="absolute inset-0 bg-gradient-to-t from-corporate-900/90 to-corporate-900/30 group-hover:to-corporate-900/50 transition-colors" />
           </div>
-          
-          {/* Content */}
           <div className="absolute inset-0 p-8 flex flex-col justify-end">
-            <h3 className="text-2xl font-bold text-white mb-2 group-hover:text-accent-400 transition-colors">
-              {cat.title[language]}
-            </h3>
+            <h3 className="text-2xl font-bold text-white mb-2 group-hover:text-accent-400 transition-colors">{cat.title[language]}</h3>
             <div className="flex justify-between items-center">
-              <span className="text-slate-300 text-sm font-medium">
-                {cat.items.length} {language === 'en' ? 'Items' : '个文件'}
-              </span>
+              <span className="text-slate-300 text-sm font-medium">{cat.items.length} {language === 'en' ? 'Items' : '个文件'}</span>
               <span className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-accent-600 transition-colors text-white">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
               </span>
