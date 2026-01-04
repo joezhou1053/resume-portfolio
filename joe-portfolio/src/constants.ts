@@ -277,7 +277,7 @@ export const INITIAL_DOCUMENTS: DocumentCategory[] = [
           { id: 'at1', name: { en: "Main Interface Design", zh: "主界面设计" }, type: "image", size: "0.5 MB", description: { en: "Basic Information tab with collapsible sections for workflow efficiency.", zh: "基本信息选项卡，采用可折叠分段设计提升工作流效率。" }, url: "/portfolio/asset-transfer-app/Image1.png" },
           { id: 'at2', name: { en: "Financial Information Module", zh: "财务信息模块" }, type: "image", size: "0.6 MB", description: { en: "Financial data display with masked sensitive information for security.", zh: "财务数据展示，敏感信息脱敏处理保障数据安全。" }, url: "/portfolio/asset-transfer-app/Image2.png" },
           { id: 'at3', name: { en: "Edit Mode & Process Tracking", zh: "编辑模式与流程跟踪" }, type: "image", size: "0.5 MB", description: { en: "Edit mode indicator and Process Record tab for audit trail.", zh: "编辑模式指示器与流程记录选项卡，支持审计追踪。" }, url: "/portfolio/asset-transfer-app/Image3.png" },
-          { id: 'at4', name: { en: "React Prototype Source Code", zh: "React 原型源代码" }, type: "code", size: "0.1 MB", description: { en: "Functional React component with state management and Lucide icons.", zh: "功能完整的 React 组件，包含状态管理与 Lucide 图标库。" }, url: "/asset_transfer_prototype.tsx" }
+          { id: 'at4', name: { en: "React Prototype Source Code", zh: "React 原型源代码" }, type: "code", size: "0.1 MB", description: { en: "Functional React component with state management and Lucide icons.", zh: "功能完整的 React 组件，包含状态管理与 Lucide 图标库。" }, url: "/portfolio//asset_transfer_prototype.tsx" }
         ],
         versions: [{ version: 1, date: "2025-01-04", name: "asset_transfer_prototype.tsx", size: "0.1 MB", isCurrent: true }]
       }
