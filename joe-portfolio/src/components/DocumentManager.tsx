@@ -82,17 +82,18 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
         {/* Image Preview */}
         {isImagePreview ? (
           <div className="flex-grow flex flex-col bg-white rounded-xl shadow-2xl overflow-hidden">
-            <div className="flex-grow flex items-center justify-center p-4">
+            <div className="flex-grow flex items-center justify-center p-4 md:p-8 overflow-auto" style={{ maxHeight: 'calc(100vh - 200px)' }}>
               <img
                 src={previewAsset.url}
                 alt={title}
-                className="max-w-full max-h-full object-contain"
+                className="w-auto h-auto max-w-full object-contain"
+                style={{ maxHeight: '100%' }}
                 onError={(e) => {
                   (e.currentTarget as HTMLImageElement).src = 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?q=80&w=1200&auto=format&fit=crop';
                 }}
               />
             </div>
-            <div className="p-4 bg-slate-50 border-t border-slate-200 flex justify-center">
+            <div className="p-4 bg-slate-50 border-t border-slate-200 flex justify-center flex-shrink-0">
               <button
                 className="px-6 py-3 bg-corporate-800 text-white rounded-lg hover:bg-corporate-900 transition-all font-semibold shadow-lg"
                 onClick={() => handleDownload(previewAsset.url!, filename)}
