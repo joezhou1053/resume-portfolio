@@ -4,7 +4,8 @@
       "Bash(node:*)",
       "Bash(copy:*)",
       "Bash(npm run dev)",
-      "Bash(mkdir:*)"
+      "Bash(mkdir:*)",
+      "Bash(npm install:*)"
     ]
   }
 }

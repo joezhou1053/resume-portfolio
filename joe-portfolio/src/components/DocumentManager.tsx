@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import type { DocumentCategory, DocumentItem, ProjectAsset, Language } from '../types';
 import * as StorageService from '../services/storageService';
+import JSZip from 'jszip';
+import { saveAs } from 'file-saver';
 
 interface Props {
   language: Language;
@@ -45,12 +47,68 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
     document.body.removeChild(link);
   };
 
+  const handleBundleDownload = async (project: DocumentItem, projectName: string) => {
+    if (!project.assets || project.assets.length === 0) {
+      alert(language === 'en' ? 'No assets to download' : '没有可下载的资源');
+      return;
+    }
+
+    try {
+      // Create a new ZIP file
+      const zip = new JSZip();
+
+      // Fetch and add all assets to the ZIP
+      const promises = project.assets.map(async (asset) => {
+        if (asset.url) {
+          try {
+            const response = await fetch(asset.url);
+            if (!response.ok) throw new Error(`Failed to fetch ${asset.name[language]}`);
+
+            const blob = await response.blob();
+
+            // Determine file extension
+            let extension = '';
+            switch (asset.type) {
+              case 'image': extension = '.png'; break;
+              case 'code': extension = '.tsx'; break;
+              case 'pdf': extension = '.pdf'; break;
+              case 'excel': extension = '.xlsx'; break;
+              case 'python': extension = '.py'; break;
+              case 'notebook': extension = '.ipynb'; break;
+              case 'tableau': extension = '.twbx'; break;
+              default: extension = '.bin';
+            }
+
+            // Add to ZIP with a clean filename
+            const fileName = `${asset.id}_${asset.name[language].replace(/[^a-zA-Z0-9\u4e00-\u9fa5]/g, '_')}${extension}`;
+            zip.file(fileName, blob);
+          } catch (error) {
+            console.error(`Failed to add ${asset.name[language]} to zip:`, error);
+          }
+        }
+      });
+
+      // Wait for all files to be added
+      await Promise.all(promises);
+
+      // Generate ZIP file and trigger download
+      const zipFileName = `${projectName.replace(/[^a-zA-Z0-9\u4e00-\u9fa5]/g, '_')}_bundle.zip`;
+      const content = await zip.generateAsync({ type: 'blob' });
+      saveAs(content, zipFileName);
+
+    } catch (error) {
+      console.error('Bundle download failed:', error);
+      alert(language === 'en' ? 'Failed to create bundle' : '创建压缩包失败');
+    }
+  };
+
   const getAssetIcon = (type: string) => {
     switch (type) {
       case 'pdf': return <svg className="w-5 h-5 text-red-500" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" /></svg>;
       case 'excel': return <svg className="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" /></svg>;
       case 'python':
-      case 'notebook': return <svg className="w-5 h-5 text-blue-500" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" /></svg>;
+      case 'notebook':
+      case 'code': return <svg className="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" /></svg>;
       case 'tableau': return <svg className="w-5 h-5 text-orange-500" fill="currentColor" viewBox="0 0 20 20"><path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z" /><path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z" /></svg>;
       default: return <svg className="w-5 h-5 text-slate-400" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" /></svg>;
     }
@@ -195,8 +253,7 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
                  <div className="mt-auto pt-6 border-t border-slate-200">
                     <button
                       onClick={() => {
-                        const fileUrl = `/${project.versions[0].name}`;
-                        handleDownload(fileUrl, project.versions[0].name);
+                        handleBundleDownload(project, project.title[language]);
                       }}
                       className="w-full py-4 bg-corporate-800 text-white rounded-2xl hover:bg-corporate-900 transition-all flex items-center justify-center space-x-3 shadow-lg shadow-corporate-800/20 font-bold"
                     >
@@ -236,8 +293,11 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
                             </button>
                             <button
                               onClick={() => {
-                                if (asset.type === 'image' && asset.url) {
-                                  handleDownload(asset.url, `${asset.name[language]}.${asset.type === 'image' ? 'png' : asset.type}`);
+                                if (asset.url && (asset.type === 'image' || asset.type === 'code')) {
+                                  // Determine file extension based on type
+                                  const extension = asset.type === 'image' ? 'png' :
+                                                  asset.type === 'code' ? 'tsx' : asset.type;
+                                  handleDownload(asset.url, `${asset.name[language]}.${extension}`);
                                 } else {
                                   alert(language === 'en' ? `Downloading ${asset.name[language]}...` : `正在下载 ${asset.name[language]}...`);
                                 }
