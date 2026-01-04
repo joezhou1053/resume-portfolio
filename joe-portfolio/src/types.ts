@@ -3,9 +3,10 @@ export type Language = 'en' | 'zh';
 export interface ProjectAsset {
   id: string;
   name: { en: string; zh: string };
-  type: 'pdf' | 'excel' | 'word' | 'tableau' | 'python' | 'notebook' | 'visio';
+  type: 'pdf' | 'excel' | 'word' | 'tableau' | 'python' | 'notebook' | 'visio' | 'image' | 'code';
   size: string;
   description: { en: string; zh: string };
+  url?: string; // Optional URL for image/code assets
 }
 
 export interface DocumentItem {

@@ -12,7 +12,10 @@
 - **技能可视化**：通过雷达图 + 横向柱状图展示金融、数据分析、工具熟练度等维度。  
 - **文档与证书管理**：
   - 分类展示：简历、作品集、OSU 学位、Coursera 证书等；
-  - 支持模拟在线预览、下载提示；
+  - **作品集项目探索器**（Portfolio Project Explorer）：
+    - 双栏布局设计：左侧 HR 视角（项目摘要、核心价值/产出），右侧技术证明（项目资源文件库）；
+    - 支持项目包含多个子资产（BRD 文档、Visio 流程图、Python 脚本、Tableau 工作簿、React 原型代码、设计稿等）；
+    - 每个子文件支持独立预览、下载，文件类型图标系统（PDF、Excel、Python、Tableau、Image、Code 等）。
   - 通过本地存储（localStorage）记录文档信息。
 - **“仅本人可编辑”模式（Admin 模式）**：
   - 页脚有一个隐蔽的 `π` 按钮可切换管理员模式；
@@ -64,12 +67,17 @@ npm run preview      # 本地预览构建结果
 
 ### 如何修改为你自己的简历
 
-- **文字内容 / 经历 / 项目**：  
-  - 集中定义在 `src/constants.ts` 中的 `CONTENT_ZH` 和 `CONTENT_EN`；  
+- **文字内容 / 经历 / 项目**：
+  - 集中定义在 `src/constants.ts` 中的 `CONTENT_ZH` 和 `CONTENT_EN`；
   - 修改其中的 `hero`（抬头、自我介绍）、`experience`（工作经历）、`education`（教育背景）、`skills`（硬技能 / 软技能 / 语言）即可。
-- **文档和证书列表**：  
-  - 在 `constants.ts` 的 `INITIAL_DOCUMENTS` 中维护；  
+- **文档和证书列表**：
+  - 在 `constants.ts` 的 `INITIAL_DOCUMENTS` 中维护；
   - 每个分类（简历、作品集、证书等）以及其下 `versions` 数组可按你自己的文件名与日期调整。
+- **作品集项目配置**（新增）：
+  - 作品集类型（`type: 'portfolio'`）的文档支持多子文件结构；
+  - 配置 `projectSummary`（项目摘要，给 HR 快速了解价值）；
+  - 配置 `highlights`（核心成就/量化产出）；
+  - 配置 `assets` 数组：每个子文件包含 `id`、`name`（中英文）、`type`（文件类型）、`size`、`description`（中英文说明）。
 - **联系信息 / Footer**：  
   - 在 `App.tsx` 底部 Footer 中，可以替换姓名、邮箱、LinkedIn 链接等。
 - **配色与样式**：  

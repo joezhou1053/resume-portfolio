@@ -1,7 +1,7 @@
 import type { DocumentCategory, FileVersion } from '../types';
 import { INITIAL_DOCUMENTS } from '../constants';
 
-const STORAGE_KEY = 'joe_zhou_portfolio_v5_categories'; // Versioned key to prevent data conflict
+const STORAGE_KEY = 'joe_zhou_portfolio_v6_categories'; // Versioned key to prevent data conflict (updated to v6 for new portfolio items)
 
 export const getDocuments = (): DocumentCategory[] => {
   const stored = localStorage.getItem(STORAGE_KEY);

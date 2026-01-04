@@ -248,6 +248,38 @@ export const INITIAL_DOCUMENTS: DocumentCategory[] = [
           { id: 't4', name: { en: "Data Dictionary", zh: "数据字典说明" }, type: "excel", size: "0.5 MB", description: { en: "Definitions for all data fields used.", zh: "所用数据字段的详细定义说明。" } }
         ],
         versions: [{ version: 1, date: "2023-01-10", name: "Tableau_Case_Study.zip", size: "16.6 MB", isCurrent: true }]
+      },
+      {
+        id: 'port-asset-transfer',
+        title: { en: "Asset Transfer App Prototype Design", zh: "资产调拨应用原型设计" },
+        subtitle: { en: "Business Requirements Document", zh: "项目：商业需求规格说明书" },
+        type: "portfolio",
+        thumbnailUrl: "/portfolio/asset-transfer-app/Image1.png",
+        projectSummary: {
+          en: "Mobile-first prototype for enterprise asset transfer workflow management with real-time approval tracking and automated SAP integration.",
+          zh: "面向企业资产调拨流程管理的移动优先原型设计，支持实时审批跟踪与 SAP 系统自动化集成。"
+        },
+        highlights: {
+          en: [
+            "Streamlined asset transfer approval workflow with 4-section collapsible design",
+            "Real-time SAP status synchronization (Transfer posting/EO status tracking)",
+            "Financial data precision with masked sensitive fields (rates, amounts, fees)",
+            "Dual-mode interface: View mode for stakeholders, Edit mode for administrators"
+          ],
+          zh: [
+            "优化资产调拨审批工作流，采用四段式可折叠设计",
+            "实时同步 SAP 系统状态（转账过账/EO 状态跟踪）",
+            "财务数据精准管理，敏感字段脱敏处理（费率、金额、费用）",
+            "双模式界面：查看模式供利益相关者使用，编辑模式供管理员操作"
+          ]
+        },
+        assets: [
+          { id: 'at1', name: { en: "Main Interface Design", zh: "主界面设计" }, type: "image", size: "0.5 MB", description: { en: "Basic Information tab with collapsible sections for workflow efficiency.", zh: "基本信息选项卡，采用可折叠分段设计提升工作流效率。" }, url: "/portfolio/asset-transfer-app/Image1.png" },
+          { id: 'at2', name: { en: "Financial Information Module", zh: "财务信息模块" }, type: "image", size: "0.6 MB", description: { en: "Financial data display with masked sensitive information for security.", zh: "财务数据展示，敏感信息脱敏处理保障数据安全。" }, url: "/portfolio/asset-transfer-app/Image2.png" },
+          { id: 'at3', name: { en: "Edit Mode & Process Tracking", zh: "编辑模式与流程跟踪" }, type: "image", size: "0.5 MB", description: { en: "Edit mode indicator and Process Record tab for audit trail.", zh: "编辑模式指示器与流程记录选项卡，支持审计追踪。" }, url: "/portfolio/asset-transfer-app/Image3.png" },
+          { id: 'at4', name: { en: "React Prototype Source Code", zh: "React 原型源代码" }, type: "code", size: "0.1 MB", description: { en: "Functional React component with state management and Lucide icons.", zh: "功能完整的 React 组件，包含状态管理与 Lucide 图标库。" } }
+        ],
+        versions: [{ version: 1, date: "2025-01-04", name: "asset_transfer_prototype.tsx", size: "0.1 MB", isCurrent: true }]
       }
     ]
   },

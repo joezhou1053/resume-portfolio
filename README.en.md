@@ -14,7 +14,10 @@ This project is Joe Zhou’s personal **online resume and portfolio** site, buil
   - Horizontal bar chart for tools such as SQL, Excel, Tableau, Visio, Python.
 - **Document & Certificate Management**:
   - Categories for resumes, portfolio artifacts, OSU degree, Coursera certificates, etc.;
-  - Simulated online preview and download actions;
+  - **Portfolio Project Explorer** with specialized case study view:
+    - Dual-pane layout: Left for HR focus (project summary, key impact/highlights), right for technical proof (project asset library);
+    - Supports multi-asset projects (BRD docs, Visio diagrams, Python scripts, Tableau workbooks, React prototypes, design mockups, etc.);
+    - Individual asset preview/download with file-type icon system (PDF, Excel, Python, Tableau, Image, Code, etc.).
   - Backed by localStorage for storing metadata and version info in the browser.
 - **“Only I can edit” Admin Mode**:
   - A subtle `π` button in the footer toggles admin mode;
@@ -66,12 +69,17 @@ You can adjust or extend these commands in `package.json` under `scripts`.
 
 ### Customizing It for Yourself
 
-- **Text content / experience / projects**:  
-  - Defined in `src/constants.ts` as `CONTENT_EN` and `CONTENT_ZH`;  
+- **Text content / experience / projects**:
+  - Defined in `src/constants.ts` as `CONTENT_EN` and `CONTENT_ZH`;
   - Update sections like `hero`, `experience`, `education`, and `skills` to match your own background.
-- **Documents and certificates**:  
-  - Managed in the `INITIAL_DOCUMENTS` array in `constants.ts`;  
+- **Documents and certificates**:
+  - Managed in the `INITIAL_DOCUMENTS` array in `constants.ts`;
   - Each category and its `versions` list can be changed to your actual filenames, sizes, and dates.
+- **Portfolio project configuration** (new):
+  - Portfolio items (`type: 'portfolio'`) support multi-asset structure;
+  - Configure `projectSummary` (project overview for HR quick understanding);
+  - Configure `highlights` (key achievements/quantified impact);
+  - Configure `assets` array: each sub-file includes `id`, `name` (EN/ZH), `type` (file type), `size`, `description` (EN/ZH).
 - **Contact info / footer**:  
   - Update the footer in `App.tsx` (name, email, LinkedIn URL, etc.).
 - **Branding & theme**:  

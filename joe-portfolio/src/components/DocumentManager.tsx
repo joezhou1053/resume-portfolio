@@ -35,6 +35,16 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
     }
   };
 
+  const handleDownload = (url: string, filename: string) => {
+    // Create a temporary anchor element to trigger download
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   const getAssetIcon = (type: string) => {
     switch (type) {
       case 'pdf': return <svg className="w-5 h-5 text-red-500" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" /></svg>;
@@ -50,6 +60,7 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
   if (previewAsset || previewDoc) {
     const title = previewAsset ? previewAsset.name[language] : (previewDoc ? previewDoc.title[language] : "");
     const filename = previewAsset ? `asset_${previewAsset.id}.${previewAsset.type}` : (previewDoc?.versions.find(v => v.isCurrent)?.name || "");
+    const isImagePreview = previewAsset?.type === 'image' && previewAsset.url;
 
     return (
       <div className="fixed inset-0 z-[60] bg-slate-900/95 flex flex-col animate-fade-in p-4 md:p-8">
@@ -68,35 +79,60 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
           </button>
         </div>
 
-        <div className="flex-grow bg-white rounded-xl shadow-2xl overflow-hidden flex items-center justify-center relative">
-          <div className="text-center p-12 max-w-lg">
-             <div className="mb-8 mx-auto w-24 h-24 bg-accent-50 rounded-2xl flex items-center justify-center text-accent-500 animate-pulse">
-               {previewAsset ? getAssetIcon(previewAsset.type) : <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>}
-             </div>
-             <h4 className="text-2xl font-bold text-slate-800 mb-4">
-                {language === 'en' ? 'Interactive Preview Engine' : '交互式预览引擎'}
-             </h4>
-             <p className="text-slate-500 mb-8 leading-relaxed">
-                {language === 'en'
-                  ? "We are preparing a secure sandbox environment to display this file's contents while protecting intellectual property."
-                  : "正在准备安全沙箱环境以展示文件内容，同时确保相关知识产权受到保护。"}
-             </p>
-             <div className="flex justify-center space-x-4">
-                <button
-                  className="px-6 py-3 bg-corporate-800 text-white rounded-lg hover:bg-corporate-900 transition-all font-semibold shadow-lg"
-                  onClick={() => alert(language === 'en' ? `Downloading ${filename}...` : `正在下载 ${filename}...`)}
-                >
-                  {language === 'en' ? 'Download for Offline View' : '下载到本地查看'}
-                </button>
-                <button
-                  className="px-6 py-3 border border-slate-200 text-slate-600 rounded-lg hover:bg-slate-50 transition-all"
-                  onClick={() => { setPreviewAsset(null); setPreviewDoc(null); }}
-                >
-                  {language === 'en' ? 'Back' : '返回'}
-                </button>
-             </div>
+        {/* Image Preview */}
+        {isImagePreview ? (
+          <div className="flex-grow flex flex-col bg-white rounded-xl shadow-2xl overflow-hidden">
+            <div className="flex-grow flex items-center justify-center p-4">
+              <img
+                src={previewAsset.url}
+                alt={title}
+                className="max-w-full max-h-full object-contain"
+                onError={(e) => {
+                  (e.currentTarget as HTMLImageElement).src = 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?q=80&w=1200&auto=format&fit=crop';
+                }}
+              />
+            </div>
+            <div className="p-4 bg-slate-50 border-t border-slate-200 flex justify-center">
+              <button
+                className="px-6 py-3 bg-corporate-800 text-white rounded-lg hover:bg-corporate-900 transition-all font-semibold shadow-lg"
+                onClick={() => handleDownload(previewAsset.url!, filename)}
+              >
+                {language === 'en' ? 'Download Image' : '下载图片'}
+              </button>
+            </div>
           </div>
-        </div>
+        ) : (
+          /* Non-image Preview Placeholder */
+          <div className="flex-grow bg-white rounded-xl shadow-2xl overflow-hidden flex items-center justify-center relative">
+            <div className="text-center p-12 max-w-lg">
+               <div className="mb-8 mx-auto w-24 h-24 bg-accent-50 rounded-2xl flex items-center justify-center text-accent-500 animate-pulse">
+                 {previewAsset ? getAssetIcon(previewAsset.type) : <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>}
+               </div>
+               <h4 className="text-2xl font-bold text-slate-800 mb-4">
+                  {language === 'en' ? 'Interactive Preview Engine' : '交互式预览引擎'}
+               </h4>
+               <p className="text-slate-500 mb-8 leading-relaxed">
+                  {language === 'en'
+                    ? "We are preparing a secure sandbox environment to display this file's contents while protecting intellectual property."
+                    : "正在准备安全沙箱环境以展示文件内容，同时确保相关知识产权受到保护。"}
+               </p>
+               <div className="flex justify-center space-x-4">
+                  <button
+                    className="px-6 py-3 bg-corporate-800 text-white rounded-lg hover:bg-corporate-900 transition-all font-semibold shadow-lg"
+                    onClick={() => alert(language === 'en' ? `Downloading ${filename}...` : `正在下载 ${filename}...`)}
+                  >
+                    {language === 'en' ? 'Download for Offline View' : '下载到本地查看'}
+                  </button>
+                  <button
+                    className="px-6 py-3 border border-slate-200 text-slate-600 rounded-lg hover:bg-slate-50 transition-all"
+                    onClick={() => { setPreviewAsset(null); setPreviewDoc(null); }}
+                  >
+                    {language === 'en' ? 'Back' : '返回'}
+                  </button>
+               </div>
+            </div>
+          </div>
+        )}
       </div>
     );
   }
@@ -157,7 +193,10 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
 
                  <div className="mt-auto pt-6 border-t border-slate-200">
                     <button
-                      onClick={() => alert(language === 'en' ? `Preparing ${project.versions[0].name}...` : `正在准备 ${project.versions[0].name}...`)}
+                      onClick={() => {
+                        const fileUrl = `/${project.versions[0].name}`;
+                        handleDownload(fileUrl, project.versions[0].name);
+                      }}
                       className="w-full py-4 bg-corporate-800 text-white rounded-2xl hover:bg-corporate-900 transition-all flex items-center justify-center space-x-3 shadow-lg shadow-corporate-800/20 font-bold"
                     >
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
@@ -195,7 +234,13 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
                               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
                             </button>
                             <button
-                              onClick={() => alert(`Downloading ${asset.name[language]}...`)}
+                              onClick={() => {
+                                if (asset.type === 'image' && asset.url) {
+                                  handleDownload(asset.url, `${asset.name[language]}.${asset.type === 'image' ? 'png' : asset.type}`);
+                                } else {
+                                  alert(language === 'en' ? `Downloading ${asset.name[language]}...` : `正在下载 ${asset.name[language]}...`);
+                                }
+                              }}
                               className="p-2 text-slate-400 hover:text-corporate-800 hover:bg-slate-100 rounded-lg transition-all"
                               title={language === 'en' ? 'Download File' : '下载文件'}
                             >
@@ -266,7 +311,10 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
                       {language === 'en' ? 'Preview' : '预览'}
                     </button>
                     <button
-                      onClick={() => alert(`Downloading ${currentVersion?.name}...`)}
+                      onClick={() => {
+                        const fileUrl = `/${currentVersion?.name}`;
+                        handleDownload(fileUrl, currentVersion?.name || 'document');
+                      }}
                       className="flex items-center justify-center px-3 py-2 bg-corporate-800 text-white rounded-lg hover:bg-corporate-900 transition-colors text-xs font-medium"
                     >
                       {language === 'en' ? 'Download' : '下载'}

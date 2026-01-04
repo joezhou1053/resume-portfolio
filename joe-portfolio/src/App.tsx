@@ -313,7 +313,7 @@ const App: React.FC = () => {
             <div className="md:text-right text-sm">
               <p>© {new Date().getFullYear()} Joe Zhou. All rights reserved.</p>
               <div className="mt-2 space-x-4">
-                <a href="mailto:joe.zhou@example.com" className="hover:text-white transition-colors">Email</a>
+                <a href="mailto:645286918@qq.com" className="hover:text-white transition-colors">Email</a>
                 <a href="#" className="hover:text-white transition-colors">LinkedIn</a>
                 {/* Secret Admin Toggle - Hidden from clear view, acting as the 'Only I can edit' mechanic */}
                 <button 
