@@ -26,7 +26,7 @@ export const CONTENT_EN: AppContent = {
     {
       company: "China Telecom Fujian Fufu Technology Co., Ltd.",
       title: "Requirements Analysis Engineer",
-      period: "2021 - Present",
+      period: "2023.01 - Present",
       location: "Fuzhou, China",
       description: [
         "Led requirements gathering and analysis for large-scale enterprise systems.",
@@ -114,7 +114,7 @@ export const CONTENT_ZH: AppContent = {
     {
       company: "中国电信福富科技有限公司",
       title: "需求分析工程师",
-      period: "2021 - 至今",
+      period: "2023.01 - 至今",
       location: "中国 福州",
       description: [
         "负责大型企业级系统的需求调研、分析与文档编写。",
@@ -286,14 +286,14 @@ export const INITIAL_DOCUMENTS: DocumentCategory[] = [
   {
     id: 'cat-degree',
     title: { en: "OSU Degree Certificate", zh: "OSU 学位证书" },
-    coverImage: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=600&auto=format&fit=crop",
+    coverImage: "/osu-logo.svg",
     items: [
       {
         id: 'doc-degree-osu',
         title: { en: "Bachelor of Science", zh: "理学学士学位" },
         subtitle: { en: "The Ohio State University", zh: "颁发机构：OSU" },
         type: "certificate",
-        thumbnailUrl: "https://images.unsplash.com/photo-1635350644168-5264b3602d18?q=80&w=400&auto=format&fit=crop",
+        thumbnailUrl: "/osu-logo.svg",
         versions: [{ version: 1, date: "2021-06-01", name: "OSU_Diploma.pdf", size: "0.8 MB", isCurrent: true }]
       },
       {

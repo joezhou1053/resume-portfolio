@@ -104,7 +104,6 @@ const App: React.FC = () => {
 
       {/* Hero Section */}
       <header className="bg-corporate-900 text-white pt-20 pb-24 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="lg:w-2/3">
             <div className="inline-block px-3 py-1 mb-4 text-xs font-semibold tracking-wider text-accent-500 uppercase bg-corporate-800 rounded-full border border-corporate-500">
