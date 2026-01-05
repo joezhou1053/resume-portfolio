@@ -285,7 +285,7 @@ export const INITIAL_DOCUMENTS: DocumentCategory[] = [
   },
   {
     id: 'cat-degree',
-    title: { en: "OSU Degree Certificate", zh: "OSU 学位证书" },
+    title: { en: "OSU Degrees & Honors", zh: "OSU 学位与荣誉" },
     coverImage: "/osu-logo.svg",
     items: [
       {
@@ -311,6 +311,30 @@ export const INITIAL_DOCUMENTS: DocumentCategory[] = [
         type: "certificate",
         thumbnailUrl: "https://images.unsplash.com/photo-1586281380349-632531db7ed4?q=80&w=400&auto=format&fit=crop",
         versions: [{ version: 1, date: "2021-06-20", name: "OSU_Degree_Verification.pdf", size: "0.5 MB", isCurrent: true }]
+      },
+      {
+        id: 'doc-dean-2019',
+        title: { en: "Dean's List 2019", zh: "院长嘉许名单 2019" },
+        subtitle: { en: "The Ohio State University", zh: "颁发机构：OSU" },
+        type: "certificate",
+        thumbnailUrl: "/osu-logo.svg",
+        versions: [{ version: 1, date: "2019-12-20", name: "OSU_Deans_List_2019.pdf", size: "0.3 MB", isCurrent: true }]
+      },
+      {
+        id: 'doc-dean-2020',
+        title: { en: "Dean's List 2020", zh: "院长嘉许名单 2020" },
+        subtitle: { en: "The Ohio State University", zh: "颁发机构：OSU" },
+        type: "certificate",
+        thumbnailUrl: "/osu-logo.svg",
+        versions: [{ version: 1, date: "2020-12-20", name: "OSU_Deans_List_2020.pdf", size: "0.3 MB", isCurrent: true }]
+      },
+      {
+        id: 'doc-dean-2021',
+        title: { en: "Dean's List 2021", zh: "院长嘉许名单 2021" },
+        subtitle: { en: "The Ohio State University", zh: "颁发机构：OSU" },
+        type: "certificate",
+        thumbnailUrl: "/osu-logo.svg",
+        versions: [{ version: 1, date: "2021-12-20", name: "OSU_Deans_List_2021.pdf", size: "0.3 MB", isCurrent: true }]
       }
     ]
   },
