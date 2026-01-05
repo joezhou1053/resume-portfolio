@@ -1,0 +1,7 @@
+# tuples are just immutable lists. use () instead of [ ] 
+
+
+一、split tuple
+
+(age, income) = "32,12000".split( ", ")
+

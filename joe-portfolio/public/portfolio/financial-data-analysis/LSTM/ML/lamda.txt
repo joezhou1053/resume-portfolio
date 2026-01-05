@@ -1,0 +1,7 @@
+# lamda function let you inline simple func
+
+def dosth(f, x)
+       return f(x)
+dosth(lamda x : x * x * x, 3)
+
+27

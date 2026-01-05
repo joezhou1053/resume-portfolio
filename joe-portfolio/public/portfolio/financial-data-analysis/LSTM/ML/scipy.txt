@@ -1,0 +1,28 @@
+SciPy 是一个 基于 Python 的开源科学计算库，它建立在 NumPy 之上，主要用于处理更高阶的 数学、科学与工程计算。
+如果把 NumPy 比作“打地基”的库（数组和基础运算），那 SciPy 就像是在上面搭建起来的“高层建筑”，提供了丰富的专业工具集。
+
+
+
+from scipy import stats
+stats.mode(age)
+
+
+
+
+核心功能模块包括：
+
+scipy.linalg → 高级线性代数运算（矩阵分解、特征值、矩阵方程解法）
+
+scipy.optimize → 优化与求解器（最小化函数、拟合模型、非线性方程解）
+
+scipy.integrate → 数值积分与常微分方程求解
+
+scipy.stats → 统计分布、假设检验、概率计算
+
+scipy.signal → 信号处理（滤波、傅里叶变换、时频分析）
+
+scipy.sparse → 稀疏矩阵与相关算法（大规模稀疏数据场景）
+
+scipy.fft → 快速傅里叶变换
+
+scipy.interpolate → 插值与曲线拟合

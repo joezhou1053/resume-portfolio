@@ -20,10 +20,31 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [previewDoc, setPreviewDoc] = useState<DocumentItem | null>(null);
   const [previewAsset, setPreviewAsset] = useState<ProjectAsset | null>(null);
+  const [notebookContent, setNotebookContent] = useState<string>('');
+  const [loadingNotebook, setLoadingNotebook] = useState(false);
 
   useEffect(() => {
     setCategories(StorageService.getDocuments());
   }, []);
+
+  // Load notebook content when previewing a notebook asset
+  useEffect(() => {
+    if (previewAsset?.type === 'notebook' && previewAsset.url) {
+      setLoadingNotebook(true);
+      fetch(previewAsset.url)
+        .then(res => res.text())
+        .then(content => {
+          setNotebookContent(content);
+          setLoadingNotebook(false);
+        })
+        .catch(err => {
+          console.error('Failed to load notebook:', err);
+          setLoadingNotebook(false);
+        });
+    } else {
+      setNotebookContent('');
+    }
+  }, [previewAsset]);
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>, docId: string) => {
     if (e.target.files && e.target.files[0]) {
@@ -38,7 +59,8 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
     }
   };
 
-  const handleDownload = (url: string, filename: string) => {
+  const handleDownload = (url: string | undefined, filename: string) => {
+    if (!url) return;
     // Create a temporary anchor element to trigger download
     const link = document.createElement('a');
     link.href = url;
@@ -137,6 +159,16 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
     const pdfUrl = getPdfUrl();
     const isPdfPreview = !!pdfUrl;
 
+    // Check if it's a Notebook preview
+    const getNotebookUrl = () => {
+      if (previewAsset?.type === 'notebook' && previewAsset.url) {
+        return previewAsset.url;
+      }
+      return '';
+    };
+    const notebookUrl = getNotebookUrl();
+    const isNotebookPreview = !!notebookUrl;
+
     return (
       <div className="fixed inset-0 z-[60] bg-slate-900/95 flex flex-col animate-fade-in p-4 md:p-8">
         <div className="flex justify-between items-center mb-4 text-white">
@@ -193,6 +225,59 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
                 onClick={() => handleDownload(pdfUrl, filename)}
               >
                 {language === 'en' ? 'Download PDF' : '下载 PDF'}
+              </button>
+            </div>
+          </div>
+        ) : isNotebookPreview ? (
+          /* Jupyter Notebook Preview with code viewer */
+          <div className="flex-grow flex flex-col bg-white rounded-xl shadow-2xl overflow-hidden">
+            <div className="flex-grow overflow-auto p-6" style={{ maxHeight: 'calc(100vh - 180px)' }}>
+              {loadingNotebook ? (
+                <div className="flex items-center justify-center h-full">
+                  <div className="text-center">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-corporate-800 mx-auto mb-4"></div>
+                    <p className="text-slate-600">{language === 'en' ? 'Loading notebook...' : '正在加载笔记本...'}</p>
+                  </div>
+                </div>
+              ) : notebookContent ? (
+                <div className="h-full">
+                  <div className="mb-4 p-3 bg-slate-50 rounded-lg border border-slate-200">
+                    <h4 className="text-sm font-bold text-slate-700 mb-2">
+                      {language === 'en' ? '📓 Jupyter Notebook Preview' : '📓 Jupyter Notebook 预览'}
+                    </h4>
+                    <p className="text-xs text-slate-500 mb-2">
+                      {language === 'en'
+                        ? 'This is the raw JSON content of the notebook. For the best viewing experience, please download and open in Jupyter or VS Code.'
+                        : '这是笔记本的原始JSON内容。为了获得最佳查看体验，请下载后在Jupyter或VS Code中打开。'}
+                    </p>
+                    <div className="flex items-center space-x-4 text-xs text-slate-600">
+                      <span className="px-2 py-1 bg-blue-100 text-blue-700 rounded">
+                        {notebookContent.split('\n').length} {language === 'en' ? 'lines' : '行'}
+                      </span>
+                      <span className="px-2 py-1 bg-green-100 text-green-700 rounded">
+                        JSON Format
+                      </span>
+                    </div>
+                  </div>
+                  <pre className="bg-slate-900 text-slate-100 p-4 rounded-lg overflow-auto text-xs leading-relaxed font-mono" style={{ maxHeight: 'calc(100vh - 350px)' }}>
+                    <code>{notebookContent}</code>
+                  </pre>
+                </div>
+              ) : (
+                <div className="flex items-center justify-center h-full">
+                  <p className="text-red-500">{language === 'en' ? 'Failed to load notebook' : '加载笔记本失败'}</p>
+                </div>
+              )}
+            </div>
+            <div className="p-4 bg-slate-50 border-t border-slate-200 flex justify-end flex-shrink-0">
+              <button
+                className="px-6 py-3 bg-corporate-800 text-white rounded-lg hover:bg-corporate-900 transition-all font-semibold shadow-lg"
+                onClick={() => {
+                  const extension = 'ipynb';
+                  handleDownload(notebookUrl, `${previewAsset?.name[language]}.${extension}`);
+                }}
+              >
+                {language === 'en' ? 'Download .ipynb File' : '下载 .ipynb 文件'}
               </button>
             </div>
           </div>
@@ -332,13 +417,20 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
                             </button>
                             <button
                               onClick={() => {
-                                if (asset.url && (asset.type === 'image' || asset.type === 'code')) {
+                                if (asset.url) {
                                   // Determine file extension based on type
-                                  const extension = asset.type === 'image' ? 'png' :
-                                                  asset.type === 'code' ? 'tsx' : asset.type;
+                                  let extension = '';
+                                  switch (asset.type) {
+                                    case 'image': extension = 'png'; break;
+                                    case 'code': extension = 'tsx'; break;
+                                    case 'notebook': extension = 'ipynb'; break;
+                                    case 'pdf': extension = 'pdf'; break;
+                                    case 'excel': extension = 'xlsx'; break;
+                                    case 'python': extension = 'py'; break;
+                                    case 'tableau': extension = 'twbx'; break;
+                                    default: extension = asset.type;
+                                  }
                                   handleDownload(asset.url, `${asset.name[language]}.${extension}`);
-                                } else {
-                                  alert(language === 'en' ? `Downloading ${asset.name[language]}...` : `正在下载 ${asset.name[language]}...`);
                                 }
                               }}
                               className="p-2 text-slate-400 hover:text-corporate-800 hover:bg-slate-100 rounded-lg transition-all"
@@ -424,7 +516,7 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
                             onClick={() => {
                               const extension = asset.type === 'image' ? 'jpg' :
                                               asset.type === 'code' ? 'tsx' : asset.type;
-                              handleDownload(asset.url, `${asset.name[language]}.${extension}`);
+                              handleDownload(asset.url, `${asset.name[language] || 'file'}.${extension}`);
                             }}
                             className="p-2 text-slate-400 hover:text-corporate-800 hover:bg-slate-100 rounded-lg transition-all"
                             title={language === 'en' ? 'Download' : '下载'}

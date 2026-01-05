@@ -35,13 +35,13 @@ export const CONTENT_EN: AppContent = {
       ],
       projects: [
         {
-          name: "Capital Project Management System",
+          name: "CapEx Project Management System",
           role: "Lead Analyst",
           description: [
             "Designed workflows for capital expenditure tracking.",
             "Reduced reporting latency by 30% through optimized data structures."
           ],
-          technologies: ["Visio", "SQL", "Axure"]
+          technologies: ["Visio", "SQL", "Axure", "XMind"]
         },
         {
           name: "Field Management APP",
@@ -59,7 +59,7 @@ export const CONTENT_EN: AppContent = {
             "Defined KPIs and visualized construction progress data.",
             "Ensured data accuracy through rigorous verification processes."
           ],
-          technologies: ["Tableau", "Excel", "Data Visualization"]
+          technologies: ["Tableau Date Visualization", "Excel", "Data Cleaning"]
         }
       ]
     }
@@ -81,7 +81,7 @@ export const CONTENT_EN: AppContent = {
     hard: [
       { category: "Business Analysis", items: ["Requirement Gathering", "UML/Visio", "Axure RP", "Agile/Scrum"] },
       { category: "Data & Finance", items: ["SQL", "Excel (Advanced)", "Financial Modeling", "Data Auditing"] },
-      { category: "Development", items: ["API Integration", "Basic Python", "System Testing"] }
+      { category: "Development", items: ["API Integration", "Intermediate Python", "System Testing", "Vibe Coding"] }
     ],
     soft: ["Cross-functional Communication", "Stakeholder Management", "Problem Solving", "Team Leadership"],
     languages: ["English (Professional/Academic)", "Mandarin (Native)"]
@@ -123,13 +123,13 @@ export const CONTENT_ZH: AppContent = {
       ],
       projects: [
         {
-          name: "资本性项目管理系统",
+          name: "资本性支出项目管理系统",
           role: "主分析师",
           description: [
             "梳理并设计资本开支全流程管理功能。",
             "通过优化数据流转逻辑，提升了报表生成效率。"
           ],
-          technologies: ["Visio", "SQL", "Axure"]
+          technologies: ["Visio", "SQL", "Axure", "XMind"]
         },
         {
           name: "现场管理 APP",
@@ -147,7 +147,7 @@ export const CONTENT_ZH: AppContent = {
             "定义关键绩效指标(KPI)，设计可视化大屏。",
             "处理海量建设数据，进行清洗与稽核，确保数据质量。"
           ],
-          technologies: ["数据可视化", "Excel", "数据清洗"]
+          technologies: ["Tableau数据可视化", "Excel", "数据清洗"]
         }
       ]
     }
@@ -169,7 +169,7 @@ export const CONTENT_ZH: AppContent = {
     hard: [
       { category: "商业分析", items: ["需求调研", "流程图/UML", "Axure 原型", "敏捷开发"] },
       { category: "数据与金融", items: ["SQL 查询", "Excel (高级)", "金融建模", "数据稽核"] },
-      { category: "技术能力", items: ["API 接口联调", "Python 基础", "系统测试"] }
+      { category: "技术能力", items: ["API 接口联调", "Python 熟练", "系统测试", "氛围编程“"] }
     ],
     soft: ["团队协作", "跨部门沟通", "逻辑思维", "英语沟通"],
     languages: ["英语 (专业流利)", "中文 (母语)"]
@@ -280,6 +280,70 @@ export const INITIAL_DOCUMENTS: DocumentCategory[] = [
           { id: 'at4', name: { en: "React Prototype Source Code", zh: "React 原型源代码" }, type: "code", size: "0.1 MB", description: { en: "Functional React component with state management and Lucide icons.", zh: "功能完整的 React 组件，包含状态管理与 Lucide 图标库。" }, url: "/portfolio//asset_transfer_prototype.tsx" }
         ],
         versions: [{ version: 1, date: "2025-01-04", name: "asset_transfer_prototype.tsx", size: "0.1 MB", isCurrent: true }]
+      },
+      {
+        id: 'port-financial-data-analysis',
+        title: { en: "Financial Data Analysis with LSTM", zh: "金融数据分析与LSTM应用" },
+        subtitle: { en: "Deep Learning & Quantitative Trading", zh: "项目：深度学习与量化交易" },
+        type: "portfolio",
+        thumbnailUrl: "/portfolio/financial-data-analysis/Image1.png",
+        projectSummary: {
+          en: "Applied deep learning techniques to financial time series forecasting using LSTM neural networks, achieving 93.7% prediction accuracy and developing a quantitative trading strategy with backtested returns.",
+          zh: "运用LSTM深度神经网络进行金融时间序列预测，准确率达93.7%，并基于预测结果开发量化交易策略进行回测验证。"
+        },
+        highlights: {
+          en: [
+            "LSTM model achieved 93.7% accuracy in gold price prediction using 10 years of historical data",
+            "Implemented complete ML workflow: data preprocessing, feature engineering, model training, and evaluation",
+            "Developed and backtested trading strategy with cumulative returns of $11,612",
+            "Mastered TensorFlow/Keras framework for time series forecasting in financial markets"
+          ],
+          zh: [
+            "使用10年历史数据训练LSTM模型，黄金价格预测准确率达93.7%",
+            "实现完整机器学习工作流：数据预处理、特征工程、模型训练与评估",
+            "开发并回测交易策略，累计收益达11,612美元",
+            "掌握TensorFlow/Keras框架在金融市场时间序列预测中的应用"
+          ]
+        },
+        assets: [
+          { id: 'fda1', name: { en: "LSTM Gold Price Prediction Model", zh: "LSTM黄金价格预测模型" }, type: "notebook", size: "5.1 MB", description: { en: "Complete implementation with data preprocessing, LSTM architecture design, training process, and performance visualization.", zh: "完整实现，包含数据预处理、LSTM架构设计、训练过程和性能可视化。" }, url: "/portfolio/financial-data-analysis/LSTM_Gold_Price_Prediction_Joe.ipynb" },
+          { id: 'fda2', name: { en: "Financial Data Cleaning Pipeline", zh: "金融数据清洗流程" }, type: "notebook", size: "95 KB", description: { en: "Data quality assessment, missing value handling, and feature engineering for financial time series.", zh: "金融时间序列数据质量评估、缺失值处理和特征工程。" }, url: "/portfolio/financial-data-analysis/Data_Cleaning.ipynb" },
+          { id: 'fda3', name: { en: "Model Performance Visualization", zh: "模型性能可视化结果" }, type: "image", size: "299 KB", description: { en: "Visual comparison showing actual vs predicted gold prices with 93.7% accuracy.", zh: "预测值与实际值的可视化对比，展示93.7%的预测准确率。" }, url: "/portfolio/financial-data-analysis/Image1.png" },
+          { id: 'fda4', name: { en: "Prediction Results Chart", zh: "预测结果图表" }, type: "image", size: "338 KB", description: { en: "Training and testing data split with model prediction trends over time.", zh: "训练测试集划分及模型预测趋势的时间序列展示。" }, url: "/portfolio/financial-data-analysis/Image2.png" }
+        ],
+        versions: [{ version: 1, date: "2025-01-05", name: "financial_data_analysis_bundle.zip", size: "5.8 MB", isCurrent: true }]
+      },
+      {
+        id: 'port-bl-backtest',
+        title: { en: "Black-Litterman Model Backtest System", zh: "Black-Litterman模型回测系统" },
+        subtitle: { en: "Quantitative Portfolio Optimization Platform", zh: "项目：量化投资组合优化平台" },
+        type: "portfolio",
+        thumbnailUrl: "/portfolio/bl-business-model-canvas/Image1.png",
+        projectSummary: {
+          en: "An interactive web application implementing the Black-Litterman asset allocation model for portfolio optimization. Combines market equilibrium returns with investor views through Bayesian methods, providing comprehensive backtesting capabilities with advanced performance metrics and visual analytics.",
+          zh: "实现Black-Litterman资产配置模型的交互式Web应用，通过贝叶斯方法将市场均衡收益与投资者观点相结合，提供全面的回测功能、高级绩效指标和可视化分析。"
+        },
+        highlights: {
+          en: [
+            "Full-featured parameter configuration: Risk aversion coefficient (δ) and prior uncertainty (τ) with real-time adjustment",
+            "Flexible view builder supporting both absolute return views and relative performance views with confidence levels",
+            "Comprehensive backtest metrics: Sharpe ratio, max drawdown, VaR, CVaR, information ratio, and 10+ advanced indicators",
+            "Interactive visualizations: Cumulative return charts, portfolio weight evolution, and performance comparison with benchmarks"
+          ],
+          zh: [
+            "完整参数配置系统：风险厌恶系数(δ)和先验不确定性(τ)实时调整，支持多种市场环境",
+            "灵活观点构建器：支持绝对收益观点和相对表现观点，可设置信心水平和不确定性矩阵",
+            "全面回测指标：夏普比率、最大回撤、VaR、CVaR、信息比率等10+项高级绩效评估指标",
+            "交互式可视化：累计收益曲线、投资组合权重演变、与基准策略对比分析图表"
+          ]
+        },
+        assets: [
+          { id: 'bl1', name: { en: "Strategy Introduction", zh: "策略介绍" }, type: "image", size: "450 KB", description: { en: "Comprehensive overview of Black-Litterman model theory, comparing with traditional Markowitz optimization and explaining the Bayesian approach to combining market equilibrium with investor views.", zh: "Black-Litterman模型理论完整介绍，对比传统Markowitz优化方法，阐述如何通过贝叶斯方法将市场均衡与投资者观点结合。" }, url: "/portfolio/bl-business-model-canvas/Image1.png" },
+          { id: 'bl2', name: { en: "Parameter Configuration", zh: "参数配置" }, type: "image", size: "420 KB", description: { en: "Interactive parameter tuning interface for risk aversion coefficient (δ: 1-5) and uncertainty scalar (τ: 0.01-0.1) with contextual guidance and typical value recommendations.", zh: "交互式参数调优界面，配置风险厌恶系数(δ: 1-5)和不确定性标量(τ: 0.01-0.1)，提供上下文指导和典型值推荐。" }, url: "/portfolio/bl-business-model-canvas/Image2.png" },
+          { id: 'bl3', name: { en: "View Construction", zh: "观点构建" }, type: "image", size: "380 KB", description: { en: "Advanced view builder enabling absolute and relative views with dual uncertainty quantification methods: confidence level (0-100%) or He-Litterman multiplier (0.1x-5x).", zh: "高级观点构建器，支持绝对观点和相对观点，提供双重不确定性量化方法：信心水平(0-100%)或He-Litterman乘数(0.1x-5x)。" }, url: "/portfolio/bl-business-model-canvas/Image3.png" },
+          { id: 'bl4', name: { en: "Results Analysis", zh: "结果分析" }, type: "image", size: "400 KB", description: { en: "Comprehensive performance dashboard with cumulative return charts, weight distribution analysis, and 13 key metrics including Sharpe ratio, max drawdown, VaR, CVaR, Calmar ratio, and turnover rate.", zh: "综合绩效仪表盘，包含累计收益曲线、权重分布分析以及13项关键指标：夏普比率、最大回撤、VaR、CVaR、Calmar比率和换手率等。" }, url: "/portfolio/bl-business-model-canvas/Image4.png" }
+        ],
+        versions: [{ version: 1, date: "2025-01-05", name: "black_litterman_backtest_system.zip", size: "2.1 MB", isCurrent: true }]
       }
     ]
   },
@@ -350,6 +414,30 @@ export const INITIAL_DOCUMENTS: DocumentCategory[] = [
         type: "certificate",
         thumbnailUrl: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=400&auto=format&fit=crop",
         versions: [{ version: 1, date: "2023-08-15", name: "Google_Data_Cert.pdf", size: "1.5 MB", isCurrent: true }]
+      },
+      {
+        id: 'cert-lstm-deep-learning',
+        title: { en: "LSTM Deep Learning Specialization", zh: "LSTM深度学习专业证书" },
+        subtitle: { en: "Simplilearn / Coursera", zh: "机构: Simplilearn" },
+        type: "certificate",
+        thumbnailUrl: "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?q=80&w=400&auto=format&fit=crop",
+        versions: [{ version: 1, date: "2025-01-05", name: "coursera-lstm-certificate.pdf", size: "2.3 MB", isCurrent: true }]
+      },
+      {
+        id: 'cert-data-science-ml',
+        title: { en: "Data Science and Machine Learning", zh: "数据科学与机器学习" },
+        subtitle: { en: "Packt / Coursera", zh: "机构: Packt" },
+        type: "certificate",
+        thumbnailUrl: "https://images.unsplash.com/photo-1555949963-aa79dcee981c?q=80&w=400&auto=format&fit=crop",
+        versions: [{ version: 1, date: "2025-01-05", name: "coursera-data-science-ml-certificate.pdf", size: "2.5 MB", isCurrent: true }]
+      },
+      {
+        id: 'cert-python-statistics-financial',
+        title: { en: "Python and Statistics for Financial Analysis", zh: "Python与统计学在金融分析中的应用" },
+        subtitle: { en: "The Hong Kong University of Science and Technology / Coursera", zh: "机构: 香港科技大学" },
+        type: "certificate",
+        thumbnailUrl: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=400&auto=format&fit=crop",
+        versions: [{ version: 1, date: "2025-01-05", name: "coursera-python-statistics-financial-analysis-certificate.pdf", size: "1.8 MB", isCurrent: true }]
       }
     ]
   }

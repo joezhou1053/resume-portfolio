@@ -8,7 +8,10 @@
       "Bash(npm install:*)",
       "Bash(cmd:*)",
       "Bash(dir:*)",
-      "Bash(powershell:*)"
+      "Bash(powershell:*)",
+      "Bash(curl:*)",
+      "Bash(npm run build:*)",
+      "Bash(timeout:*)"
     ]
   }
 }

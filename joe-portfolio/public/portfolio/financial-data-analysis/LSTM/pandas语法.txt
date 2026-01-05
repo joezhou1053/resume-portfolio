@@ -1,0 +1,137 @@
+1. 在 pandas 里，drop(index=[...]) 里面填的是 index 标签（label），而不是行号。
+
+2. drop 行
+df = df.drop(index=[0,1])
+
+
+3. 删除列--只删一列
+
+df = df.drop("Volume", axis=1)
+ 3.1
+这也是为什么推荐用 iloc[2:]，因为它是基于位置（position），不会管你的 index 是日期还是别的：
+
+df = df.iloc[2:]   # 永远删掉前两行
+
+
+4. 给一列重命名
+df = df.rename(columns={"Adj Close": "Adjusted_Close"})
+
+
+5. replace 用法
+regex=True 是 pandas 中 replace() 方法的一个参数，表示使用正则表达式进行模式匹配和替换。
+
+
+
+6. 
+如果你想「重新编号」
+
+用 reset_index：df = df.iloc[2:].reset_index(drop=True)
+
+
+7. 截取两列组成一个新的DF
+new_df = df[["Date", "Close"]]
+
+
+8. 两个DF, 截取两列组成新的DF
+
+情况 1：你想要“并排拼接”
+
+new_df = pd.concat(
+    [df1[["Date", "Close"]], df2[["Date", "Volume"]]], 
+    axis=1
+)
+
+
+9. to_csv
+# 保存成 CSV
+new_df.to_csv("output.csv", index=False, encoding="utf-8-sig")---这样读回来时就不会有 "Unnamed: 0"。
+
+
+10. 读CSV
+df = pd.read_csv("output.csv", index_col=False) ---这样即使有 Unnamed: 0 也会被忽略掉。
+
+11. 读CSV 2
+df = pd.read_csv("output.csv", index_col=0)----这样 pandas 会把 "Unnamed: 0" 作为真正的 index，不会留在 DataFrame 里。
+
+
+12. 某一列转换为日期格式
+df4['Date'] = pd.to_datetime(df4['Date'])
+
+
+13.datetime accessor 提取年份
+df.Date.dt.year---详见1014
+
+
+14. df.columns 获取列名
+
+15. sort df by specific columns
+df.sort_values(['hired'])
+
+
+16. 列的值 按照类型数数
+degree_counts = df['Level of Education'] .value_counts()
+
+
+17. 画图
+degree_counts.plot(kind='bar')
+
+18: pivot table 
+
+DataFrame.pivot_table(
+    data=None, values=None, 
+    index=None, columns=None, 
+    aggfunc='mean', fill_value=None, 
+    margins=False, margins_name='All', 
+    dropna=True, observed=False, sort=True
+)
+
+- data
+可选，通常直接对 df.pivot_table(...) 就行。
+
+- values
+要汇总的列名，可以是单列或列表。
+不填 = 对所有数值列做聚合。
+
+- index
+行索引，相当于透视表的“行分组字段”。
+
+- columns
+列索引，相当于透视表的“列分组字段”。
+
+- aggfunc
+聚合函数（默认 'mean'）：
+
+常用：'mean', 'sum', 'count', 'max', 'min'
+
+也可传自定义函数，甚至 dict，比如：
+
+
+
+18. .groupby
+
+你可以把 groupby 理解成 先按某个字段把数据分组。
+
+
+19. .agg
+
+agg 就是 告诉 pandas 每组的数据要做什么聚合运算。
+常见的操作有：sum（求和）、mean（平均）、max、min 等等。
+
+
+20. groupby + agg   可以对不同的列用不同的聚合方式：
+df.groupby("店铺").agg({
+    "销量": "sum",
+    "收入": "mean"
+})
+
+
+
+21. sort_values
+
+这是 pandas 提供的 DataFrame / Series 专属方法。  
+
+df.sort_values(by="销量", ascending=False)
+
+22. dropna
+df = df.dropna(subset=["Close_growth_rate"])
+dropna() 👉 丢掉没法计算的第一行，更「干净」，特别适合只关心增长率序列的时候。

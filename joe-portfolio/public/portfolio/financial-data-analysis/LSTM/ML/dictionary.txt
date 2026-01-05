@@ -1,0 +1,10 @@
+captains = { }
+
+captains["Enterprise"] = "Kirk"
+
+
+获取: 
+1. print(captains["Enterprise"])
+
+2. print(captains.get("Enterprise")
+

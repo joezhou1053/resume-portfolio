@@ -1,0 +1,72 @@
+# Jupyter Notebook Markdown 格式指南
+
+在 Jupyter Notebook 的 Markdown 单元格中，你可以使用多种方式改变字体颜色和添加加粗效果。
+
+## 改变字体颜色
+
+### 方法1：使用 HTML 标签（最常用）
+```markdown
+<font color='red'>这是红色文字</font>
+<font color='blue'>这是蓝色文字</font>
+<font color='#FF00FF'>这是紫色文字（使用十六进制颜色代码）</font>
+```
+
+### 方法2：使用 LaTeX 格式（适用于数学表达式）
+```markdown
+$\textcolor{green}{这是绿色文字}$
+```
+
+### 方法3：使用 span 标签（更灵活）
+```markdown
+<span style="color:orange">这是橙色文字</span>
+```
+
+## 添加加粗效果
+
+### 方法1：使用 Markdown 语法（最简单）
+```markdown
+**这是加粗文字**
+__这也是加粗文字__
+```
+
+### 方法2：使用 HTML 标签
+```markdown
+<strong>这是加粗文字</strong>
+<b>这也是加粗文字</b>
+```
+
+## 组合使用：同时改变颜色和加粗
+
+```markdown
+**<font color='red'>这是红色加粗文字</font>**
+```
+
+或者
+
+```markdown
+<strong><font color='blue'>这是蓝色加粗文字</font></strong>
+```
+
+## 完整示例
+
+```markdown
+# 标题
+
+这是普通文本。
+
+**这是加粗文本**
+
+<font color='red'>这是红色文本</font>
+
+**<font color='blue'>这是蓝色加粗文本</font>**
+
+<span style="color:green; font-weight:bold">这是绿色加粗文本</span>
+```
+
+## 提示
+
+1. 颜色可以使用英文名称（如 red, blue, green）或十六进制代码（如 #FF5733）
+2. 使用 HTML 标签时，确保标签正确闭合
+3. 在 Jupyter Notebook 中预览效果，可以按 Shift+Enter 运行 Markdown 单元格
+
+记住这些简单的语法，你就可以轻松地在 Jupyter Notebook 中创建丰富多彩的文本了！

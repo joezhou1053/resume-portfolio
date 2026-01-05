@@ -1,0 +1,7 @@
+np.mean(incomes)
+
+np.median(incomes)
+
+np.append(incomes, [10000000])
+
+

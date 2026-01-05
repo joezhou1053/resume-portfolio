@@ -1,0 +1,28 @@
+list = [1,2,3]
+
+list.extend([4,5])
+
+list = [1,2,3,4,5]
+
+list.append(6)
+
+
+list =   [1,2,3,4,5,6]
+
+
+
+y = [7, 8, 9]
+
+list_of_lists = [ list, y]
+
+list_of_lists = [  [1,2,3,4,5,6] ,  [7, 8, 9] ] 
+
+
+三、排序
+
+z = [3,2,1]
+z.sort()
+[1,2,3]
+
+z.sort(reverse = True)
+[3,2,1]

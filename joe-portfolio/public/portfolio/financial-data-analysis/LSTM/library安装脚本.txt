@@ -1,0 +1,42 @@
+upyter notebook 怎么安装 sklearn.preprocessing
+
+!pip install scikit-learn
+
+
+怎么安装 tensorflow
+!pip install tensorflow
+
+
+3. 怎么安装 keras
+
+Keras 现在已经“合体”到 TensorFlow 里了，直接用 tf.keras 就能调用 ✅。
+所以大部分情况下 不需要单独安装 keras，只要装好 TensorFlow 就行：
+
+
+4. keras   的 ValueError: Unable to import backend : mxnet
+
+这个错误是因为你的环境中安装了独立版本的Keras，并且配置为使用MXNet后端，但你现在想要使用TensorFlow。有几种方法可以解决这个问题：
+设置环境变量（推荐）：
+在导入TensorFlow之前，先设置Keras后端为TensorFlow：
+
+
+import os
+os.environ['KERAS_BACKEND'] = 'tensorflow'  # 必须在导入keras前设置
+
+import tensorflow as tf
+from tensorflow.keras import Model
+from tensorflow.keras.layers import Input, Dense, Dropout, LSTM
+
+5. pip install yfinance
+
+6. pip install cvxpy
+
+
+7. pip install PyPortfolioOpt
+!pip install PyPortfolioOpt---如果你在 Jupyter Notebook 里，可以直接写：
+pip install ecos --only-binary=:all:
+
+
+8. 代码美化器
+pip install black[jupyter]
+

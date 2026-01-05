@@ -1,0 +1,2 @@
+plt.hist(incomes, 50)
+plt.show()

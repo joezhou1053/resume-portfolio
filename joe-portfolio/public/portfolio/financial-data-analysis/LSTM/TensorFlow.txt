@@ -1,0 +1,67 @@
+TensorFlow 其实就是个「AI 工具箱」，里面集成了一整套端到端的机器学习和深度学习工具链。可以把它理解成一个既能搞科研、又能上生产的全栈解决方案。核心模块和工具大概分成几类：
+
+---
+
+### 🔑 核心工具 & API
+
+* **TensorFlow Core (低阶 API)**
+  张量（Tensor）运算、自动微分、计算图（Graph）、会话（Session，TF1.x）、即时执行（Eager Execution，TF2.x）。
+  → 用来写底层模型、算子开发，掌控细节。
+
+* **Keras (高阶 API)**
+  内置在 TF 里的 `tf.keras`，封装了模型搭建、训练、评估、推理的完整流程。
+  → 写模型像搭乐高一样，快速迭代。
+
+---
+
+### 🧩 模型开发相关
+
+* **tf.data**
+  数据管道构建，支持大规模数据高效加载和预处理。
+* **tf.feature\_column**
+  特征工程工具，适合结构化数据。
+* **tf.nn / tf.linalg / tf.signal**
+  常用神经网络函数、线性代数、信号处理算子库。
+
+---
+
+### 🚀 训练 & 优化
+
+* **tf.distribute**
+  分布式训练策略（多 GPU、多 TPU、多机器）。
+* **tf.train**
+  优化器（SGD、Adam）、检查点保存、学习率调度。
+* **tf.profiler**
+  训练性能分析，帮助找瓶颈。
+
+---
+
+### 📦 模型部署
+
+* **TensorFlow Serving**
+  部署在线推理服务。
+* **TensorFlow Lite (TFLite)**
+  模型压缩 & 移动端 / 边缘设备推理。
+* **TensorFlow\.js**
+  直接在浏览器或 Node.js 环境跑模型。
+* **TF Hub**
+  模型库，可以直接下载预训练模型。
+
+---
+
+### 🧠 高阶工具
+
+* **TFX (TensorFlow Extended)**
+  工业级 ML 流水线（数据处理、训练、验证、上线）。
+* **TensorBoard**
+  可视化工具（loss 曲线、模型结构、embedding 可视化）。
+* **TF Agents**
+  强化学习库。
+* **TF Probability**
+  概率建模、贝叶斯推理。
+
+---
+
+💡一句话总结：
+TensorFlow 就像一个「AI 工厂」，既有原材料（张量计算）、也有生产线（Keras/TFX）、还有运输系统（Serving/TFLite/JS），覆盖了从研究到落地的全链路。
+
