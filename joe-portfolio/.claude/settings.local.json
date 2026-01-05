@@ -5,7 +5,10 @@
       "Bash(copy:*)",
       "Bash(npm run dev)",
       "Bash(mkdir:*)",
-      "Bash(npm install:*)"
+      "Bash(npm install:*)",
+      "Bash(cmd:*)",
+      "Bash(dir:*)",
+      "Bash(powershell:*)"
     ]
   }
 }

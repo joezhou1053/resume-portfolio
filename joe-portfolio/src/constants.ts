@@ -290,13 +290,10 @@ export const INITIAL_DOCUMENTS: DocumentCategory[] = [
     items: [
       {
         id: 'doc-degree-osu',
-        title: { en: "Bachelor of Science", zh: "理学学士学位" },
+        title: { en: "OSU Diploma", zh: "OSU 毕业证书" },
         subtitle: { en: "The Ohio State University", zh: "颁发机构：OSU" },
         type: "certificate",
         thumbnailUrl: "/osu-logo.svg",
-        assets: [
-          { id: 'osu-diploma-img', name: { en: "Graduation Certificate", zh: "毕业证书" }, type: "image", size: "2.5 MB", description: { en: "Official graduation certificate from The Ohio State University", zh: "俄亥俄州立大学正式毕业证书" }, url: "/osu-diploma.jpg" }
-        ],
         versions: [{ version: 1, date: "2021-06-01", name: "OSU_Diploma.pdf", size: "0.8 MB", isCurrent: true }]
       },
       {
@@ -306,6 +303,14 @@ export const INITIAL_DOCUMENTS: DocumentCategory[] = [
         type: "certificate",
         thumbnailUrl: "https://images.unsplash.com/photo-1596495577886-d920f1fb7238?q=80&w=400&auto=format&fit=crop",
         versions: [{ version: 1, date: "2021-06-15", name: "OSU_Transcript.pdf", size: "1.1 MB", isCurrent: true }]
+      },
+      {
+        id: 'doc-degree-verification',
+        title: { en: "Degree Verification", zh: "学历认证" },
+        subtitle: { en: "Chinese Service Center for Scholarly Exchange", zh: "颁发机构：教育部留学服务中心" },
+        type: "certificate",
+        thumbnailUrl: "https://images.unsplash.com/photo-1586281380349-632531db7ed4?q=80&w=400&auto=format&fit=crop",
+        versions: [{ version: 1, date: "2021-06-20", name: "OSU_Degree_Verification.pdf", size: "0.5 MB", isCurrent: true }]
       }
     ]
   },

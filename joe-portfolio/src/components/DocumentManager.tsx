@@ -121,6 +121,22 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
     const filename = previewAsset ? `asset_${previewAsset.id}.${previewAsset.type}` : (previewDoc?.versions.find(v => v.isCurrent)?.name || "");
     const isImagePreview = previewAsset?.type === 'image' && previewAsset.url;
 
+    // Check if it's a PDF preview
+    const getPdfUrl = () => {
+      if (previewAsset?.type === 'pdf' && previewAsset.url) {
+        return previewAsset.url;
+      }
+      if (previewDoc) {
+        const currentVersion = previewDoc.versions.find(v => v.isCurrent);
+        if (currentVersion?.name.endsWith('.pdf')) {
+          return `/${currentVersion.name}`;
+        }
+      }
+      return '';
+    };
+    const pdfUrl = getPdfUrl();
+    const isPdfPreview = !!pdfUrl;
+
     return (
       <div className="fixed inset-0 z-[60] bg-slate-900/95 flex flex-col animate-fade-in p-4 md:p-8">
         <div className="flex justify-between items-center mb-4 text-white">
@@ -161,6 +177,25 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
               </button>
             </div>
           </div>
+        ) : isPdfPreview ? (
+          /* PDF Preview with iframe */
+          <div className="flex-grow flex flex-col bg-white rounded-xl shadow-2xl overflow-hidden">
+            <div className="flex-grow overflow-hidden" style={{ maxHeight: 'calc(100vh - 180px)' }}>
+              <iframe
+                src={pdfUrl}
+                className="w-full h-full border-0"
+                title={title}
+              />
+            </div>
+            <div className="p-4 bg-slate-50 border-t border-slate-200 flex justify-center flex-shrink-0">
+              <button
+                className="px-6 py-3 bg-corporate-800 text-white rounded-lg hover:bg-corporate-900 transition-all font-semibold shadow-lg"
+                onClick={() => handleDownload(pdfUrl, filename)}
+              >
+                {language === 'en' ? 'Download PDF' : '下载 PDF'}
+              </button>
+            </div>
+          </div>
         ) : (
           /* Non-image Preview Placeholder */
           <div className="flex-grow bg-white rounded-xl shadow-2xl overflow-hidden flex items-center justify-center relative">
@@ -179,7 +214,10 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
                <div className="flex justify-center space-x-4">
                   <button
                     className="px-6 py-3 bg-corporate-800 text-white rounded-lg hover:bg-corporate-900 transition-all font-semibold shadow-lg"
-                    onClick={() => alert(language === 'en' ? `Downloading ${filename}...` : `正在下载 ${filename}...`)}
+                    onClick={() => {
+                      const downloadUrl = previewAsset?.url || (previewDoc ? `/${previewDoc.versions.find(v => v.isCurrent)?.name}` : '');
+                      if (downloadUrl) handleDownload(downloadUrl, filename);
+                    }}
                   >
                     {language === 'en' ? 'Download for Offline View' : '下载到本地查看'}
                   </button>
@@ -487,14 +525,16 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
                   <h3 className="font-bold text-slate-800 mb-4 line-clamp-2">{doc.title[language]}</h3>
                   <div className="mt-auto grid grid-cols-2 gap-2">
                     <button onClick={() => {
-                      // If document has assets, open detail view, otherwise open preview modal
-                      if (doc.assets && doc.assets.length > 0) {
+                      // If document has a single image asset, preview it directly
+                      if (doc.assets && doc.assets.length === 1 && doc.assets[0].type === 'image') {
+                        setPreviewAsset(doc.assets[0]);
+                      } else if (doc.assets && doc.assets.length > 0) {
                         setActiveDocument(doc);
                       } else {
                         setPreviewDoc(doc);
                       }
                     }} className="flex items-center justify-center px-3 py-2 bg-slate-50 text-slate-700 rounded-lg hover:bg-slate-100 transition-colors text-xs font-medium border border-slate-200">
-                      {language === 'en' ? (doc.assets && doc.assets.length > 0 ? 'View Details' : 'Preview') : (doc.assets && doc.assets.length > 0 ? '查看详情' : '预览')}
+                      {language === 'en' ? (doc.assets && doc.assets.length === 1 && doc.assets[0].type === 'image' ? 'Preview' : doc.assets && doc.assets.length > 0 ? 'View Details' : 'Preview') : (doc.assets && doc.assets.length === 1 && doc.assets[0].type === 'image' ? '预览' : doc.assets && doc.assets.length > 0 ? '查看详情' : '预览')}
                     </button>
                     <button
                       onClick={() => {
