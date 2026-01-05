@@ -169,7 +169,7 @@ export const CONTENT_ZH: AppContent = {
     hard: [
       { category: "商业分析", items: ["需求调研", "流程图/UML", "Axure 原型", "敏捷开发"] },
       { category: "数据与金融", items: ["SQL 查询", "Excel (高级)", "金融建模", "数据稽核"] },
-      { category: "技术能力", items: ["API 接口联调", "Python 熟练", "系统测试", "氛围编程“"] }
+      { category: "技术能力", items: ["API 接口联调", "Python 熟练", "系统测试", "氛围编程"] }
     ],
     soft: ["团队协作", "跨部门沟通", "逻辑思维", "英语沟通"],
     languages: ["英语 (专业流利)", "中文 (母语)"]

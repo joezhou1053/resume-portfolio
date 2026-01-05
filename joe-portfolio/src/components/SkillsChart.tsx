@@ -1,12 +1,13 @@
 import React from 'react';
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
-import type { Language } from '../types';
+import type { Language, SkillSet } from '../types';
 
 interface Props {
   language: Language;
+  skills: SkillSet[];
 }
 
-const SkillsChart: React.FC<Props> = ({ language }) => {
+const SkillsChart: React.FC<Props> = ({ language, skills }) => {
   const radarData = [
     { subject: language === 'en' ? 'Finance' : '金融知识', A: 90, fullMark: 100 },
     { subject: language === 'en' ? 'Data Analysis' : '数据分析', A: 85, fullMark: 100 },
@@ -25,49 +26,79 @@ const SkillsChart: React.FC<Props> = ({ language }) => {
   ];
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-      {/* Radar Chart for Core Competencies */}
-      <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200 min-w-0">
-        <h3 className="text-lg font-bold text-corporate-800 mb-6 text-center">
-          {language === 'en' ? 'Competency Matrix' : '能力维度分析'}
-        </h3>
-        <div className="h-64 w-full">
-          <ResponsiveContainer width="100%" height={256}>
-            <RadarChart cx="50%" cy="50%" outerRadius="80%" data={radarData}>
-              <PolarGrid stroke="#e2e8f0" />
-              <PolarAngleAxis dataKey="subject" tick={{ fill: '#475569', fontSize: 12 }} />
-              <PolarRadiusAxis angle={30} domain={[0, 100]} tick={false} axisLine={false} />
-              <Radar
-                name="Joe"
-                dataKey="A"
-                stroke="#007aff"
-                strokeWidth={2}
-                fill="#007aff"
-                fillOpacity={0.3}
-              />
-            </RadarChart>
-          </ResponsiveContainer>
+    <div className="space-y-8">
+      {/* Charts Row */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {/* Radar Chart for Core Competencies */}
+        <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200 min-w-0">
+          <h3 className="text-lg font-bold text-corporate-800 mb-6 text-center">
+            {language === 'en' ? 'Competency Matrix' : '能力维度分析'}
+          </h3>
+          <div className="h-64 w-full">
+            <ResponsiveContainer width="100%" height={256}>
+              <RadarChart cx="50%" cy="50%" outerRadius="80%" data={radarData}>
+                <PolarGrid stroke="#e2e8f0" />
+                <PolarAngleAxis dataKey="subject" tick={{ fill: '#475569', fontSize: 12 }} />
+                <PolarRadiusAxis angle={30} domain={[0, 100]} tick={false} axisLine={false} />
+                <Radar
+                  name="Joe"
+                  dataKey="A"
+                  stroke="#007aff"
+                  strokeWidth={2}
+                  fill="#007aff"
+                  fillOpacity={0.3}
+                />
+              </RadarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+
+        {/* Bar Chart for Technical Tools */}
+        <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200 min-w-0">
+          <h3 className="text-lg font-bold text-corporate-800 mb-6 text-center">
+            {language === 'en' ? 'Technical Proficiency' : '技术工具熟练度'}
+          </h3>
+          <div className="h-64 w-full">
+            <ResponsiveContainer width="100%" height={256}>
+              <BarChart layout="vertical" data={toolsData} margin={{ top: 5, right: 30, left: 40, bottom: 5 }}>
+                <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} stroke="#f1f5f9"/>
+                <XAxis type="number" domain={[0, 100]} hide />
+                <YAxis dataKey="name" type="category" tick={{ fill: '#334e68', fontSize: 13, fontWeight: 500 }} width={60} />
+                <Tooltip
+                  cursor={{ fill: '#f8fafc' }}
+                  contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)' }}
+                />
+                <Bar dataKey="level" fill="#334e68" radius={[0, 4, 4, 0]} barSize={20} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
         </div>
       </div>
 
-      {/* Bar Chart for Technical Tools */}
-      <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200 min-w-0">
-        <h3 className="text-lg font-bold text-corporate-800 mb-6 text-center">
-          {language === 'en' ? 'Technical Proficiency' : '技术工具熟练度'}
+      {/* Hard Skills Categories - NOW DISPLAYING DATA FROM CONSTANTS.TS */}
+      <div className="bg-white p-8 rounded-xl shadow-sm border border-slate-200">
+        <h3 className="text-lg font-bold text-corporate-800 mb-6">
+          {language === 'en' ? 'Technical Skills Breakdown' : '硬技能详解'}
         </h3>
-        <div className="h-64 w-full">
-          <ResponsiveContainer width="100%" height={256}>
-            <BarChart layout="vertical" data={toolsData} margin={{ top: 5, right: 30, left: 40, bottom: 5 }}>
-              <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} stroke="#f1f5f9"/>
-              <XAxis type="number" domain={[0, 100]} hide />
-              <YAxis dataKey="name" type="category" tick={{ fill: '#334e68', fontSize: 13, fontWeight: 500 }} width={60} />
-              <Tooltip 
-                cursor={{ fill: '#f8fafc' }}
-                contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)' }}
-              />
-              <Bar dataKey="level" fill="#334e68" radius={[0, 4, 4, 0]} barSize={20} />
-            </BarChart>
-          </ResponsiveContainer>
+        <div className="space-y-6">
+          {skills.map((category, idx) => (
+            <div key={idx} className="border-b border-slate-100 pb-4 last:border-0 last:pb-0">
+              <h4 className="text-md font-semibold text-accent-600 mb-3 flex items-center">
+                <span className="w-1.5 h-1.5 bg-accent-600 rounded-full mr-2"></span>
+                {category.category}
+              </h4>
+              <div className="flex flex-wrap gap-2">
+                {category.items.map((item, itemIdx) => (
+                  <span
+                    key={itemIdx}
+                    className="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-700 hover:border-accent-300 hover:bg-accent-50 transition-colors"
+                  >
+                    {item}
+                  </span>
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>

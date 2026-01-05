@@ -260,7 +260,7 @@ const App: React.FC = () => {
                    <span className="w-2 h-8 bg-corporate-500 mr-4 rounded-full"></span>
                    {content.sectionTitles.skills}
                 </h2>
-                <SkillsChart language={lang} />
+                <SkillsChart language={lang} skills={content.skills.hard} />
                 
                 {/* Soft Skills Tags */}
                 <div className="mt-8">
