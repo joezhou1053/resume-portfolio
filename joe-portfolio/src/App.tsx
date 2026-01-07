@@ -11,24 +11,11 @@ const App: React.FC = () => {
   const [content, setContent] = useState<AppContent>(CONTENT_ZH);
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [degreeThumb, setDegreeThumb] = useState<string | null>(null);
 
   useEffect(() => {
     setContent(lang === 'en' ? CONTENT_EN : CONTENT_ZH);
     setIsAdmin(StorageService.checkAdmin());
   }, [lang]);
-
-  useEffect(() => {
-    // Try to find the OSU degree document thumbnail and set it for education card
-    try {
-      const cats = StorageService.getDocuments();
-      const degreeCat = cats.find(c => c.id === 'cat-degree');
-      const doc = degreeCat?.items.find(i => i.id === 'doc-degree-osu');
-      if (doc && 'thumbnailUrl' in doc) setDegreeThumb(doc.thumbnailUrl || null);
-    } catch (e) {
-      // ignore
-    }
-  }, []);
 
   const toggleLanguage = () => {
     setLang(prev => prev === 'en' ? 'zh' : 'en');
@@ -200,80 +187,108 @@ const App: React.FC = () => {
           </div>
         </section>
 
-        {/* Education & Skills Split Section */}
-        <section id="skills" className="py-20 bg-slate-50">
+        {/* Education & Skills Dashboard - Final Optimized Compact Layout */}
+        <section id="skills" className="py-12 bg-slate-50/50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-              {/* Education Column */}
-              <div className="lg:col-span-1">
-                <h2 className="text-3xl font-bold text-corporate-900 mb-8 flex items-center">
-                  <span className="w-2 h-8 bg-corporate-500 mr-4 rounded-full"></span>
-                  {content.sectionTitles.education}
-                </h2>
-                {content.education.map((edu, idx) => (
-                  <div key={idx} className="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
-                    <div className="flex items-center mb-4">
-                              {degreeThumb ? (
-                                <img
-                                  src={degreeThumb}
-                                  alt="degree"
-                                  onError={(e) => { (e.currentTarget as HTMLImageElement).src = 'https://images.unsplash.com/photo-1496307042754-b4aa456c4a2d?q=80&w=400&auto=format&fit=crop'; }}
-                                  className="w-12 h-12 rounded-lg object-cover mr-4"
-                                />
-                              ) : (
-                                <div className="w-12 h-12 bg-red-100 text-red-700 rounded-lg flex items-center justify-center font-bold text-xl mr-4">O</div>
-                              )}
-                              <div>
-                        <h3 className="font-bold text-lg text-slate-900">{edu.school}</h3>
-                        <p className="text-sm text-slate-500">{edu.degree} - {edu.major}</p>
+            <div className="grid lg:grid-cols-12 gap-5">
+
+              {/* Left Column (Identity & Foundation) */}
+              <div className="lg:col-span-4 flex flex-col gap-5">
+                {/* Unified Foundation Card */}
+                <div className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex flex-col h-full">
+                  <h2 className="text-lg font-bold text-corporate-900 mb-4 flex items-center border-b border-slate-50 pb-3">
+                    <span className="w-1 h-5 bg-corporate-800 mr-3 rounded-full"></span>
+                    {content.sectionTitles.education}
+                  </h2>
+
+                  {content.education.map((edu, idx) => (
+                    <div key={idx} className="mb-6">
+                      <div className="flex items-center mb-3">
+                        <div className="w-9 h-9 bg-red-100 text-red-700 rounded-lg flex-shrink-0 flex items-center justify-center font-bold text-base mr-3">
+                          O
+                        </div>
+                        <div>
+                          <h3 className="font-bold text-[13px] text-slate-900 leading-tight">{edu.school}</h3>
+                          <p className="text-[10px] text-slate-500">{edu.degree} • {edu.major}</p>
+                        </div>
                       </div>
+                      <ul className="space-y-1.5 text-[11px] text-slate-600">
+                        {edu.details.map((detail, i) => (
+                          <li key={i} className="flex items-start">
+                            <svg className="w-3 h-3 mr-2 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
+                            <span className="flex-1">{detail}</span>
+                          </li>
+                        ))}
+                      </ul>
                     </div>
-                    <ul className="space-y-3 text-sm text-slate-600">
-                      {edu.details.map((detail, i) => (
-                        <li key={i} className="flex items-start">
-                          <svg className="w-4 h-4 mr-2 text-green-500 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-                          {detail}
-                        </li>
+                  ))}
+
+                  <div className="mt-auto pt-5 border-t border-slate-50">
+                    <h3 className="font-bold text-xs text-slate-900 mb-3 flex items-center">
+                      <svg className="w-4 h-4 mr-2 text-corporate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" /></svg>
+                      {lang === 'en' ? 'Language Proficiency' : '语言能力'}
+                    </h3>
+                    <div className="grid grid-cols-1 gap-2">
+                      {content.skills.languages.map((l, i) => (
+                        <div key={i} className="flex items-center justify-between text-[11px] bg-slate-50/50 px-3 py-2 rounded-xl border border-slate-100/50 hover:bg-white transition-colors">
+                          <span className="font-medium text-slate-700">{l.split('(')[0]}</span>
+                          <span className="font-bold text-[9px] bg-white text-corporate-600 border border-slate-200 px-2 py-0.5 rounded-full uppercase">
+                            {l.split('(')[1]?.replace(')', '') || 'Native'}
+                          </span>
+                        </div>
                       ))}
-                    </ul>
+                    </div>
                   </div>
-                ))}
-                
-                {/* Languages Sub-box */}
-                <div className="mt-8 bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
-                   <h3 className="font-bold text-lg text-slate-900 mb-4">{lang === 'en' ? 'Languages' : '语言能力'}</h3>
-                   <div className="space-y-3">
-                     {content.skills.languages.map((l, i) => (
-                       <div key={i} className="flex items-center justify-between">
-                         <span className="text-slate-600">{l.split('(')[0]}</span>
-                         <span className="text-xs font-semibold bg-slate-100 px-2 py-1 rounded text-slate-500">{l.split('(')[1]?.replace(')', '') || 'Native'}</span>
-                       </div>
-                     ))}
-                   </div>
                 </div>
               </div>
 
-              {/* Skills Visualizations */}
-              <div className="lg:col-span-2">
-                <h2 className="text-3xl font-bold text-corporate-900 mb-8 flex items-center">
-                   <span className="w-2 h-8 bg-corporate-500 mr-4 rounded-full"></span>
-                   {content.sectionTitles.skills}
-                </h2>
-                <SkillsChart language={lang} skills={content.skills.hard} />
-                
-                {/* Soft Skills Tags */}
-                <div className="mt-8">
-                  <h3 className="text-lg font-bold text-corporate-800 mb-4">{lang === 'en' ? 'Interpersonal & Leadership' : '软技能与领导力'}</h3>
-                  <div className="flex flex-wrap gap-3">
+              {/* Right Column (Core Competency Dashboard) */}
+              <div className="lg:col-span-8 flex flex-col gap-5">
+                <div className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex flex-col">
+                  <div className="flex justify-between items-center mb-5 pb-3 border-b border-slate-50">
+                    <h2 className="text-lg font-bold text-corporate-900 flex items-center">
+                      <span className="w-1 h-5 bg-accent-600 mr-3 rounded-full"></span>
+                      {content.sectionTitles.skills}
+                    </h2>
+                  </div>
+
+                  {/* Skills Tag Grid - Fixed Hard Skill Rendering */}
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
+                    {content.skills.hard.map((skillGroup, idx) => (
+                      <div key={idx} className="bg-slate-50/50 p-3 rounded-xl border border-slate-100/30">
+                        <h3 className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-2 border-b border-slate-100 pb-1">
+                          {skillGroup.category}
+                        </h3>
+                        <div className="flex flex-wrap gap-1">
+                          {skillGroup.items.map((item, i) => (
+                            <span key={i} className="text-[10px] font-bold text-corporate-800 bg-white px-2 py-0.5 rounded border border-slate-100 shadow-sm">
+                              {item}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Dynamic Visualizations - Compact View */}
+                  <div className="bg-white rounded-xl">
+                    <SkillsChart language={lang} />
+                  </div>
+
+                  {/* Soft Skills & Leadership - Tightly integrated at the bottom */}
+                  <div className="mt-6 pt-5 border-t border-slate-50 flex flex-wrap items-center gap-2">
+                    <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest mr-2">
+                      {lang === 'en' ? 'SOFT SKILLS' : '核心软技能'}
+                    </span>
                     {content.skills.soft.map((skill, i) => (
-                      <span key={i} className="px-4 py-2 bg-white border border-slate-200 rounded-full text-slate-600 text-sm hover:border-accent-400 hover:text-accent-600 transition-colors cursor-default">
+                      <span key={i} className="px-3 py-1 bg-accent-50 text-accent-700 text-[10px] font-black rounded-lg border border-accent-100 hover:bg-accent-600 hover:text-white transition-all cursor-default">
                         {skill}
                       </span>
                     ))}
                   </div>
                 </div>
               </div>
+
             </div>
           </div>
         </section>

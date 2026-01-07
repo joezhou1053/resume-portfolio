@@ -438,6 +438,46 @@ export const INITIAL_DOCUMENTS: DocumentCategory[] = [
         type: "certificate",
         thumbnailUrl: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=400&auto=format&fit=crop",
         versions: [{ version: 1, date: "2025-01-05", name: "coursera-python-statistics-financial-analysis-certificate.pdf", size: "1.8 MB", isCurrent: true }]
+      },
+      {
+        id: 'cert-tableau-fundamentals',
+        title: { en: "Fundamentals of Visualization with Tableau", zh: "Tableau数据可视化基础" },
+        subtitle: { en: "UC Davis / Coursera", zh: "机构: UC Davis" },
+        type: "certificate",
+        thumbnailUrl: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=400&auto=format&fit=crop",
+        versions: [{ version: 1, date: "2025-01-07", name: "Fundamentals_of_Visualization_with_Tableau.pdf", size: "1.2 MB", isCurrent: true }]
+      },
+      {
+        id: 'cert-tableau-essential-design',
+        title: { en: "Essential Design Principles for Tableau", zh: "Tableau核心设计原则" },
+        subtitle: { en: "UC Davis / Coursera", zh: "机构: UC Davis" },
+        type: "certificate",
+        thumbnailUrl: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=400&auto=format&fit=crop",
+        versions: [{ version: 1, date: "2025-01-07", name: "Essential_Design_Principles_for_Tableau.pdf", size: "1.1 MB", isCurrent: true }]
+      },
+      {
+        id: 'cert-tableau-visual-analytics',
+        title: { en: "Visual Analytics with Tableau", zh: "Tableau可视化分析" },
+        subtitle: { en: "UC Davis / Coursera", zh: "机构: UC Davis" },
+        type: "certificate",
+        thumbnailUrl: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=400&auto=format&fit=crop",
+        versions: [{ version: 1, date: "2025-01-07", name: "Visual_Analytics_with_Tableau.pdf", size: "1.3 MB", isCurrent: true }]
+      },
+      {
+        id: 'cert-tableau-dashboards',
+        title: { en: "Creating Dashboards and Storytelling with Tableau", zh: "Tableau仪表板与数据叙事" },
+        subtitle: { en: "UC Davis / Coursera", zh: "机构: UC Davis" },
+        type: "certificate",
+        thumbnailUrl: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=400&auto=format&fit=crop",
+        versions: [{ version: 1, date: "2025-01-07", name: "Creating_Dashboards_and_Storytelling_with_Tableau.pdf", size: "1.4 MB", isCurrent: true }]
+      },
+      {
+        id: 'cert-python-finance-edhec',
+        title: { en: "Python & Finance Specialization", zh: "Python & Finance 专业化认证" },
+        subtitle: { en: "EDHEC Business School / Coursera", zh: "机构: EDHEC 商学院" },
+        type: "certificate",
+        thumbnailUrl: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?q=80&w=400&auto=format&fit=crop",
+        versions: [{ version: 1, date: "2025-01-07", name: "Coursera_Python_Finance_Specialization_EDHEC.pdf", size: "2.0 MB", isCurrent: true }]
       }
     ]
   }

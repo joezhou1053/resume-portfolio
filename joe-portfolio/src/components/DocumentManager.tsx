@@ -643,6 +643,29 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
             );
           })}
         </div>
+
+        {/* Pagination Controls */}
+        {filteredItems.length > ITEMS_PER_PAGE && (
+          <div className="flex justify-center items-center mt-8 space-x-4">
+            <button
+              onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+              disabled={currentPage === 1}
+              className="px-4 py-2 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm font-medium"
+            >
+              {language === 'en' ? '← Previous' : '← 上一页'}
+            </button>
+            <span className="text-sm text-slate-600">
+              {language === 'en' ? `Page ${currentPage} of ${Math.ceil(filteredItems.length / ITEMS_PER_PAGE)}` : `第 ${currentPage} 页，共 ${Math.ceil(filteredItems.length / ITEMS_PER_PAGE)} 页`}
+            </span>
+            <button
+              onClick={() => setCurrentPage(prev => Math.min(Math.ceil(filteredItems.length / ITEMS_PER_PAGE), prev + 1))}
+              disabled={currentPage === Math.ceil(filteredItems.length / ITEMS_PER_PAGE)}
+              className="px-4 py-2 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm font-medium"
+            >
+              {language === 'en' ? 'Next →' : '下一页 →'}
+            </button>
+          </div>
+        )}
       </div>
     );
   }
@@ -650,7 +673,7 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 animate-fade-in">
       {categories.map((cat) => (
-        <div key={cat.id} onClick={() => setActiveCategory(cat)} className="group relative h-64 rounded-3xl overflow-hidden cursor-pointer shadow-md hover:shadow-xl transition-all transform hover:-translate-y-1">
+        <div key={cat.id} onClick={() => { setActiveCategory(cat); setCurrentPage(1); }} className="group relative h-64 rounded-3xl overflow-hidden cursor-pointer shadow-md hover:shadow-xl transition-all transform hover:-translate-y-1">
           <div className="absolute inset-0">
             <img src={cat.coverImage} alt="" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
             <div className="absolute inset-0 bg-gradient-to-t from-corporate-900/90 to-corporate-900/30 group-hover:to-corporate-900/50 transition-colors" />
