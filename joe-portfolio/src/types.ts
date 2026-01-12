@@ -3,7 +3,7 @@ export type Language = 'en' | 'zh';
 export interface ProjectAsset {
   id: string;
   name: { en: string; zh: string };
-  type: 'pdf' | 'excel' | 'word' | 'tableau' | 'python' | 'notebook' | 'visio' | 'image' | 'code';
+  type: 'pdf' | 'excel' | 'word' | 'tableau' | 'tableau-url' | 'python' | 'notebook' | 'visio' | 'image' | 'code' | 'markdown';
   size: string;
   description: { en: string; zh: string };
   url?: string; // Optional URL for image/code assets
@@ -17,6 +17,7 @@ export interface DocumentItem {
   thumbnailUrl: string;
   projectSummary?: { en: string; zh: string }; // For portfolio items
   highlights?: { en: string[]; zh: string[] }; // Key achievements for HR
+  liveUrl?: string; // Live demo URL for portfolio items
   assets?: ProjectAsset[]; // Sub-files for portfolio
   versions: FileVersion[];
 }

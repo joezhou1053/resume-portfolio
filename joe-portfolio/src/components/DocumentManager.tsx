@@ -1,5 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import type { DocumentCategory, DocumentItem, ProjectAsset, Language } from '../types';
 import * as StorageService from '../services/storageService';
 import JSZip from 'jszip';
@@ -11,6 +13,7 @@ interface Props {
 }
 
 const ITEMS_PER_PAGE = 6;
+const PORTFOLIO_ITEMS_PER_PAGE = 3;
 
 const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
   const [categories, setCategories] = useState<DocumentCategory[]>([]);
@@ -18,10 +21,13 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
   const [activeDocument, setActiveDocument] = useState<DocumentItem | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
+  const [portfolioPage, setPortfolioPage] = useState(1);
   const [previewDoc, setPreviewDoc] = useState<DocumentItem | null>(null);
   const [previewAsset, setPreviewAsset] = useState<ProjectAsset | null>(null);
   const [notebookContent, setNotebookContent] = useState<string>('');
   const [loadingNotebook, setLoadingNotebook] = useState(false);
+  const [markdownContent, setMarkdownContent] = useState<string>('');
+  const [loadingMarkdown, setLoadingMarkdown] = useState(false);
 
   useEffect(() => {
     setCategories(StorageService.getDocuments());
@@ -43,6 +49,25 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
         });
     } else {
       setNotebookContent('');
+    }
+  }, [previewAsset]);
+
+  // Load markdown content when previewing a markdown asset
+  useEffect(() => {
+    if (previewAsset?.type === 'markdown' && previewAsset.url) {
+      setLoadingMarkdown(true);
+      fetch(previewAsset.url)
+        .then(res => res.text())
+        .then(content => {
+          setMarkdownContent(content);
+          setLoadingMarkdown(false);
+        })
+        .catch(err => {
+          console.error('Failed to load markdown:', err);
+          setLoadingMarkdown(false);
+        });
+    } else {
+      setMarkdownContent('');
     }
   }, [previewAsset]);
 
@@ -99,6 +124,7 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
               case 'python': extension = '.py'; break;
               case 'notebook': extension = '.ipynb'; break;
               case 'tableau': extension = '.twbx'; break;
+              case 'markdown': extension = '.md'; break;
               default: extension = '.bin';
             }
 
@@ -132,7 +158,9 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
       case 'python':
       case 'notebook':
       case 'code': return <svg className="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" /></svg>;
+      case 'markdown': return <svg className="w-5 h-5 text-purple-600" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 0h8v12H6V4zm1 3v6h1V7l2 3 2-3v6h1V7h-1l-2 3-2-3H7z" clipRule="evenodd" /></svg>;
       case 'tableau': return <svg className="w-5 h-5 text-orange-500" fill="currentColor" viewBox="0 0 20 20"><path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z" /><path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z" /></svg>;
+      case 'tableau-url': return <svg className="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122" /></svg>;
       default: return <svg className="w-5 h-5 text-slate-400" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" /></svg>;
     }
   };
@@ -168,6 +196,16 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
     };
     const notebookUrl = getNotebookUrl();
     const isNotebookPreview = !!notebookUrl;
+
+    // Check if it's a Markdown preview
+    const getMarkdownUrl = () => {
+      if (previewAsset?.type === 'markdown' && previewAsset.url) {
+        return previewAsset.url;
+      }
+      return '';
+    };
+    const markdownUrl = getMarkdownUrl();
+    const isMarkdownPreview = !!markdownUrl;
 
     return (
       <div className="fixed inset-0 z-[60] bg-slate-900/95 flex flex-col animate-fade-in p-4 md:p-8">
@@ -281,6 +319,83 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
               </button>
             </div>
           </div>
+        ) : isMarkdownPreview ? (
+          /* Markdown Preview with formatted content */
+          <div className="flex-grow flex flex-col bg-white rounded-xl shadow-2xl overflow-hidden">
+            <div className="flex-grow overflow-auto p-8" style={{ maxHeight: 'calc(100vh - 180px)' }}>
+              {loadingMarkdown ? (
+                <div className="flex items-center justify-center h-full">
+                  <div className="text-center">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-corporate-800 mx-auto mb-4"></div>
+                    <p className="text-slate-600">{language === 'en' ? 'Loading markdown...' : '正在加载 Markdown...'}</p>
+                  </div>
+                </div>
+              ) : markdownContent ? (
+                <div className="h-full">
+                  <div className="mb-6 p-4 bg-slate-50 rounded-lg border border-slate-200">
+                    <h4 className="text-lg font-bold text-slate-700 mb-2 flex items-center">
+                      <svg className="w-5 h-5 mr-2 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                      </svg>
+                      {language === 'en' ? '📝 Markdown Document' : '📝 Markdown 文档'}
+                    </h4>
+                    <div className="flex items-center space-x-4 text-xs text-slate-600">
+                      <span className="px-2 py-1 bg-purple-100 text-purple-700 rounded">
+                        {markdownContent.split('\n').length} {language === 'en' ? 'lines' : '行'}
+                      </span>
+                      <span className="px-2 py-1 bg-indigo-100 text-indigo-700 rounded">
+                        Markdown Format
+                      </span>
+                    </div>
+                  </div>
+                  <div className="prose prose-sm max-w-none">
+                    <ReactMarkdown
+                      remarkPlugins={[remarkGfm]}
+                      components={{
+                        table: ({ node, ...props }) => (
+                          <div className="overflow-x-auto my-4">
+                            <table className="min-w-full divide-y divide-slate-200 border border-slate-300" {...props} />
+                          </div>
+                        ),
+                        thead: ({ node, ...props }) => (
+                          <thead className="bg-slate-50" {...props} />
+                        ),
+                        tbody: ({ node, ...props }) => (
+                          <tbody className="bg-white divide-y divide-slate-200" {...props} />
+                        ),
+                        tr: ({ node, ...props }) => (
+                          <tr className="hover:bg-slate-50" {...props} />
+                        ),
+                        th: ({ node, ...props }) => (
+                          <th className="px-4 py-2 text-left text-xs font-bold text-slate-700 uppercase tracking-wider border-b border-slate-300 bg-slate-50" {...props} />
+                        ),
+                        td: ({ node, ...props }) => (
+                          <td className="px-4 py-2 text-sm text-slate-700 border border-slate-200" {...props} />
+                        ),
+                      }}
+                    >
+                      {markdownContent}
+                    </ReactMarkdown>
+                  </div>
+                </div>
+              ) : (
+                <div className="flex items-center justify-center h-full">
+                  <p className="text-red-500">{language === 'en' ? 'Failed to load markdown' : '加载 Markdown 失败'}</p>
+                </div>
+              )}
+            </div>
+            <div className="p-4 bg-slate-50 border-t border-slate-200 flex justify-end flex-shrink-0">
+              <button
+                className="px-6 py-3 bg-corporate-800 text-white rounded-lg hover:bg-corporate-900 transition-all font-semibold shadow-lg"
+                onClick={() => {
+                  const extension = 'md';
+                  handleDownload(markdownUrl, `${previewAsset?.name[language]}.${extension}`);
+                }}
+              >
+                {language === 'en' ? 'Download .md File' : '下载 .md 文件'}
+              </button>
+            </div>
+          </div>
         ) : (
           /* Non-image Preview Placeholder */
           <div className="flex-grow bg-white rounded-xl shadow-2xl overflow-hidden flex items-center justify-center relative">
@@ -327,6 +442,11 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
       return item.title[language].toLowerCase().includes(q) || item.subtitle[language].toLowerCase().includes(q);
     });
 
+    const totalPages = Math.ceil(filteredItems.length / PORTFOLIO_ITEMS_PER_PAGE);
+    const startIndex = (portfolioPage - 1) * PORTFOLIO_ITEMS_PER_PAGE;
+    const endIndex = startIndex + PORTFOLIO_ITEMS_PER_PAGE;
+    const paginatedItems = filteredItems.slice(startIndex, endIndex);
+
     return (
       <div className="animate-fade-in min-h-[600px]">
         <div className="flex flex-col md:flex-row justify-between items-center mb-10 gap-4">
@@ -337,7 +457,7 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
           <div className="relative w-full md:w-64">
              <input
                type="text" placeholder={language === 'en' ? "Search projects..." : "搜索项目案例..."}
-               value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
+               value={searchQuery} onChange={(e) => { setSearchQuery(e.target.value); setPortfolioPage(1); }}
                className="w-full pl-10 pr-4 py-2 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-accent-500 outline-none text-sm"
              />
              <svg className="w-4 h-4 text-slate-400 absolute left-3 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
@@ -345,7 +465,7 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
         </div>
 
         <div className="space-y-12">
-          {filteredItems.map(project => (
+          {paginatedItems.map(project => (
             <div key={project.id} className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden flex flex-col lg:flex-row">
               {/* Left Column: Context (HR Attention) */}
               <div className="lg:w-1/3 p-8 bg-slate-50 border-r border-slate-100 flex flex-col">
@@ -355,9 +475,28 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
                      <span>{project.subtitle[language]}</span>
                    </div>
                    <h3 className="text-2xl font-black text-slate-900 leading-tight mb-4">{project.title[language]}</h3>
-                   <p className="text-slate-600 text-sm leading-relaxed mb-6 italic">
+                   <p className="text-slate-600 text-sm leading-relaxed mb-4 italic">
                      "{project.projectSummary?.[language]}"
                    </p>
+
+                   {/* Live Demo Link */}
+                   {project.liveUrl && (
+                     <a
+                       href={project.liveUrl}
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       className="mb-6 flex items-center justify-center space-x-2 py-3 px-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl hover:from-indigo-700 hover:to-purple-700 transition-all shadow-md hover:shadow-lg font-semibold text-sm"
+                     >
+                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                       </svg>
+                       <span>{language === 'en' ? 'Live Demo: ' : '在线演示： '}Tableau Public</span>
+                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                       </svg>
+                     </a>
+                   )}
 
                    <div className="space-y-4">
                      <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest">
@@ -402,51 +541,66 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {project.assets?.map(asset => (
-                    <div key={asset.id} className="group bg-white border border-slate-100 rounded-2xl p-4 hover:border-accent-200 hover:shadow-md transition-all flex flex-col justify-between">
+                    <div key={asset.id} className={`group rounded-2xl p-4 transition-all flex flex-col justify-between ${asset.type === 'tableau-url' ? 'bg-gradient-to-br from-indigo-50 to-purple-50 border-2 border-indigo-200 hover:shadow-lg hover:border-indigo-400' : 'bg-white border border-slate-100 hover:border-accent-200 hover:shadow-md'}`}>
                        <div className="flex items-start justify-between mb-4">
-                          <div className="bg-slate-50 p-3 rounded-xl group-hover:bg-accent-50 transition-colors">
+                          <div className={`p-3 rounded-xl transition-colors ${asset.type === 'tableau-url' ? 'bg-indigo-100 group-hover:bg-indigo-200' : 'bg-slate-50 group-hover:bg-accent-50'}`}>
                              {getAssetIcon(asset.type)}
                           </div>
                           <div className="flex space-x-1">
-                            <button
-                              onClick={() => setPreviewAsset(asset)}
-                              className="p-2 text-slate-400 hover:text-accent-600 hover:bg-accent-50 rounded-lg transition-all"
-                              title={language === 'en' ? 'Quick Look' : '快速预览'}
-                            >
-                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
-                            </button>
-                            <button
-                              onClick={() => {
-                                if (asset.url) {
-                                  // Determine file extension based on type
-                                  let extension = '';
-                                  switch (asset.type) {
-                                    case 'image': extension = 'png'; break;
-                                    case 'code': extension = 'tsx'; break;
-                                    case 'notebook': extension = 'ipynb'; break;
-                                    case 'pdf': extension = 'pdf'; break;
-                                    case 'excel': extension = 'xlsx'; break;
-                                    case 'python': extension = 'py'; break;
-                                    case 'tableau': extension = 'twbx'; break;
-                                    default: extension = asset.type;
-                                  }
-                                  handleDownload(asset.url, `${asset.name[language]}.${extension}`);
-                                }
-                              }}
-                              className="p-2 text-slate-400 hover:text-corporate-800 hover:bg-slate-100 rounded-lg transition-all"
-                              title={language === 'en' ? 'Download File' : '下载文件'}
-                            >
-                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
-                            </button>
+                            {asset.type === 'tableau-url' ? (
+                              <a
+                                href={asset.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="px-3 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-all flex items-center space-x-1 font-semibold text-xs shadow-md"
+                                title={language === 'en' ? 'Open Interactive Dashboard' : '打开交互式仪表板'}
+                              >
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+                                <span>{language === 'en' ? 'Open' : '打开'}</span>
+                              </a>
+                            ) : (
+                              <>
+                                <button
+                                  onClick={() => setPreviewAsset(asset)}
+                                  className="p-2 text-slate-400 hover:text-accent-600 hover:bg-accent-50 rounded-lg transition-all"
+                                  title={language === 'en' ? 'Quick Look' : '快速预览'}
+                                >
+                                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+                                </button>
+                                <button
+                                  onClick={() => {
+                                    if (asset.url) {
+                                      // Determine file extension based on type
+                                      let extension = '';
+                                      switch (asset.type) {
+                                        case 'image': extension = 'png'; break;
+                                        case 'code': extension = 'tsx'; break;
+                                        case 'notebook': extension = 'ipynb'; break;
+                                        case 'pdf': extension = 'pdf'; break;
+                                        case 'excel': extension = 'xlsx'; break;
+                                        case 'python': extension = 'py'; break;
+                                        case 'tableau': extension = 'twbx'; break;
+                                        default: extension = asset.type;
+                                      }
+                                      handleDownload(asset.url, `${asset.name[language]}.${extension}`);
+                                    }
+                                  }}
+                                  className="p-2 text-slate-400 hover:text-corporate-800 hover:bg-slate-100 rounded-lg transition-all"
+                                  title={language === 'en' ? 'Download File' : '下载文件'}
+                                >
+                                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                                </button>
+                              </>
+                            )}
                           </div>
                        </div>
                        <div>
-                         <h5 className="font-bold text-slate-800 text-sm mb-1 group-hover:text-accent-700 transition-colors">{asset.name[language]}</h5>
-                         <p className="text-[11px] text-slate-500 line-clamp-2 leading-relaxed">{asset.description[language]}</p>
+                         <h5 className={`font-bold text-sm mb-1 transition-colors ${asset.type === 'tableau-url' ? 'text-indigo-900 group-hover:text-indigo-700' : 'text-slate-800 group-hover:text-accent-700'}`}>{asset.name[language]}</h5>
+                         <p className={`line-clamp-2 leading-relaxed ${asset.type === 'tableau-url' ? 'text-xs text-indigo-700' : 'text-[11px] text-slate-500'}`}>{asset.description[language]}</p>
                        </div>
                        <div className="mt-3 pt-3 border-t border-slate-50 flex justify-between items-center">
-                         <span className="text-[10px] font-bold text-slate-300 uppercase">{asset.type}</span>
-                         <span className="text-[10px] font-medium text-slate-400">{asset.size}</span>
+                         <span className={`font-bold uppercase ${asset.type === 'tableau-url' ? 'text-xs text-indigo-600' : 'text-[10px] text-slate-300'}`}>{asset.type}</span>
+                         <span className={`font-medium ${asset.type === 'tableau-url' ? 'text-xs text-indigo-600' : 'text-[10px] text-slate-400'}`}>{asset.size}</span>
                        </div>
                     </div>
                   ))}
@@ -455,6 +609,49 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
             </div>
           ))}
         </div>
+
+        {/* Pagination Controls */}
+        {filteredItems.length > PORTFOLIO_ITEMS_PER_PAGE && (
+          <div className="flex justify-center items-center mt-12 space-x-4">
+            <button
+              onClick={() => setPortfolioPage(prev => Math.max(1, prev - 1))}
+              disabled={portfolioPage === 1}
+              className="px-6 py-3 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all text-sm font-semibold shadow-sm"
+            >
+              {language === 'en' ? '← Previous' : '← 上一页'}
+            </button>
+            <div className="flex items-center space-x-2">
+              <span className="text-sm font-medium text-slate-700">
+                {language === 'en' ? 'Page' : '第'}
+              </span>
+              <div className="flex space-x-1">
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                  <button
+                    key={page}
+                    onClick={() => setPortfolioPage(page)}
+                    className={`w-10 h-10 rounded-lg font-semibold transition-all ${
+                      portfolioPage === page
+                        ? 'bg-corporate-800 text-white shadow-lg'
+                        : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'
+                    }`}
+                  >
+                    {page}
+                  </button>
+                ))}
+              </div>
+              <span className="text-sm font-medium text-slate-700">
+                {language === 'en' ? `of ${totalPages}` : `页 / 共 ${totalPages} 页`}
+              </span>
+            </div>
+            <button
+              onClick={() => setPortfolioPage(prev => Math.min(totalPages, prev + 1))}
+              disabled={portfolioPage === totalPages}
+              className="px-6 py-3 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all text-sm font-semibold shadow-sm"
+            >
+              {language === 'en' ? 'Next →' : '下一页 →'}
+            </button>
+          </div>
+        )}
       </div>
     );
   }
@@ -673,7 +870,7 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 animate-fade-in">
       {categories.map((cat) => (
-        <div key={cat.id} onClick={() => { setActiveCategory(cat); setCurrentPage(1); }} className="group relative h-64 rounded-3xl overflow-hidden cursor-pointer shadow-md hover:shadow-xl transition-all transform hover:-translate-y-1">
+        <div key={cat.id} onClick={() => { setActiveCategory(cat); setCurrentPage(1); setPortfolioPage(1); }} className="group relative h-64 rounded-3xl overflow-hidden cursor-pointer shadow-md hover:shadow-xl transition-all transform hover:-translate-y-1">
           <div className="absolute inset-0">
             <img src={cat.coverImage} alt="" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
             <div className="absolute inset-0 bg-gradient-to-t from-corporate-900/90 to-corporate-900/30 group-hover:to-corporate-900/50 transition-colors" />

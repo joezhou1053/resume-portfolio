@@ -344,6 +344,102 @@ export const INITIAL_DOCUMENTS: DocumentCategory[] = [
           { id: 'bl4', name: { en: "Results Analysis", zh: "结果分析" }, type: "image", size: "400 KB", description: { en: "Comprehensive performance dashboard with cumulative return charts, weight distribution analysis, and 13 key metrics including Sharpe ratio, max drawdown, VaR, CVaR, Calmar ratio, and turnover rate.", zh: "综合绩效仪表盘，包含累计收益曲线、权重分布分析以及13项关键指标：夏普比率、最大回撤、VaR、CVaR、Calmar比率和换手率等。" }, url: "/portfolio/bl-business-model-canvas/Image4.png" }
         ],
         versions: [{ version: 1, date: "2025-01-05", name: "black_litterman_backtest_system.zip", size: "2.1 MB", isCurrent: true }]
+      },
+      {
+        id: 'port-diamond-hands',
+        title: { en: "Diamond Hands Protocol - GameFi Application", zh: "钻石手协议 - GameFi 储蓄游戏" },
+        subtitle: { en: "Solana Blockchain Game", zh: "项目：Solana 区块链游戏" },
+        type: "portfolio",
+        thumbnailUrl: "/portfolio/diamond-hands/Image1.png",
+        projectSummary: {
+          en: "A gamified savings application built on Solana blockchain featuring a prisoner's dilemma-style challenge. Players lock SOL for 60 seconds while deciding whether to panic-sell with penalties or hold as 'Diamond Hands' to share pool rewards. Includes real-time panic events, avalanche periods, and dynamic reward mechanisms.",
+          zh: "基于 Solana 区块链的游戏化储蓄应用，采用囚徒困境式挑战机制。玩家锁定 SOL 60秒，期间可选择恐慌卖出（支付惩罚）或坚持作为'钻石手'（分享奖池奖励）。包含实时恐慌事件、雪崩期机制和动态奖励分配系统。"
+        },
+        highlights: {
+          en: [
+            "Prisoner's dilemma game mechanics: 60-second lockup with panic-sell options (20% normal / 40% avalanche penalty)",
+            "Three-phase system: Normal period (0-60s), Panic Peak (15-25s, 30% panic rate), Avalanche period (20-30s, 75% panic rate)",
+            "Real-time activity feed and dynamic reward pool with visual feedback (color changes, pulse effects, vibration)",
+            "User manual documenting game theory mechanics, ROI calculations, and strategy guides for different player levels"
+          ],
+          zh: [
+            "囚徒困境游戏机制：60秒锁定期，提供恐慌卖出选项（正常期20%惩罚 / 雪崩期40%惩罚）",
+            "三阶段系统：正常期（0-60秒）、恐慌高峰期（15-25秒，30%恐慌率）、雪崩期（20-30秒，75%恐慌率）",
+            "实时活动流和动态奖池，配备视觉反馈系统（颜色变化、脉冲效果、震动提醒）",
+            "完整的玩家指南文档，涵盖博弈论机制、ROI计算公式和不同玩家级别的策略建议"
+          ]
+        },
+        assets: [
+          { id: 'dh1', name: { en: "Game Interface Overview", zh: "游戏界面总览" }, type: "image", size: "947 KB", description: { en: "Main interface showing the countdown timer, reward pool, panic indicator, and real-time activity feed with player actions.", zh: "游戏主界面，展示倒计时器、奖池金额、恐慌指标和实时玩家活动流。" }, url: "/portfolio/diamond-hands/Image1.png" },
+          { id: 'dh2', name: { en: "Avalanche Period Visualization", zh: "雪崩期视觉效果" }, type: "image", size: "531 KB", description: { en: "Red border with dual pulse effects during avalanche period (20-30s), showing panic-sell penalties and 'per second loss' indicators.", zh: "雪崩期（20-30秒）的红色边框和双重脉冲效果，显示恐慌卖出惩罚和'每秒损失'指标。" }, url: "/portfolio/diamond-hands/Image2.png" },
+          { id: 'dh3', name: { en: "ROI Calculation Card", zh: "收益计算卡片" }, type: "image", size: "707 KB", description: { en: "Real-time comparison card showing 'Panic Now' vs. 'Hold 60s' scenarios with dynamic reward projections.", zh: "实时对比卡片，展示'现在恐慌'与'坚持60秒'两种情景的收益预测。" }, url: "/portfolio/diamond-hands/Image3.png" },
+          { id: 'dh4', name: { en: "Player Strategy Guide", zh: "玩家策略指南" }, type: "markdown", size: "5 KB", description: { en: "Comprehensive guide covering game mechanics, three-phase system, ROI examples, and beginner/advanced strategies.", zh: "完整玩家指南，涵盖游戏机制、三阶段系统、收益计算示例和初级/进阶策略建议。" }, url: "/portfolio/diamond-hands/玩家指南.md" }
+        ],
+        versions: [{ version: 1, date: "2025-01-08", name: "diamond_hands_protocol.zip", size: "2.2 MB", isCurrent: true }]
+      },
+      {
+        id: 'port-tableau-superstore',
+        title: { en: "Tableau Superstore Data Visualization", zh: "Tableau 超市数据可视化分析" },
+        subtitle: { en: "Interactive Business Analytics Dashboard", zh: "项目：交互式商业分析仪表板" },
+        type: "portfolio",
+        thumbnailUrl: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=600&auto=format&fit=crop",
+        projectSummary: {
+          en: "Comprehensive data visualization project using Tableau to analyze Superstore sales performance. Features an interactive Story format with multiple dashboards showing sales trends, regional performance, product category analysis, and customer segmentation. Includes user persona research and data-driven design process documentation.",
+          zh: "使用Tableau对超市销售业绩进行全面数据可视化分析的项目。采用交互式故事格式，包含多个仪表板，展示销售趋势、区域表现、产品类别分析和客户细分。包含用户画像研究和数据驱动设计流程文档。"
+        },
+        highlights: {
+          en: [
+            "Interactive Tableau Story with 5+ connected dashboards for multi-dimensional business analysis",
+            "User-centered design: Created detailed personas (Terrence & Sylvia) to guide visualization strategy",
+            "Comprehensive data exploration covering sales, profit, customer segments, and geographical performance",
+            "Design checklist and best practices documentation for reproducible analytics workflows"
+          ],
+          zh: [
+            "交互式Tableau故事板，包含5+个关联仪表板，支持多维度商业分析",
+            "以用户为中心的设计：创建详细用户画像（Terrence & Sylvia）指导可视化策略",
+            "全面的数据探索，涵盖销售、利润、客户细分和地理绩效分析",
+            "完整的设计检查清单和最佳实践文档，支持可复用的分析工作流"
+          ]
+        },
+        assets: [
+          { id: 'ts1', name: { en: "Tableau Public Interactive Story", zh: "Tableau Public 交互式故事板" }, type: "tableau-url", size: "Link", description: { en: "Interactive Tableau Story with 5+ connected dashboards for sales, profit, customer segments, and geographical performance analysis.", zh: "交互式 Tableau 故事板，包含5+个关联仪表板，展示销售、利润、客户细分和地理绩效分析。" }, url: "https://public.tableau.com/app/profile/joe.zhou4877/viz/superstore_project_JoeZhou/Story" },
+          { id: 'ts2', name: { en: "Design Checklist & Documentation", zh: "设计检查清单与文档" }, type: "pdf", size: "450 KB", description: { en: "Complete design checklist documenting the visualization design process, best practices, and quality assurance criteria.", zh: "完整的设计检查清单，记录可视化设计流程、最佳实践和质量保证标准。" }, url: "/portfolio/tableau-superstore/Design Checklist_JoeZhou.pdf" },
+          { id: 'ts3', name: { en: "User Persona 1: Terrence", zh: "用户画像1：Terrence" }, type: "pdf", size: "320 KB", description: { en: "Detailed persona for operations-focused stakeholders. Defines information needs for inventory, logistics, and operational efficiency.", zh: "面向运营利益相关者的详细画像。定义了库存、物流和运营效率的信息需求。" }, url: "/portfolio/tableau-superstore/Persona 2 Terrence.pdf" },
+          { id: 'ts4', name: { en: "User Persona 2: Sylvia", zh: "用户画像2：Sylvia" }, type: "pdf", size: "290 KB", description: { en: "Detailed persona for executive management. Defines strategic information needs for high-level business decision making.", zh: "面向高层管理的详细画像。定义了高层业务决策的战略信息需求。" }, url: "/portfolio/tableau-superstore/Sylvia-Persona.pdf" }
+        ],
+        versions: [{ version: 1, date: "2025-01-09", name: "tableau_superstore_project.zip", size: "2.2 MB", isCurrent: true }]
+      },
+      {
+        id: 'port-dognition-analytics',
+        title: { en: "Dognition User Behavior Analysis", zh: "Dognition 用户行为数据分析" },
+        subtitle: { en: "Data-Driven Business Process Change Proposal", zh: "项目：数据驱动的业务流程改进提案" },
+        type: "portfolio",
+        thumbnailUrl: "https://images.unsplash.com/photo-1587300003388-59208cc962cb?q=80&w=600&auto=format&fit=crop",
+        projectSummary: {
+          en: "Data visualization and business analysis project for Dognition, a company that provides dog personality assessments. Used Tableau Story to analyze user test completion patterns, breed type distributions, and personality dimension correlations. Delivered data-driven recommendations to increase user engagement and test completion rates through targeted marketing and content personalization.",
+          zh: "为 Dognition（一家提供狗狗性格评估的公司）进行的数据可视化和商业分析项目。使用 Tableau Story 分析用户测试完成模式、品种类型分布和性格维度相关性。通过有针对性的营销和内容个性化，提出数据驱动的建议以提高用户参与度和测试完成率。"
+        },
+        highlights: {
+          en: [
+            "Identified key engagement patterns: Socialite/Charmer personality types show 1.3-1.86x higher test completion rates",
+            "Breed analysis revealed purebred dogs dominate completed tests (52%), but mixed breeds represent 48% untapped potential",
+            "Developed data-driven recommendations for targeted marketing and breed-specific content strategies",
+            "Presented compelling 5-minute business proposal with supporting Tableau Story visualization"
+          ],
+          zh: [
+            "识别关键参与模式：社交型/魅力型性格的测试完成率高出 1.3-1.86 倍",
+            "品种分析显示纯种狗主导已完成测试（52%），但混种狗代表 48% 的未开发潜力",
+            "开发有针对性的营销和特定品种内容策略的数据驱动建议",
+            "通过 Tableau Story 可视化支持，进行了 5 分钟的引人入胜的商业提案演示"
+          ]
+        },
+        assets: [
+          { id: 'da1', name: { en: "Live Presentation Recording", zh: "在线演示录制" }, type: "tableau-url", size: "Link", description: { en: "Screen recording of the 5-minute business proposal presentation to Dognition management team, including data analysis and recommendations.", zh: "向 Dognition 管理层进行 5 分钟商业提案演示的屏幕录制，包含数据分析和建议。" }, url: "https://app.screencast.com/G3UHjWv7nx0G1" },
+          { id: 'da2', name: { en: "Tableau Public Interactive Story", zh: "Tableau Public 交互式故事板" }, type: "tableau-url", size: "Link", description: { en: "Interactive Tableau Story featuring bar charts, pie charts, bubble charts, and horizontal bar graphs supporting the business recommendations.", zh: "交互式 Tableau 故事板，包含支持商业建议的条形图、饼图、气泡图和水平条形图。" }, url: "https://public.tableau.com/views/doginition_17681907474040/Story?:language=zh-CN&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link" },
+          { id: 'da3', name: { en: "Project Requirements Document", zh: "项目需求文档" }, type: "markdown", size: "12 KB", description: { en: "Complete project requirements including objectives, Dognition company background, presentation format guidelines, and evaluation criteria.", zh: "完整的项目需求，包括目标、Dognition 公司背景、演示格式指南和评估标准。" }, url: "/portfolio/dognition/项目需求.md" },
+          { id: 'da4', name: { en: "Data Analytics Methodology", zh: "数据分析方法论" }, type: "markdown", size: "15 KB", description: { en: "Comprehensive 7-step data analysis framework covering requirement analysis, data cleaning, Tableau implementation, visualization design, and the 3C storytelling methodology.", zh: "完整的7步数据分析框架，涵盖需求分析、数据清洗、Tableau 实施、可视化设计和 3C 叙事方法论。" }, url: "/portfolio/dognition/数据分析方法论.md" }
+        ],
+        versions: [{ version: 1, date: "2025-01-12", name: "dognition_analytics_project.zip", size: "0.1 MB", isCurrent: true }]
       }
     ]
   },
@@ -478,6 +574,22 @@ export const INITIAL_DOCUMENTS: DocumentCategory[] = [
         type: "certificate",
         thumbnailUrl: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?q=80&w=400&auto=format&fit=crop",
         versions: [{ version: 1, date: "2025-01-07", name: "Coursera_Python_Finance_Specialization_EDHEC.pdf", size: "2.0 MB", isCurrent: true }]
+      },
+      {
+        id: 'cert-business-metrics-duke',
+        title: { en: "Business Metrics for Data-Driven Companies", zh: "数据驱动企业的商业指标" },
+        subtitle: { en: "Duke University / Coursera", zh: "机构: Duke University" },
+        type: "certificate",
+        thumbnailUrl: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=400&auto=format&fit=crop",
+        versions: [{ version: 1, date: "2025-01-12", name: "Business_Metrics_for_Data-Driven_Companies.pdf", size: "1.5 MB", isCurrent: true }]
+      },
+      {
+        id: 'cert-managing-big-data-mysql',
+        title: { en: "Managing Big Data with MySQL", zh: "使用MySQL管理大数据" },
+        subtitle: { en: "Duke University / Coursera", zh: "机构: Duke University" },
+        type: "certificate",
+        thumbnailUrl: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?q=80&w=400&auto=format&fit=crop",
+        versions: [{ version: 1, date: "2025-01-12", name: "Managing_Big_Data_with_MySQL.pdf", size: "1.6 MB", isCurrent: true }]
       }
     ]
   }
