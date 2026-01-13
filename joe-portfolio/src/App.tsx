@@ -47,16 +47,15 @@ const App: React.FC = () => {
             </div>
             
             {/* Desktop Menu */}
-            <div className="hidden md:flex items-center space-x-8">
+            <div className="hidden md:flex items-center space-x-6">
               <button onClick={() => scrollToSection('experience')} className="text-sm font-medium hover:text-accent-600 transition-colors">{content.nav.experience}</button>
               <button onClick={() => scrollToSection('skills')} className="text-sm font-medium hover:text-accent-600 transition-colors">{content.nav.skills}</button>
-              <button onClick={() => scrollToSection('portfolio')} className="text-sm font-medium hover:text-accent-600 transition-colors">{content.nav.portfolio}</button>
               <button onClick={() => scrollToSection('documents')} className="text-sm font-medium hover:text-accent-600 transition-colors">{content.nav.downloadResume}</button>
-              
-              <div className="flex items-center border-l border-slate-200 pl-6 space-x-4">
-                <button 
+
+              <div className="flex items-center border-l border-slate-200 pl-6 ml-2">
+                <button
                   onClick={toggleLanguage}
-                  className="px-3 py-1 text-sm font-bold border border-slate-300 rounded-md hover:bg-slate-50 transition-colors"
+                  className="px-3 py-1.5 text-sm font-bold border border-slate-300 rounded-md hover:bg-slate-50 transition-colors"
                 >
                   {lang === 'en' ? '中文' : 'EN'}
                 </button>
@@ -81,9 +80,11 @@ const App: React.FC = () => {
               <button onClick={() => scrollToSection('experience')} className="block w-full text-left px-3 py-2 text-base font-medium text-slate-700 hover:bg-slate-50">{content.nav.experience}</button>
               <button onClick={() => scrollToSection('skills')} className="block w-full text-left px-3 py-2 text-base font-medium text-slate-700 hover:bg-slate-50">{content.nav.skills}</button>
               <button onClick={() => scrollToSection('documents')} className="block w-full text-left px-3 py-2 text-base font-medium text-slate-700 hover:bg-slate-50">{content.nav.downloadResume}</button>
-              <button onClick={toggleLanguage} className="block w-full text-left px-3 py-2 text-base font-bold text-accent-600 bg-slate-50">
-                 {lang === 'en' ? 'Switch to Chinese' : '切换到英文'}
-              </button>
+              <div className="border-t border-slate-200 pt-2 mt-2">
+                <button onClick={toggleLanguage} className="block w-full text-left px-3 py-2 text-base font-bold text-accent-600 bg-slate-50">
+                   {lang === 'en' ? '切换到中文' : 'Switch to English'}
+                </button>
+              </div>
             </div>
           </div>
         )}
@@ -322,51 +323,52 @@ const App: React.FC = () => {
         </section>
 
         {/* Education & Skills Dashboard - Final Optimized Compact Layout */}
-        <section id="skills" className="py-12 bg-slate-50/50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid lg:grid-cols-12 gap-5">
+        <section id="skills" className="py-16 bg-slate-50 relative">
+           <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/graphy.png')] opacity-5"></div>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div className="grid lg:grid-cols-12 gap-6">
 
               {/* Left Column (Identity & Foundation) */}
-              <div className="lg:col-span-4 flex flex-col gap-5">
+              <div className="lg:col-span-4 flex flex-col gap-6">
                 {/* Unified Foundation Card */}
-                <div className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex flex-col h-full">
-                  <h2 className="text-lg font-bold text-corporate-900 mb-4 flex items-center border-b border-slate-50 pb-3">
-                    <span className="w-1 h-5 bg-corporate-800 mr-3 rounded-full"></span>
+                <div className="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-200/60 flex flex-col h-full hover:shadow-md transition-shadow">
+                  <h2 className="text-2xl md:text-3xl font-bold text-corporate-900 mb-8 flex items-center border-b border-slate-100 pb-6">
+                    <span className="w-1.5 h-8 bg-corporate-800 mr-4 rounded-full shadow-sm"></span>
                     {content.sectionTitles.education}
                   </h2>
 
                   {content.education.map((edu, idx) => (
-                    <div key={idx} className="mb-6">
-                      <div className="flex items-center mb-3">
-                        <div className="w-9 h-9 bg-red-100 text-red-700 rounded-lg flex-shrink-0 flex items-center justify-center font-bold text-base mr-3">
+                    <div key={idx} className="mb-8">
+                      <div className="flex items-center mb-6">
+                        <div className="w-14 h-14 bg-red-50 text-red-700 rounded-xl flex-shrink-0 flex items-center justify-center font-bold text-2xl mr-5 border border-red-100 shadow-sm">
                           O
                         </div>
                         <div>
-                          <h3 className="font-bold text-[13px] text-slate-900 leading-tight">{edu.school}</h3>
-                          <p className="text-[10px] text-slate-500">{edu.degree} • {edu.major}</p>
+                          <h3 className="font-bold text-lg text-slate-900 leading-tight mb-1">{edu.school}</h3>
+                          <p className="text-sm text-slate-500 font-medium">{edu.degree} • {edu.major}</p>
                         </div>
                       </div>
-                      <ul className="space-y-1.5 text-[11px] text-slate-600">
+                      <ul className="space-y-3 text-sm text-slate-600 bg-slate-50/50 p-4 rounded-xl border border-slate-100/80">
                         {edu.details.map((detail, i) => (
                           <li key={i} className="flex items-start">
-                            <svg className="w-3 h-3 mr-2 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
-                            <span className="flex-1">{detail}</span>
+                            <svg className="w-4 h-4 mr-3 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                            <span className="flex-1 leading-relaxed">{detail}</span>
                           </li>
                         ))}
                       </ul>
                     </div>
                   ))}
 
-                  <div className="mt-auto pt-5 border-t border-slate-50">
-                    <h3 className="font-bold text-xs text-slate-900 mb-3 flex items-center">
-                      <svg className="w-4 h-4 mr-2 text-corporate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" /></svg>
+                  <div className="mt-auto pt-8 border-t border-slate-100">
+                    <h3 className="font-bold text-sm text-slate-900 mb-5 flex items-center">
+                      <svg className="w-5 h-5 mr-2 text-corporate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" /></svg>
                       {lang === 'en' ? 'Language Proficiency' : '语言能力'}
                     </h3>
-                    <div className="grid grid-cols-1 gap-2">
+                    <div className="grid grid-cols-1 gap-4">
                       {content.skills.languages.map((l, i) => (
-                        <div key={i} className="flex items-center justify-between text-[11px] bg-slate-50/50 px-3 py-2 rounded-xl border border-slate-100/50 hover:bg-white transition-colors">
+                        <div key={i} className="flex items-center justify-between text-sm bg-white px-4 py-3 rounded-lg border border-slate-200 shadow-sm hover:border-accent-200 transition-colors">
                           <span className="font-medium text-slate-700">{l.split('(')[0]}</span>
-                          <span className="font-bold text-[9px] bg-white text-corporate-600 border border-slate-200 px-2 py-0.5 rounded-full uppercase">
+                          <span className="font-bold text-xs bg-corporate-50 text-corporate-700 px-3 py-1 rounded-full uppercase tracking-wide">
                             {l.split('(')[1]?.replace(')', '') || 'Native'}
                           </span>
                         </div>
@@ -377,25 +379,27 @@ const App: React.FC = () => {
               </div>
 
               {/* Right Column (Core Competency Dashboard) */}
-              <div className="lg:col-span-8 flex flex-col gap-5">
-                <div className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex flex-col">
-                  <div className="flex justify-between items-center mb-5 pb-3 border-b border-slate-50">
-                    <h2 className="text-lg font-bold text-corporate-900 flex items-center">
-                      <span className="w-1 h-5 bg-accent-600 mr-3 rounded-full"></span>
+              <div className="lg:col-span-8 flex flex-col gap-6">
+                <div className="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-200/60 flex flex-col h-full hover:shadow-md transition-shadow">
+                  <div className="flex justify-between items-center mb-8 pb-6 border-b border-slate-100">
+                    <h2 className="text-2xl md:text-3xl font-bold text-corporate-900 flex items-center">
+                      <span className="w-1.5 h-8 bg-accent-600 mr-4 rounded-full shadow-sm"></span>
                       {content.sectionTitles.skills}
                     </h2>
+                    <span className="text-xs font-bold text-slate-500 uppercase tracking-widest bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-100 hidden sm:block">Analytics & Tech</span>
                   </div>
 
                   {/* Skills Tag Grid - Fixed Hard Skill Rendering */}
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-8">
                     {content.skills.hard.map((skillGroup, idx) => (
-                      <div key={idx} className="bg-slate-50/50 p-3 rounded-xl border border-slate-100/30">
-                        <h3 className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-2 border-b border-slate-100 pb-1">
+                      <div key={idx} className="bg-slate-50/80 p-5 rounded-xl border border-slate-100 flex flex-col h-full">
+                        <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4 flex items-center">
+                          <span className="w-2 h-2 bg-accent-400 rounded-full mr-2"></span>
                           {skillGroup.category}
                         </h3>
-                        <div className="flex flex-wrap gap-1">
+                        <div className="flex flex-wrap gap-2">
                           {skillGroup.items.map((item, i) => (
-                            <span key={i} className="text-[10px] font-bold text-corporate-800 bg-white px-2 py-0.5 rounded border border-slate-100 shadow-sm">
+                            <span key={i} className="text-xs font-bold text-slate-700 bg-white px-3 py-1.5 rounded-lg border border-slate-200 shadow-sm hover:text-accent-600 hover:border-accent-200 transition-colors cursor-default">
                               {item}
                             </span>
                           ))}
@@ -405,20 +409,23 @@ const App: React.FC = () => {
                   </div>
 
                   {/* Dynamic Visualizations - Compact View */}
-                  <div className="bg-white rounded-xl">
+                  <div className="bg-white rounded-xl mb-6 flex-grow">
                     <SkillsChart language={lang} />
                   </div>
 
                   {/* Soft Skills & Leadership - Tightly integrated at the bottom */}
-                  <div className="mt-6 pt-5 border-t border-slate-50 flex flex-wrap items-center gap-2">
-                    <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest mr-2">
-                      {lang === 'en' ? 'SOFT SKILLS' : '核心软技能'}
-                    </span>
-                    {content.skills.soft.map((skill, i) => (
-                      <span key={i} className="px-3 py-1 bg-accent-50 text-accent-700 text-[10px] font-black rounded-lg border border-accent-100 hover:bg-accent-600 hover:text-white transition-all cursor-default">
-                        {skill}
-                      </span>
-                    ))}
+                  <div className="pt-8 border-t border-slate-100 mt-auto">
+                     <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">
+                      {lang === 'en' ? 'SOFT SKILLS & LEADERSHIP' : '核心软技能'}
+                    </h3>
+                    <div className="flex flex-wrap gap-3">
+                      {content.skills.soft.map((skill, i) => (
+                        <span key={i} className="px-4 py-2 bg-gradient-to-br from-accent-50 to-white text-accent-700 text-xs font-bold rounded-lg border border-accent-100/60 hover:shadow-md transition-all cursor-default flex items-center">
+                          <svg className="w-4 h-4 mr-2 text-accent-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                          {skill}
+                        </span>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>

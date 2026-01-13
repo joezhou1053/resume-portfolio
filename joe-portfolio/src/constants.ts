@@ -5,7 +5,6 @@ export const CONTENT_EN: AppContent = {
     home: "Home",
     experience: "Experience",
     skills: "Analytics & Skills",
-    portfolio: "Portfolio",
     contact: "Contact",
     downloadResume: "Documents"
   },
@@ -93,7 +92,6 @@ export const CONTENT_ZH: AppContent = {
     home: "首页",
     experience: "工作经历",
     skills: "技能分析",
-    portfolio: "作品集",
     contact: "联系我",
     downloadResume: "文档中心"
   },
@@ -205,82 +203,6 @@ export const INITIAL_DOCUMENTS: DocumentCategory[] = [
     title: { en: "Portfolio Presentation", zh: "作品集演示" },
     coverImage: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=600&auto=format&fit=crop",
     items: [
-      {
-        id: 'port-brd-telecom',
-        title: { en: "Business Requirements Spec (BRD)", zh: "商业需求规格说明书 (BRD)" },
-        subtitle: { en: "China Telecom Project", zh: "项目：中国电信" },
-        type: "portfolio",
-        thumbnailUrl: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?q=80&w=400&auto=format&fit=crop",
-        projectSummary: {
-          en: "Comprehensive digital transformation for China Telecom's capital expenditure tracking system.",
-          zh: "针对中国电信资本开支跟踪系统的全面数字化转型方案，涵盖全流程需求闭环管理。"
-        },
-        highlights: {
-          en: ["Streamlined 12+ complex approval workflows", "Reduced reporting latency by 30%", "Ensured 100% requirements traceability"],
-          zh: ["梳理并优化12个以上的复杂审批流程", "报表生成延迟降低30%", "实现100%需求可追溯性"]
-        },
-        assets: [
-          { id: 'a1', name: { en: "Main BRD Document", zh: "核心 BRD 文档" }, type: "pdf", size: "2.5 MB", description: { en: "The complete requirements specification.", zh: "完整的需求规格说明书。" } },
-          { id: 'a2', name: { en: "Workflow Visio Diagrams", zh: "业务流程 Visio 图集" }, type: "visio", size: "1.8 MB", description: { en: "End-to-end business process models.", zh: "端到端的业务流程模型。" } },
-          { id: 'a3', name: { en: "User Manual Draft", zh: "用户操作手册草案" }, type: "word", size: "4.2 MB", description: { en: "Instructional guide for system end-users.", zh: "针对系统最终用户的操作指南。" } },
-          { id: 'a4', name: { en: "Traceability Matrix", zh: "需求跟踪矩阵" }, type: "excel", size: "0.8 MB", description: { en: "Excel-based RTM for QA and Dev tracking.", zh: "基于 Excel 的 RTM 跟踪表。" } }
-        ],
-        versions: [{ version: 2, date: "2023-03-15", name: "Telecom_Project_Bundle.zip", size: "9.3 MB", isCurrent: true }]
-      },
-      {
-        id: 'port-tableau-dash',
-        title: { en: "Data Visualization Dashboard", zh: "数据可视化仪表盘" },
-        subtitle: { en: "Tableau Sample", zh: "项目：Tableau 案例" },
-        type: "portfolio",
-        thumbnailUrl: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=400&auto=format&fit=crop",
-        projectSummary: {
-          en: "Advanced monitoring dashboard for construction progress and safety management.",
-          zh: "用于施工进度监控和安全管理的综合数据可视化面板，支持多维度实时穿透。"
-        },
-        highlights: {
-          en: ["Interactive KPI tracking", "Automated data cleaning with Python", "Real-time construction site monitoring"],
-          zh: ["交互式 KPI 跟踪", "利用 Python 实现自动化数据清洗", "实时施工现场监控分析"]
-        },
-        assets: [
-          { id: 't1', name: { en: "Tableau Workbook (.twbx)", zh: "Tableau 工作簿 (.twbx)" }, type: "tableau", size: "12.4 MB", description: { en: "The interactive visualization source file.", zh: "交互式可视化源文件。" } },
-          { id: 't2', name: { en: "Data Cleaning Script", zh: "数据清洗 Python 脚本" }, type: "python", size: "0.2 MB", description: { en: "Automated ETL process for raw datasets.", zh: "针对原始数据集的自动化 ETL 流程。" } },
-          { id: 't3', name: { en: "Exploratory Analysis", zh: "探索性数据分析 (EDA)" }, type: "notebook", size: "3.5 MB", description: { en: "Jupyter Notebook showing data logic.", zh: "展示数据逻辑的 Jupyter Notebook。" } },
-          { id: 't4', name: { en: "Data Dictionary", zh: "数据字典说明" }, type: "excel", size: "0.5 MB", description: { en: "Definitions for all data fields used.", zh: "所用数据字段的详细定义说明。" } }
-        ],
-        versions: [{ version: 1, date: "2023-01-10", name: "Tableau_Case_Study.zip", size: "16.6 MB", isCurrent: true }]
-      },
-      {
-        id: 'port-asset-transfer',
-        title: { en: "Asset Transfer App Prototype Design", zh: "交资转固应用原型设计" },
-        subtitle: { en: "Mobile Approval Function Design.", zh: "项目：移动端审批功能设计" },
-        type: "portfolio",
-        thumbnailUrl: "/portfolio/asset-transfer-app/Image1.png",
-        projectSummary: {
-          en: "Mobile-first prototype for enterprise asset transfer workflow management with real-time approval tracking and automated SAP integration.",
-          zh: "面向企业交资转固流程管理的移动优先原型设计，支持实时审批跟踪与 SAP 系统自动化集成。"
-        },
-        highlights: {
-          en: [
-            "Streamlined asset transfer approval workflow with 4-section collapsible design",
-            "Real-time SAP status synchronization (Transfer posting/status tracking)",
-            "Financial data precision with masked sensitive fields (rates, amounts, fees)",
-            "Dual-mode interface: View mode for stakeholders, Edit mode for administrators"
-          ],
-          zh: [
-            "优化交资转固审批工作流，采用四段式可折叠设计",
-            "实时同步 SAP 系统状态（转固过账/状态跟踪）",
-            "财务数据精准管理，敏感字段脱敏处理（费率、金额、费用）",
-            "双模式界面：查看模式供利益相关者使用，编辑模式供管理员操作"
-          ]
-        },
-        assets: [
-          { id: 'at1', name: { en: "Main Interface Design", zh: "主界面设计" }, type: "image", size: "0.5 MB", description: { en: "Basic Information tab with collapsible sections for workflow efficiency.", zh: "基本信息选项卡，采用可折叠分段设计提升工作流效率。" }, url: "/portfolio/asset-transfer-app/Image1.png" },
-          { id: 'at2', name: { en: "Financial Information Module", zh: "财务信息模块" }, type: "image", size: "0.6 MB", description: { en: "Financial data display with masked sensitive information for security.", zh: "财务数据展示，敏感信息脱敏处理保障数据安全。" }, url: "/portfolio/asset-transfer-app/Image2.png" },
-          { id: 'at3', name: { en: "Edit Mode & Process Tracking", zh: "编辑模式与流程跟踪" }, type: "image", size: "0.5 MB", description: { en: "Edit mode indicator and Process Record tab for audit trail.", zh: "编辑模式指示器与流程记录选项卡，支持审计追踪。" }, url: "/portfolio/asset-transfer-app/Image3.png" },
-          { id: 'at4', name: { en: "React Prototype Source Code", zh: "React 原型源代码" }, type: "code", size: "0.1 MB", description: { en: "Functional React component with state management and Lucide icons.", zh: "功能完整的 React 组件，包含状态管理与 Lucide 图标库。" }, url: "/portfolio//asset_transfer_prototype.tsx" }
-        ],
-        versions: [{ version: 1, date: "2025-01-04", name: "asset_transfer_prototype.tsx", size: "0.1 MB", isCurrent: true }]
-      },
       {
         id: 'port-financial-data-analysis',
         title: { en: "Financial Data Analysis with LSTM", zh: "金融数据分析与LSTM应用" },
@@ -535,14 +457,6 @@ export const INITIAL_DOCUMENTS: DocumentCategory[] = [
     title: { en: "Coursera Certificates", zh: "Coursera 职业证书" },
     coverImage: "https://images.unsplash.com/photo-1501504905252-473c47e087f8?q=80&w=600&auto=format&fit=crop",
     items: [
-      {
-        id: 'cert-google-data',
-        title: { en: "Google Data Analytics", zh: "Google 数据分析师认证" },
-        subtitle: { en: "Google / Coursera", zh: "机构: Google" },
-        type: "certificate",
-        thumbnailUrl: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=400&auto=format&fit=crop",
-        versions: [{ version: 1, date: "2023-08-15", name: "Google_Data_Cert.pdf", size: "1.5 MB", isCurrent: true }]
-      },
       {
         id: 'cert-lstm-deep-learning',
         title: { en: "LSTM Deep Learning Specialization", zh: "LSTM深度学习专业证书" },

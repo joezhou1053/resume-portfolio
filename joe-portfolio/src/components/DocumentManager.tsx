@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import type { DocumentCategory, DocumentItem, ProjectAsset, Language } from '../types';
@@ -28,10 +28,44 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
   const [loadingNotebook, setLoadingNotebook] = useState(false);
   const [markdownContent, setMarkdownContent] = useState<string>('');
   const [loadingMarkdown, setLoadingMarkdown] = useState(false);
+  const scrollPositionRef = useRef<number>(0);
+  const isModalOpenRef = useRef<boolean>(false);
 
   useEffect(() => {
     setCategories(StorageService.getDocuments());
   }, []);
+
+  // Store scroll position when preview opens and restore when closes
+  useEffect(() => {
+    if (previewAsset || previewDoc) {
+      // Mark modal as open and save scroll position if not already saved
+      isModalOpenRef.current = true;
+      if (scrollPositionRef.current === 0) {
+        scrollPositionRef.current = window.pageYOffset || document.documentElement.scrollTop;
+      }
+      // Prevent body scroll when modal is open
+      document.body.style.overflow = 'hidden';
+    } else {
+      // Modal is closing
+      const wasModalOpen = isModalOpenRef.current;
+      isModalOpenRef.current = false;
+
+      // Restore body scroll when modal closes
+      document.body.style.overflow = '';
+
+      // Only restore scroll position if modal was actually open
+      if (wasModalOpen && scrollPositionRef.current > 0) {
+        // Use multiple strategies to ensure scroll position is restored
+        setTimeout(() => {
+          window.scrollTo(0, scrollPositionRef.current);
+          // Fallback: try again in next frame
+          requestAnimationFrame(() => {
+            window.scrollTo(0, scrollPositionRef.current);
+          });
+        }, 10);
+      }
+    }
+  }, [previewAsset, previewDoc]);
 
   // Load notebook content when previewing a notebook asset
   useEffect(() => {
@@ -82,6 +116,23 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
       }
       alert(language === 'en' ? "New version uploaded successfully!" : "新版本上传成功！");
     }
+  };
+
+  const closePreview = () => {
+    setPreviewAsset(null);
+    setPreviewDoc(null);
+  };
+
+  const openPreviewAsset = (asset: ProjectAsset) => {
+    // Save scroll position BEFORE opening preview
+    scrollPositionRef.current = window.pageYOffset || document.documentElement.scrollTop;
+    setPreviewAsset(asset);
+  };
+
+  const openPreviewDoc = (doc: DocumentItem) => {
+    // Save scroll position BEFORE opening preview
+    scrollPositionRef.current = window.pageYOffset || document.documentElement.scrollTop;
+    setPreviewDoc(doc);
   };
 
   const handleDownload = (url: string | undefined, filename: string) => {
@@ -235,7 +286,7 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
                <p className="text-xs text-slate-400">{filename}</p>
              </div>
           </div>
-          <button onClick={() => { setPreviewAsset(null); setPreviewDoc(null); }} className="p-2 hover:bg-white/10 rounded-full transition-colors text-slate-300">
+          <button onClick={closePreview} className="p-2 hover:bg-white/10 rounded-full transition-colors text-slate-300">
             <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
           </button>
         </div>
@@ -532,7 +583,7 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
                   </button>
                   <button
                     className="px-6 py-3 border border-slate-200 text-slate-600 rounded-lg hover:bg-slate-50 transition-all"
-                    onClick={() => { setPreviewAsset(null); setPreviewDoc(null); }}
+                    onClick={closePreview}
                   >
                     {language === 'en' ? 'Back' : '返回'}
                   </button>
@@ -621,21 +672,6 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
                      </ul>
                    </div>
                  </div>
-
-                 <div className="mt-auto pt-6 border-t border-slate-200">
-                    <button
-                      onClick={() => {
-                        handleBundleDownload(project, project.title[language]);
-                      }}
-                      className="w-full py-4 bg-corporate-800 text-white rounded-2xl hover:bg-corporate-900 transition-all flex items-center justify-center space-x-3 shadow-lg shadow-corporate-800/20 font-bold"
-                    >
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
-                      <span>{language === 'en' ? 'Download Full Project Bundle' : '下载项目全套附件包'}</span>
-                    </button>
-                    <p className="text-center text-[10px] text-slate-400 mt-2">
-                      {language === 'en' ? 'Includes all documentation, scripts & source files' : '包含所有相关文档、脚本及原始文件'}
-                    </p>
-                 </div>
               </div>
 
               {/* Right Column: File Explorer (Technical Proof) */}
@@ -668,39 +704,13 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
                                 <span>{language === 'en' ? 'Open' : '打开'}</span>
                               </a>
                             ) : (
-                              <>
-                                <button
-                                  onClick={() => setPreviewAsset(asset)}
-                                  className="p-2 text-slate-400 hover:text-accent-600 hover:bg-accent-50 rounded-lg transition-all"
-                                  title={language === 'en' ? 'Quick Look' : '快速预览'}
-                                >
-                                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
-                                </button>
-                                <button
-                                  onClick={() => {
-                                    if (asset.url) {
-                                      // Determine file extension based on type
-                                      let extension = '';
-                                      switch (asset.type) {
-                                        case 'image': extension = 'png'; break;
-                                        case 'code': extension = 'tsx'; break;
-                                        case 'notebook': extension = 'ipynb'; break;
-                                        case 'pdf': extension = 'pdf'; break;
-                                        case 'excel': extension = 'xlsx'; break;
-                                        case 'pptx': extension = 'pptx'; break;
-                                        case 'python': extension = 'py'; break;
-                                        case 'tableau': extension = 'twbx'; break;
-                                        default: extension = asset.type;
-                                      }
-                                      handleDownload(asset.url, `${asset.name[language]}.${extension}`);
-                                    }
-                                  }}
-                                  className="p-2 text-slate-400 hover:text-corporate-800 hover:bg-slate-100 rounded-lg transition-all"
-                                  title={language === 'en' ? 'Download File' : '下载文件'}
-                                >
-                                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
-                                </button>
-                              </>
+                              <button
+                                onClick={() => openPreviewAsset(asset)}
+                                className="p-2 text-slate-400 hover:text-accent-600 hover:bg-accent-50 rounded-lg transition-all"
+                                title={language === 'en' ? 'Quick Look' : '快速预览'}
+                              >
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+                              </button>
                             )}
                           </div>
                        </div>
@@ -811,24 +821,11 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
                       <div className="flex space-x-1">
                         {asset.url && asset.type === 'image' && (
                           <button
-                            onClick={() => setPreviewAsset(asset)}
+                            onClick={() => openPreviewAsset(asset)}
                             className="p-2 text-slate-400 hover:text-accent-600 hover:bg-accent-50 rounded-lg transition-all"
                             title={language === 'en' ? 'Quick Look' : '快速预览'}
                           >
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
-                          </button>
-                        )}
-                        {asset.url && (
-                          <button
-                            onClick={() => {
-                              const extension = asset.type === 'image' ? 'jpg' :
-                                              asset.type === 'code' ? 'tsx' : asset.type;
-                              handleDownload(asset.url, `${asset.name[language] || 'file'}.${extension}`);
-                            }}
-                            className="p-2 text-slate-400 hover:text-corporate-800 hover:bg-slate-100 rounded-lg transition-all"
-                            title={language === 'en' ? 'Download' : '下载'}
-                          >
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
                           </button>
                         )}
                       </div>
@@ -852,32 +849,6 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
             )}
           </div>
 
-          {/* Download Current Version */}
-          {activeDocument.versions.length > 0 && (
-            <div className="px-8 pb-8">
-              <div className="bg-corporate-50 rounded-xl p-6 border border-corporate-100">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h5 className="font-bold text-corporate-900 mb-1">{language === 'en' ? 'Current Version' : '当前版本'}</h5>
-                    <p className="text-sm text-slate-500">v{activeDocument.versions.find(v => v.isCurrent)?.version} - {activeDocument.versions.find(v => v.isCurrent)?.date}</p>
-                  </div>
-                  <button
-                    onClick={() => {
-                      const currentVersion = activeDocument.versions.find(v => v.isCurrent);
-                      if (currentVersion) {
-                        const fileUrl = `/${currentVersion.name}`;
-                        handleDownload(fileUrl, currentVersion.name);
-                      }
-                    }}
-                    className="px-6 py-3 bg-corporate-800 text-white rounded-xl hover:bg-corporate-900 transition-all font-semibold shadow-lg flex items-center space-x-2"
-                  >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
-                    <span>{language === 'en' ? 'Download Document' : '下载文档'}</span>
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
         </div>
       </div>
     );
@@ -922,27 +893,18 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
                 <div className="p-5 flex-grow flex flex-col">
                   <p className="text-xs font-semibold text-accent-600 uppercase tracking-wider mb-1">{doc.subtitle[language]}</p>
                   <h3 className="font-bold text-slate-800 mb-4 line-clamp-2">{doc.title[language]}</h3>
-                  <div className="mt-auto grid grid-cols-2 gap-2">
+                  <div className="mt-auto">
                     <button onClick={() => {
                       // If document has a single image asset, preview it directly
                       if (doc.assets && doc.assets.length === 1 && doc.assets[0].type === 'image') {
-                        setPreviewAsset(doc.assets[0]);
+                        openPreviewAsset(doc.assets[0]);
                       } else if (doc.assets && doc.assets.length > 0) {
                         setActiveDocument(doc);
                       } else {
-                        setPreviewDoc(doc);
+                        openPreviewDoc(doc);
                       }
-                    }} className="flex items-center justify-center px-3 py-2 bg-slate-50 text-slate-700 rounded-lg hover:bg-slate-100 transition-colors text-xs font-medium border border-slate-200">
+                    }} className="w-full flex items-center justify-center px-3 py-2 bg-slate-50 text-slate-700 rounded-lg hover:bg-slate-100 transition-colors text-xs font-medium border border-slate-200">
                       {language === 'en' ? (doc.assets && doc.assets.length === 1 && doc.assets[0].type === 'image' ? 'Preview' : doc.assets && doc.assets.length > 0 ? 'View Details' : 'Preview') : (doc.assets && doc.assets.length === 1 && doc.assets[0].type === 'image' ? '预览' : doc.assets && doc.assets.length > 0 ? '查看详情' : '预览')}
-                    </button>
-                    <button
-                      onClick={() => {
-                        const fileUrl = `/${currentVersion?.name}`;
-                        handleDownload(fileUrl, currentVersion?.name || 'document');
-                      }}
-                      className="flex items-center justify-center px-3 py-2 bg-corporate-800 text-white rounded-lg hover:bg-corporate-900 transition-colors text-xs font-medium"
-                    >
-                      {language === 'en' ? 'Download' : '下载'}
                     </button>
                   </div>
                 </div>
