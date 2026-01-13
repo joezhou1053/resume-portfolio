@@ -89,30 +89,164 @@ const App: React.FC = () => {
         )}
       </nav>
 
-      {/* Hero Section */}
-      <header className="bg-corporate-900 text-white pt-20 pb-24 relative overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="lg:w-2/3">
-            <div className="inline-block px-3 py-1 mb-4 text-xs font-semibold tracking-wider text-accent-500 uppercase bg-corporate-800 rounded-full border border-corporate-500">
-              {lang === 'en' ? 'Available for new opportunities' : '寻求商业分析/数据分析机会'}
+      {/* Enhanced Hero Section */}
+      <header className="relative bg-corporate-900 text-white overflow-hidden min-h-[680px] flex items-center">
+        {/* Rich Background Layers */}
+        <div className="absolute inset-0 z-0">
+            {/* Deep Professional Base */}
+            <div className="absolute inset-0 bg-gradient-to-br from-corporate-900 via-[#0a1525] to-[#05101a]"></div>
+
+            {/* Technical Grid Blueprint */}
+            <div className="absolute inset-0 opacity-10"
+                 style={{
+                   backgroundImage: `linear-gradient(#4f7a9e 1px, transparent 1px), linear-gradient(90deg, #4f7a9e 1px, transparent 1px)`,
+                   backgroundSize: '40px 40px'
+                 }}>
             </div>
-            <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight mb-4 leading-tight">
-              {content.hero.greeting}
-            </h1>
-            <p className="text-xl md:text-2xl text-slate-300 font-light mb-8">
-              {content.hero.role}
-            </p>
-            <p className="text-lg text-slate-400 max-w-2xl mb-10 leading-relaxed">
-              {content.hero.summary}
-            </p>
-            <div className="flex flex-wrap gap-4">
-              <button onClick={() => scrollToSection('portfolio')} className="px-8 py-3 bg-accent-600 hover:bg-accent-500 text-white font-semibold rounded-lg shadow-lg shadow-accent-600/30 transition-all transform hover:-translate-y-0.5">
-                {content.hero.cta}
-              </button>
-              <button onClick={() => scrollToSection('documents')} className="px-8 py-3 bg-corporate-800 hover:bg-corporate-700 text-slate-200 font-semibold rounded-lg border border-corporate-600 transition-all">
-                {content.nav.downloadResume}
-              </button>
+
+            {/* Abstract Data Waves - Bottom */}
+            <svg className="absolute bottom-0 w-full h-[300px] text-accent-900/20" viewBox="0 0 1440 320" preserveAspectRatio="none">
+               <path fill="currentColor" d="M0,224L48,213.3C96,203,192,181,288,181.3C384,181,480,203,576,224C672,245,768,267,864,250.7C960,235,1056,181,1152,165.3C1248,149,1344,171,1392,181.3L1440,192L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+            </svg>
+
+            {/* Glowing Accent Orbs - Depth */}
+            <div className="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] bg-accent-600/10 rounded-full blur-[120px]"></div>
+            <div className="absolute bottom-[10%] left-[20%] w-[400px] h-[400px] bg-indigo-600/10 rounded-full blur-[100px]"></div>
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full pt-12 pb-20">
+          <div className="grid lg:grid-cols-12 gap-16 items-center">
+
+            {/* Left Column: Text Content */}
+            <div className="lg:col-span-7 space-y-8 relative">
+              <div className="space-y-4">
+                {/* Status Badge - User likes this, keeping it */}
+                <div className="inline-flex items-center space-x-2 bg-white/5 backdrop-blur-md border border-white/10 rounded-full px-4 py-1.5 shadow-lg">
+                  <span className="flex h-2 w-2 relative">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                  </span>
+                  <span className="text-xs font-semibold tracking-wide text-green-300 uppercase">
+                    {lang === 'en' ? 'Open to Work' : '积极求职中'}
+                  </span>
+                </div>
+
+                <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-tight">
+                  <span className="block text-white mb-2">{content.hero.greeting.split('(')[0]}</span>
+                  <span className="block text-3xl md:text-4xl lg:text-5xl font-light text-slate-400">
+                     (Joe Zhou)
+                  </span>
+                </h1>
+
+                <div className="flex items-center space-x-3 text-xl md:text-2xl text-accent-400 font-medium">
+                  <span className="h-0.5 w-12 bg-accent-500 rounded-full"></span>
+                  <p className="tracking-wide">{content.hero.role}</p>
+                </div>
+              </div>
+
+              <p className="text-lg text-slate-300 max-w-2xl leading-relaxed border-l-2 border-slate-600/50 pl-6">
+                {content.hero.summary}
+              </p>
+
+              <div className="flex flex-wrap gap-4 pt-4">
+                <button onClick={() => scrollToSection('portfolio')} className="group relative px-8 py-4 bg-accent-600 hover:bg-accent-500 text-white font-bold rounded-xl shadow-xl shadow-accent-600/20 transition-all hover:-translate-y-0.5">
+                  <span className="flex items-center">
+                    {content.hero.cta}
+                    <svg className="w-5 h-5 ml-2 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
+                  </span>
+                </button>
+                <button onClick={() => scrollToSection('documents')} className="px-8 py-4 bg-white/5 hover:bg-white/10 backdrop-blur-md text-white font-semibold rounded-xl border border-white/10 transition-all hover:border-white/20 hover:shadow-lg">
+                  {content.nav.downloadResume}
+                </button>
+              </div>
             </div>
+
+            {/* Right Column: "Holographic Workspace" Composition */}
+            <div className="hidden lg:block lg:col-span-5 relative h-full min-h-[500px] perspective-1000">
+               <div className="relative w-full h-full flex items-center justify-center">
+
+                  {/* Background Decoration: Abstract Ring */}
+                  <div className="absolute inset-0 border-2 border-white/5 rounded-full w-[450px] h-[450px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-[spin_60s_linear_infinite]"></div>
+                  <div className="absolute inset-0 border border-white/5 rounded-full w-[350px] h-[350px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 border-dashed opacity-50"></div>
+
+                  {/* Main Profile Card (Center) */}
+                  <div className="relative z-20 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-2xl border border-white/20 rounded-2xl p-6 shadow-2xl w-80 transform transition-transform hover:scale-[1.02]">
+                    <div className="flex items-center space-x-4 mb-6 border-b border-white/10 pb-4">
+                      <div className="h-14 w-14 rounded-xl bg-gradient-to-br from-slate-200 to-slate-400 p-[2px]">
+                        <div className="h-full w-full rounded-[10px] bg-slate-800 flex items-center justify-center">
+                          <span className="text-xl font-bold text-white">JZ</span>
+                        </div>
+                      </div>
+                      <div>
+                        <h3 className="text-white font-bold text-base">Joe Zhou</h3>
+                        <p className="text-accent-300 text-xs font-mono">{lang === 'en' ? 'FINANCE & DATA' : '金融 & 数据'}</p>
+                      </div>
+                    </div>
+
+                    <div className="space-y-4">
+                       <div className="bg-black/20 rounded-lg p-3 flex justify-between items-center">
+                          <div>
+                             <p className="text-[10px] text-slate-400 uppercase">{lang === 'en' ? 'Education' : '教育'}</p>
+                             <p className="text-sm font-semibold text-white">OSU</p>
+                          </div>
+                          <div className="text-right">
+                             <p className="text-[10px] text-slate-400 uppercase">{lang === 'en' ? 'Major' : '专业'}</p>
+                             <p className="text-sm font-semibold text-white">{lang === 'en' ? 'Finance' : '金融'}</p>
+                          </div>
+                       </div>
+                       <div className="grid grid-cols-2 gap-3">
+                          <div className="bg-white/5 rounded-lg p-3 text-center">
+                             <p className="text-xl font-bold text-white">3<span className="text-xs text-accent-400">+</span></p>
+                             <p className="text-[10px] text-slate-400">{lang === 'en' ? 'Years Exp' : '工作年限'}</p>
+                          </div>
+                          <div className="bg-white/5 rounded-lg p-3 text-center">
+                             <p className="text-xl font-bold text-white">12<span className="text-xs text-accent-400">+</span></p>
+                             <p className="text-[10px] text-slate-400">{lang === 'en' ? 'Projects' : '项目经验'}</p>
+                          </div>
+                       </div>
+                    </div>
+                  </div>
+
+                  {/* Floating Widget 1: Efficiency Metric (Top Right) */}
+                  <div className="absolute top-10 -right-4 z-30 animate-[bounce_4s_infinite]">
+                     <div className="bg-white/90 backdrop-blur text-slate-800 p-4 rounded-xl shadow-xl border border-white/40 w-40">
+                        <div className="flex items-center justify-between mb-2">
+                           <div className="p-1.5 bg-green-100 rounded text-green-600">
+                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
+                           </div>
+                           <span className="text-[10px] font-bold text-green-600 bg-green-50 px-1.5 py-0.5 rounded">+30%</span>
+                        </div>
+                        <p className="text-[10px] text-slate-500 uppercase font-bold tracking-wider">{lang === 'en' ? 'Efficiency' : '效率提升'}</p>
+                        <p className="text-sm font-bold leading-tight mt-0.5">{lang === 'en' ? 'Report Latency Reduced' : '报表延迟降低'}</p>
+                     </div>
+                  </div>
+
+                  {/* Floating Widget 2: Tech Stack Badges (Bottom Left) */}
+                  <div className="absolute bottom-16 -left-8 z-30 animate-[bounce_5s_infinite]">
+                     <div className="bg-corporate-800/90 backdrop-blur border border-white/10 p-4 rounded-xl shadow-2xl">
+                        <p className="text-[10px] text-slate-400 uppercase font-bold mb-3 border-b border-white/10 pb-2">{lang === 'en' ? 'Core Toolkit' : '核心工具'}</p>
+                        <div className="flex flex-col space-y-2">
+                           {lang === 'en' ? ['Python', 'SQL', 'Tableau', 'Axure'] : ['Python', 'SQL', 'Tableau', 'Axure'].map((tool, i) => {
+                              const cnNames = ['Python', 'SQL', 'Tableau', 'Axure'];
+                              return (
+                                <div key={i} className="flex items-center space-x-2">
+                                   <span className={`w-2 h-2 rounded-full ${i===0 ? 'bg-yellow-400' : i===1 ? 'bg-blue-400' : 'bg-slate-400'}`}></span>
+                                   <span className="text-xs font-mono text-slate-200">{lang === 'en' ? tool : cnNames[i]}</span>
+                                </div>
+                              );
+                           })}
+                        </div>
+                     </div>
+                  </div>
+
+                  {/* Connecting Lines (Decor) */}
+                  <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-20" style={{ zIndex: 10 }}>
+                     <path d="M150 250 L 100 350" stroke="white" strokeDasharray="4 4" fill="none" />
+                     <path d="M350 250 L 400 150" stroke="white" strokeDasharray="4 4" fill="none" />
+                  </svg>
+               </div>
+            </div>
+
           </div>
         </div>
       </header>
