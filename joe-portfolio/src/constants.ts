@@ -440,6 +440,38 @@ export const INITIAL_DOCUMENTS: DocumentCategory[] = [
           { id: 'da4', name: { en: "Data Analytics Methodology", zh: "数据分析方法论" }, type: "markdown", size: "15 KB", description: { en: "Comprehensive 7-step data analysis framework covering requirement analysis, data cleaning, Tableau implementation, visualization design, and the 3C storytelling methodology.", zh: "完整的7步数据分析框架，涵盖需求分析、数据清洗、Tableau 实施、可视化设计和 3C 叙事方法论。" }, url: "/portfolio/dognition/数据分析方法论.md" }
         ],
         versions: [{ version: 1, date: "2025-01-12", name: "dognition_analytics_project.zip", size: "0.1 MB", isCurrent: true }]
+      },
+      {
+        id: 'port-wsd-property-management',
+        title: { en: "Watershed Property Management Analytics", zh: "物业管理数据分析 Capstone 项目" },
+        subtitle: { en: "Data-Driven Profit Optimization Strategy", zh: "项目：数据驱动的利润优化策略" },
+        type: "portfolio",
+        thumbnailUrl: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?q=80&w=600&auto=format&fit=crop",
+        projectSummary: {
+          en: "Comprehensive data analytics capstone project for Watershed Property Management, Inc. involving full-stack analysis from MySQL database extraction to Excel modeling and Tableau visualization. Developed a data-driven strategy to increase profits for thousands of residential rental properties across the United States through sensitivity analysis and risk assessment.",
+          zh: "为 Watershed Property Management, Inc. 进行的全面数据分析 Capstone 项目，涵盖从 MySQL 数据库提取到 Excel 建模和 Tableau 可视化的全栈分析流程。通过敏感性分析和风险评估，为美国数千个住宅租赁物业开发了数据驱动的利润增长策略。"
+        },
+        highlights: {
+          en: [
+            "End-to-end data pipeline: MySQL database extraction → Excel analysis → Tableau dashboard visualization",
+            "Sensitivity analysis dashboard identifying optimal revenue opportunities while managing risk exposure",
+            "Comprehensive White Paper documenting business process change recommendations",
+            "Executive presentation with strategic proposals for profit maximization"
+          ],
+          zh: [
+            "端到端数据管道：MySQL 数据库提取 → Excel 分析 → Tableau 仪表板可视化",
+            "敏感性分析仪表板，在管理风险敞口的同时识别最佳收入机会",
+            "完整的白皮书文档，详细说明业务流程变更建议",
+            "面向高管的战略提案演示，提供利润最大化建议"
+          ]
+        },
+        assets: [
+          { id: 'wsd1', name: { en: "Final Presentation Recording", zh: "最终演示录制" }, type: "tableau-url", size: "Link", description: { en: "Complete presentation recording showcasing data-driven profit optimization strategy recommendations for Watershed Property Management executives.", zh: "完整的演示录制，向 Watershed Property Management 高管展示数据驱动的利润优化战略建议。" }, url: "https://app.screencast.com/CruSBGtVhcFIS" },
+          { id: 'wsd2', name: { en: "Tableau Public Interactive Dashboard", zh: "Tableau Public 交互式仪表板" }, type: "tableau-url", size: "Link", description: { en: "Interactive Tableau dashboard featuring sensitivity analysis, property performance metrics, and profit optimization scenarios for Watershed Management.", zh: "交互式 Tableau 仪表板，包含敏感性分析、物业绩效指标和 Watershed 管理的利润优化情景。" }, url: "https://public.tableau.com/views/FinalProject_V1_9/WSDashboard?:language=zh-CN&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link" },
+          { id: 'wsd3', name: { en: "White Paper - Strategic Analysis", zh: "白皮书 - 战略分析" }, type: "pdf", size: "338 KB", description: { en: "Comprehensive white paper documenting the complete analysis methodology, data extraction process, statistical findings, and strategic recommendations for increasing property management profits.", zh: "完整的白皮书，记录了分析方法论、数据提取流程、统计发现以及提高物业管理利润的战略建议。" }, url: "/portfolio/tableau-wsd-project/White_Paper.pdf" },
+          { id: 'wsd4', name: { en: "Executive Presentation Slides", zh: "高管演示文稿" }, type: "pptx", size: "1.8 MB", description: { en: "Professional presentation deck prepared for Watershed executive team, featuring data visualizations, sensitivity analysis results, and profit optimization implementation roadmap.", zh: "为 Watershed 管理团队准备的专业演示文稿，包含数据可视化、敏感性分析结果和利润优化实施路线图。" }, url: "/portfolio/tableau-wsd-project/Final_Presentation.pptx" }
+        ],
+        versions: [{ version: 1, date: "2025-01-13", name: "watershed_property_management_capstone.zip", size: "8.3 MB", isCurrent: true }]
       }
     ]
   },
@@ -590,6 +622,14 @@ export const INITIAL_DOCUMENTS: DocumentCategory[] = [
         type: "certificate",
         thumbnailUrl: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?q=80&w=400&auto=format&fit=crop",
         versions: [{ version: 1, date: "2025-01-12", name: "Managing_Big_Data_with_MySQL.pdf", size: "1.6 MB", isCurrent: true }]
+      },
+      {
+        id: 'cert-data-viz-tableau',
+        title: { en: "Data Visualization and Communication with Tableau", zh: "Tableau数据可视化与沟通" },
+        subtitle: { en: "Duke University / Coursera", zh: "机构: Duke University" },
+        type: "certificate",
+        thumbnailUrl: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=400&auto=format&fit=crop",
+        versions: [{ version: 1, date: "2025-01-13", name: "Data_Visualization_and_Communication_with_Tableau.pdf", size: "1.5 MB", isCurrent: true }]
       }
     ]
   }

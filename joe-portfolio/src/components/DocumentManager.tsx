@@ -121,6 +121,7 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
               case 'code': extension = '.tsx'; break;
               case 'pdf': extension = '.pdf'; break;
               case 'excel': extension = '.xlsx'; break;
+              case 'pptx': extension = '.pptx'; break;
               case 'python': extension = '.py'; break;
               case 'notebook': extension = '.ipynb'; break;
               case 'tableau': extension = '.twbx'; break;
@@ -155,6 +156,7 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
     switch (type) {
       case 'pdf': return <svg className="w-5 h-5 text-red-500" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" /></svg>;
       case 'excel': return <svg className="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" /></svg>;
+      case 'pptx': return <svg className="w-5 h-5 text-orange-600" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" /></svg>;
       case 'python':
       case 'notebook':
       case 'code': return <svg className="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" /></svg>;
@@ -206,6 +208,20 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
     };
     const markdownUrl = getMarkdownUrl();
     const isMarkdownPreview = !!markdownUrl;
+
+    // Check if it's a PowerPoint preview
+    const getPptxUrl = () => {
+      if (previewAsset?.type === 'pptx' && previewAsset.url) {
+        return previewAsset.url;
+      }
+      return '';
+    };
+    const pptxUrl = getPptxUrl();
+    const isPptxPreview = !!pptxUrl;
+
+    // Check if we can use online preview (requires public URL)
+    const isLocalDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    const canUseOnlinePreview = !isLocalDev && window.location.protocol === 'https:';
 
     return (
       <div className="fixed inset-0 z-[60] bg-slate-900/95 flex flex-col animate-fade-in p-4 md:p-8">
@@ -265,6 +281,81 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
                 {language === 'en' ? 'Download PDF' : '下载 PDF'}
               </button>
             </div>
+          </div>
+        ) : isPptxPreview ? (
+          /* PowerPoint Preview */
+          <div className="flex-grow flex flex-col bg-white rounded-xl shadow-2xl overflow-hidden">
+            {canUseOnlinePreview ? (
+              /* Online Preview with Microsoft Office Online Viewer */
+              <>
+                <div className="flex-grow overflow-hidden" style={{ maxHeight: 'calc(100vh - 180px)' }}>
+                  <iframe
+                    src={`https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(window.location.origin + pptxUrl)}`}
+                    className="w-full h-full border-0"
+                    title={title}
+                  />
+                </div>
+                <div className="p-4 bg-slate-50 border-t border-slate-200 flex justify-between items-center flex-shrink-0">
+                  <p className="text-sm text-slate-500">
+                    {language === 'en'
+                      ? '🔒 Powered by Microsoft Office Online Viewer'
+                      : '🔒 由 Microsoft Office Online Viewer 提供支持'}
+                  </p>
+                  <button
+                    className="px-6 py-3 bg-corporate-800 text-white rounded-lg hover:bg-corporate-900 transition-all font-semibold shadow-lg"
+                    onClick={() => handleDownload(pptxUrl, filename)}
+                  >
+                    {language === 'en' ? 'Download PowerPoint' : '下载 PowerPoint'}
+                  </button>
+                </div>
+              </>
+            ) : (
+              /* Local Development - Show download prompt */
+              <div className="flex-grow overflow-auto p-8" style={{ maxHeight: 'calc(100vh - 180px)' }}>
+                <div className="h-full flex flex-col items-center justify-center text-center">
+                  <div className="mb-8 w-32 h-32 bg-orange-50 rounded-3xl flex items-center justify-center">
+                    <svg className="w-16 h-16 text-orange-500" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" />
+                    </svg>
+                  </div>
+                  <h3 className="text-2xl font-bold text-slate-800 mb-4">
+                    {language === 'en' ? 'PowerPoint Presentation' : 'PowerPoint 演示文稿'}
+                  </h3>
+                  <div className="max-w-md space-y-4 mb-8">
+                    <p className="text-slate-600 leading-relaxed">
+                      {language === 'en'
+                        ? 'Online preview requires the website to be deployed to a public HTTPS server. In local development, please download the file to view it.'
+                        : '在线预览需要网站部署到公网 HTTPS 服务器。在本地开发环境中，请下载文件后查看。'}
+                    </p>
+                    <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 text-left">
+                      <p className="text-sm font-semibold text-blue-900 mb-2">
+                        {language === 'en' ? '💡 Viewing Options:' : '💡 查看方式：'}
+                      </p>
+                      <ul className="text-sm text-blue-800 space-y-1">
+                        <li>• Microsoft PowerPoint / PowerPoint Online</li>
+                        <li>• Apple Keynote</li>
+                        <li>• Google Slides (免费/Free)</li>
+                        <li>• LibreOffice Impress</li>
+                      </ul>
+                    </div>
+                    <p className="text-xs text-slate-400">
+                      {language === 'en'
+                        ? '📢 After deploying to production (e.g., Vercel, Netlify), online preview will be enabled automatically.'
+                        : '📢 部署到生产环境（如 Vercel、Netlify）后，在线预览将自动启用。'}
+                    </p>
+                  </div>
+                  <button
+                    className="px-8 py-4 bg-corporate-800 text-white rounded-xl hover:bg-corporate-900 transition-all font-semibold shadow-lg flex items-center space-x-3"
+                    onClick={() => handleDownload(pptxUrl, filename)}
+                  >
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                    </svg>
+                    <span>{language === 'en' ? 'Download PowerPoint File' : '下载 PowerPoint 文件'}</span>
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         ) : isNotebookPreview ? (
           /* Jupyter Notebook Preview with code viewer */
@@ -404,13 +495,28 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
                  {previewAsset ? getAssetIcon(previewAsset.type) : <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>}
                </div>
                <h4 className="text-2xl font-bold text-slate-800 mb-4">
-                  {language === 'en' ? 'Interactive Preview Engine' : '交互式预览引擎'}
+                  {previewAsset?.type === 'pptx'
+                    ? (language === 'en' ? 'PowerPoint Presentation' : 'PowerPoint 演示文稿')
+                    : (language === 'en' ? 'Interactive Preview Engine' : '交互式预览引擎')
+                  }
                </h4>
-               <p className="text-slate-500 mb-8 leading-relaxed">
-                  {language === 'en'
-                    ? "We are preparing a secure sandbox environment to display this file's contents while protecting intellectual property."
-                    : "正在准备安全沙箱环境以展示文件内容，同时确保相关知识产权受到保护。"}
+               <p className="text-slate-500 mb-4 leading-relaxed">
+                  {previewAsset?.type === 'pptx'
+                    ? (language === 'en'
+                        ? "This PowerPoint presentation requires Microsoft PowerPoint, PowerPoint Online, or Keynote to view. Please download the file to your device for the best viewing experience."
+                        : "此 PowerPoint 演示文稿需要 Microsoft PowerPoint、PowerPoint Online 或 Keynote 才能查看。请下载文件到本地设备以获得最佳查看体验。")
+                    : (language === 'en'
+                        ? "We are preparing a secure sandbox environment to display this file's contents while protecting intellectual property."
+                        : "正在准备安全沙箱环境以展示文件内容，同时确保相关知识产权受到保护。")
+                  }
                </p>
+               {previewAsset?.type === 'pptx' && (
+                 <p className="text-sm text-slate-400 mb-8">
+                   {language === 'en'
+                     ? "💡 Tip: You can also open .pptx files in Google Slides or PowerPoint Online (free) directly in your browser."
+                     : "💡 提示：您也可以在浏览器中直接使用 Google Slides 或 PowerPoint Online（免费）打开 .pptx 文件。"}
+                 </p>
+               )}
                <div className="flex justify-center space-x-4">
                   <button
                     className="px-6 py-3 bg-corporate-800 text-white rounded-lg hover:bg-corporate-900 transition-all font-semibold shadow-lg"
@@ -419,7 +525,10 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
                       if (downloadUrl) handleDownload(downloadUrl, filename);
                     }}
                   >
-                    {language === 'en' ? 'Download for Offline View' : '下载到本地查看'}
+                    {previewAsset?.type === 'pptx'
+                      ? (language === 'en' ? 'Download PowerPoint File' : '下载 PowerPoint 文件')
+                      : (language === 'en' ? 'Download for Offline View' : '下载到本地查看')
+                    }
                   </button>
                   <button
                     className="px-6 py-3 border border-slate-200 text-slate-600 rounded-lg hover:bg-slate-50 transition-all"
@@ -578,6 +687,7 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
                                         case 'notebook': extension = 'ipynb'; break;
                                         case 'pdf': extension = 'pdf'; break;
                                         case 'excel': extension = 'xlsx'; break;
+                                        case 'pptx': extension = 'pptx'; break;
                                         case 'python': extension = 'py'; break;
                                         case 'tableau': extension = 'twbx'; break;
                                         default: extension = asset.type;
