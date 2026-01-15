@@ -20,12 +20,12 @@ interface NotebookOutput {
   output_type: 'stream' | 'execute_result' | 'display_data' | 'error';
   text?: string[];
   data?: {
-    'text/plain'?: string[];
-    'text/html'?: string[];
-    'image/png'?: string[];
-    'image/jpeg'?: string[];
-    'image/svg+xml'?: string[];
-    'text/markdown'?: string[];
+    'text/plain'?: string[] | string;
+    'text/html'?: string[] | string;
+    'image/png'?: string[] | string;
+    'image/jpeg'?: string[] | string;
+    'image/svg+xml'?: string[] | string;
+    'text/markdown'?: string[] | string;
   };
   name?: 'stdout' | 'stderr';
   ename?: string;
@@ -79,8 +79,10 @@ const NotebookViewer: React.FC<NotebookViewerProps> = ({ content }) => {
 
   const renderOutput = (output: NotebookOutput, index: number) => {
     // Helper function to validate and clean base64 data
-    const cleanBase64 = (data: string[]): string => {
-      const joined = data.join('').replace(/\s/g, '');
+    // Handle both string and string[] formats
+    const cleanBase64 = (data: string | string[]): string => {
+      // If it's an array, join it; if it's already a string, use it directly
+      const joined = Array.isArray(data) ? data.join('').replace(/\s/g, '') : data.replace(/\s/g, '');
       // Validate base64 length (should be multiple of 4)
       const padded = joined.padEnd(Math.ceil(joined.length / 4) * 4, '=');
       return padded;
@@ -182,57 +184,64 @@ const NotebookViewer: React.FC<NotebookViewerProps> = ({ content }) => {
       }
 
       // HTML output
-      if (data?.['text/html'] && data['text/html'].length > 0) {
-        const htmlContent = data['text/html'].join('');
-        return (
-          <div
-            key={index}
-            className="mt-2 p-3 bg-gray-50 border border-gray-200 rounded overflow-auto"
-            dangerouslySetInnerHTML={{ __html: htmlContent }}
-          />
-        );
+      if (data?.['text/html']) {
+        const htmlContent = Array.isArray(data['text/html']) ? data['text/html'].join('') : data['text/html'];
+        if (htmlContent.length > 0) {
+          return (
+            <div
+              key={index}
+              className="mt-2 p-3 bg-gray-50 border border-gray-200 rounded overflow-auto"
+              dangerouslySetInnerHTML={{ __html: htmlContent }}
+            />
+          );
+        }
       }
 
       // Markdown output
-      if (data?.['text/markdown'] && data['text/markdown'].length > 0) {
-        return (
-          <div key={index} className="mt-2 p-3 bg-gray-50 border border-gray-200 rounded prose prose-sm max-w-none">
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>
-              {data['text/markdown'].join('')}
-            </ReactMarkdown>
-          </div>
-        );
+      if (data?.['text/markdown']) {
+        const markdownContent = Array.isArray(data['text/markdown']) ? data['text/markdown'].join('') : data['text/markdown'];
+        if (markdownContent.length > 0) {
+          return (
+            <div key={index} className="mt-2 p-3 bg-gray-50 border border-gray-200 rounded prose prose-sm max-w-none">
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                {markdownContent}
+              </ReactMarkdown>
+            </div>
+          );
+        }
       }
 
       // Plain text output
-      if (data?.['text/plain'] && data['text/plain'].length > 0) {
-        const text = data['text/plain'].join('');
-        // Check if it looks like a DataFrame or table
-        const hasTableStructure = text.includes('|') && text.includes('---');
-        const hasDataFrameStructure = text.trim().split('\n').length > 5;
+      if (data?.['text/plain']) {
+        const text = Array.isArray(data['text/plain']) ? data['text/plain'].join('') : data['text/plain'];
+        if (text.length > 0) {
+          // Check if it looks like a DataFrame or table
+          const hasTableStructure = text.includes('|') && text.includes('---');
+          const hasDataFrameStructure = text.trim().split('\n').length > 5;
 
-        return (
-          <div key={index} className="mt-2">
-            {hasTableStructure || hasDataFrameStructure ? (
-              <div className="overflow-x-auto">
-                <div
-                  className="text-sm font-mono whitespace-pre"
-                  style={{
-                    lineHeight: '1.6',
-                    whiteSpace: 'pre-wrap',
-                    wordBreak: 'break-word'
-                  }}
-                >
-                  {text}
+          return (
+            <div key={index} className="mt-2">
+              {hasTableStructure || hasDataFrameStructure ? (
+                <div className="overflow-x-auto">
+                  <div
+                    className="text-sm font-mono whitespace-pre"
+                    style={{
+                      lineHeight: '1.6',
+                      whiteSpace: 'pre-wrap',
+                      wordBreak: 'break-word'
+                    }}
+                  >
+                    {text}
+                  </div>
                 </div>
-              </div>
-            ) : (
-              <pre className="p-3 bg-gray-50 text-gray-700 border border-gray-200 rounded text-sm whitespace-pre-wrap overflow-x-auto">
-                {text}
-              </pre>
-            )}
-          </div>
-        );
+              ) : (
+                <pre className="p-3 bg-gray-50 text-gray-700 border border-gray-200 rounded text-sm whitespace-pre-wrap overflow-x-auto">
+                  {text}
+                </pre>
+              )}
+            </div>
+          );
+        }
       }
     }
 

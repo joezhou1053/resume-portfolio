@@ -247,6 +247,7 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
               case 'notebook': extension = '.ipynb'; break;
               case 'tableau': extension = '.twbx'; break;
               case 'markdown': extension = '.md'; break;
+              case 'video': extension = '.mp4'; break;
               default: extension = '.bin';
             }
 
@@ -284,6 +285,7 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
       case 'markdown': return <svg className="w-5 h-5 text-purple-600" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 0h8v12H6V4zm1 3v6h1V7l2 3 2-3v6h1V7h-1l-2 3-2-3H7z" clipRule="evenodd" /></svg>;
       case 'tableau': return <svg className="w-5 h-5 text-orange-500" fill="currentColor" viewBox="0 0 20 20"><path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z" /><path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z" /></svg>;
       case 'tableau-url': return <svg className="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122" /></svg>;
+      case 'video': return <svg className="w-5 h-5 text-red-600" fill="currentColor" viewBox="0 0 20 20"><path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z" /></svg>;
       default: return <svg className="w-5 h-5 text-slate-400" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" /></svg>;
     }
   };
@@ -367,43 +369,39 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
              </div>
           </div>
           <div className="flex items-center space-x-2">
-            {/* Navigation buttons - only show for assets in portfolio projects */}
-            {currentProject && currentAssetList.length > 1 && (
+            {/* Navigation buttons - only show for assets in portfolio projects, but NOT for Tableau or video files */}
+            {currentProject && currentAssetList.length > 1 && previewAsset?.type !== 'tableau' && previewAsset?.type !== 'tableau-url' && previewAsset?.type !== 'video' && (
               <>
-                <button
-                  onClick={() => navigateAsset('prev')}
-                  disabled={currentAssetIndex === 0}
-                  className={`p-2 rounded-full transition-all group relative ${
-                    currentAssetIndex === 0
-                      ? 'text-slate-600 cursor-not-allowed opacity-50'
-                      : 'text-slate-300 hover:bg-white/10 hover:scale-110'
-                  }`}
-                  title={language === 'en' ? 'Previous in this project (←)' : '本项目内上一个 (←)'}
-                >
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                  </svg>
-                  <span className="absolute top-full mt-1 left-1/2 -translate-x-1/2 text-xs bg-black/80 px-2 py-1 rounded opacity-0 group-hover:opacity-100 whitespace-nowrap pointer-events-none">
-                    {language === 'en' ? 'Previous in project' : '项目内上一个'}
-                  </span>
-                </button>
-                <button
-                  onClick={() => navigateAsset('next')}
-                  disabled={currentAssetIndex === currentAssetList.length - 1}
-                  className={`p-2 rounded-full transition-all group relative ${
-                    currentAssetIndex === currentAssetList.length - 1
-                      ? 'text-slate-600 cursor-not-allowed opacity-50'
-                      : 'text-slate-300 hover:bg-white/10 hover:scale-110'
-                  }`}
-                  title={language === 'en' ? 'Next in this project (→)' : '本项目内下一个 (→)'}
-                >
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                  <span className="absolute top-full mt-1 left-1/2 -translate-x-1/2 text-xs bg-black/80 px-2 py-1 rounded opacity-0 group-hover:opacity-100 whitespace-nowrap pointer-events-none">
-                    {language === 'en' ? 'Next in project' : '项目内下一个'}
-                  </span>
-                </button>
+                {/* Previous button - hide if previous asset is Tableau or video */}
+                {currentAssetIndex > 0 && !['tableau', 'tableau-url', 'video'].includes(currentAssetList[currentAssetIndex - 1]?.type) && (
+                  <button
+                    onClick={() => navigateAsset('prev')}
+                    className="p-2 rounded-full transition-all group relative text-slate-300 hover:bg-white/10 hover:scale-110"
+                    title={language === 'en' ? 'Previous in this project (←)' : '本项目内上一个 (←)'}
+                  >
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                    </svg>
+                    <span className="absolute top-full mt-1 left-1/2 -translate-x-1/2 text-xs bg-black/80 px-2 py-1 rounded opacity-0 group-hover:opacity-100 whitespace-nowrap pointer-events-none">
+                      {language === 'en' ? 'Previous in project' : '项目内上一个'}
+                    </span>
+                  </button>
+                )}
+                {/* Next button - hide if next asset is Tableau or video */}
+                {currentAssetIndex < currentAssetList.length - 1 && !['tableau', 'tableau-url', 'video'].includes(currentAssetList[currentAssetIndex + 1]?.type) && (
+                  <button
+                    onClick={() => navigateAsset('next')}
+                    className="p-2 rounded-full transition-all group relative text-slate-300 hover:bg-white/10 hover:scale-110"
+                    title={language === 'en' ? 'Next in this project (→)' : '本项目内下一个 (→)'}
+                  >
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                    <span className="absolute top-full mt-1 left-1/2 -translate-x-1/2 text-xs bg-black/80 px-2 py-1 rounded opacity-0 group-hover:opacity-100 whitespace-nowrap pointer-events-none">
+                      {language === 'en' ? 'Next in project' : '项目内下一个'}
+                    </span>
+                  </button>
+                )}
               </>
             )}
             <button onClick={closePreview} className="p-2 hover:bg-white/10 rounded-full transition-colors text-slate-300 hover:scale-110" title={language === 'en' ? 'Close (Esc)' : '关闭 (Esc)'}>
@@ -425,10 +423,10 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
             />
           </div>
         ) : isPdfPreview ? (
-          /* PDF Preview with iframe */
+          /* PDF Preview with iframe - toolbar disabled to prevent download */
           <div className="flex-grow bg-white rounded-xl shadow-2xl overflow-hidden">
             <iframe
-              src={pdfUrl}
+              src={`${pdfUrl}#toolbar=0&navpanes=0&scrollbar=0`}
               className="w-full h-full border-0"
               style={{ height: 'calc(100vh - 180px)' }}
               title={title}
@@ -770,19 +768,19 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {project.assets?.map(asset => (
-                    <div key={asset.id} className={`group rounded-2xl p-4 transition-all flex flex-col justify-between ${asset.type === 'tableau-url' ? 'bg-gradient-to-br from-indigo-50 to-purple-50 border-2 border-indigo-200 hover:shadow-lg hover:border-indigo-400' : 'bg-white border border-slate-100 hover:border-accent-200 hover:shadow-md'}`}>
+                    <div key={asset.id} className={`group rounded-2xl p-4 transition-all flex flex-col justify-between ${asset.type === 'tableau-url' || asset.type === 'video' ? 'bg-gradient-to-br from-indigo-50 to-purple-50 border-2 border-indigo-200 hover:shadow-lg hover:border-indigo-400' : 'bg-white border border-slate-100 hover:border-accent-200 hover:shadow-md'}`}>
                        <div className="flex items-start justify-between mb-4">
-                          <div className={`p-3 rounded-xl transition-colors ${asset.type === 'tableau-url' ? 'bg-indigo-100 group-hover:bg-indigo-200' : 'bg-slate-50 group-hover:bg-accent-50'}`}>
+                          <div className={`p-3 rounded-xl transition-colors ${asset.type === 'tableau-url' || asset.type === 'video' ? 'bg-indigo-100 group-hover:bg-indigo-200' : 'bg-slate-50 group-hover:bg-accent-50'}`}>
                              {getAssetIcon(asset.type)}
                           </div>
                           <div className="flex space-x-1">
-                            {asset.type === 'tableau-url' ? (
+                            {asset.type === 'tableau-url' || asset.type === 'video' ? (
                               <a
                                 href={asset.url}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="px-3 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-all flex items-center space-x-1 font-semibold text-xs shadow-md"
-                                title={language === 'en' ? 'Open Interactive Dashboard' : '打开交互式仪表板'}
+                                title={language === 'en' ? (asset.type === 'video' ? 'Watch Video' : 'Open Interactive Dashboard') : (asset.type === 'video' ? '观看视频' : '打开交互式仪表板')}
                               >
                                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
                                 <span>{language === 'en' ? 'Open' : '打开'}</span>
@@ -799,12 +797,12 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
                           </div>
                        </div>
                        <div>
-                         <h5 className={`font-bold text-sm mb-2 transition-colors ${asset.type === 'tableau-url' ? 'text-indigo-900 group-hover:text-indigo-700' : 'text-slate-800 group-hover:text-accent-700'}`}>{asset.name[language]}</h5>
-                         <p className={`line-clamp-3 leading-relaxed ${asset.type === 'tableau-url' ? 'text-sm text-indigo-700 font-medium' : 'text-sm text-slate-600'}`}>{asset.description[language]}</p>
+                         <h5 className={`font-bold text-sm mb-2 transition-colors ${asset.type === 'tableau-url' || asset.type === 'video' ? 'text-indigo-900 group-hover:text-indigo-700' : 'text-slate-800 group-hover:text-accent-700'}`}>{asset.name[language]}</h5>
+                         <p className={`line-clamp-3 leading-relaxed ${asset.type === 'tableau-url' || asset.type === 'video' ? 'text-sm text-indigo-700 font-medium' : 'text-sm text-slate-600'}`}>{asset.description[language]}</p>
                        </div>
                        <div className="mt-3 pt-3 border-t border-slate-50 flex justify-between items-center">
-                         <span className={`font-bold uppercase ${asset.type === 'tableau-url' ? 'text-xs text-indigo-600' : 'text-xs text-slate-400'}`}>{asset.type}</span>
-                         <span className={`font-medium ${asset.type === 'tableau-url' ? 'text-xs text-indigo-600' : 'text-xs text-slate-400'}`}>{asset.size}</span>
+                         <span className={`font-bold uppercase ${asset.type === 'tableau-url' || asset.type === 'video' ? 'text-xs text-indigo-600' : 'text-xs text-slate-400'}`}>{asset.type}</span>
+                         <span className={`font-medium ${asset.type === 'tableau-url' || asset.type === 'video' ? 'text-xs text-indigo-600' : 'text-xs text-slate-400'}`}>{asset.size}</span>
                        </div>
                     </div>
                   ))}

@@ -3,7 +3,7 @@ export type Language = 'en' | 'zh';
 export interface ProjectAsset {
   id: string;
   name: { en: string; zh: string };
-  type: 'pdf' | 'excel' | 'word' | 'tableau' | 'tableau-url' | 'python' | 'notebook' | 'visio' | 'image' | 'code' | 'markdown';
+  type: 'pdf' | 'excel' | 'word' | 'tableau' | 'tableau-url' | 'python' | 'notebook' | 'visio' | 'image' | 'code' | 'markdown' | 'video';
   size: string;
   description: { en: string; zh: string };
   url?: string; // Optional URL for image/code assets
