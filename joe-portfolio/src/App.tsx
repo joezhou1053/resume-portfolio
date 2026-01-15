@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import type { Language, AppContent } from './types';
+import type { Language, AppContent, LifeItem } from './types';
 import { CONTENT_EN, CONTENT_ZH } from './constants';
 import * as StorageService from './services/storageService';
 import { useMemo } from 'react';
@@ -11,6 +11,20 @@ const App: React.FC = () => {
   const [content, setContent] = useState<AppContent>(CONTENT_ZH);
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Helper function to check if a hard skill should be highlighted
+  const isHighlightHardSkill = (skill: string): boolean => {
+    const highlightSkillsEN = ["Requirement Gathering", "Excel VBA", "Tableau", "Intermediate Python", "Vibe Coding"];
+    const highlightSkillsZH = ["需求调研", "Excel VBA", "Tableau 数据可视化", "Python 熟练", "氛围编程"];
+    return highlightSkillsEN.includes(skill) || highlightSkillsZH.includes(skill);
+  };
+
+  // Helper function to check if a soft skill should be highlighted
+  const isHighlightSoftSkill = (skill: string): boolean => {
+    const highlightSkillsEN = ["English Communication", "Team Leadership"];
+    const highlightSkillsZH = ["英语沟通", "团队领导力"];
+    return highlightSkillsEN.includes(skill) || highlightSkillsZH.includes(skill);
+  };
 
   useEffect(() => {
     setContent(lang === 'en' ? CONTENT_EN : CONTENT_ZH);
@@ -31,6 +45,15 @@ const App: React.FC = () => {
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
       setMobileMenuOpen(false);
+    }
+  };
+
+  const getLifeIcon = (icon: LifeItem['icon']) => {
+    switch (icon) {
+      case 'book': return <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>;
+      case 'camera': return <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" /></svg>;
+      case 'globe': return <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>;
+      case 'activity': return <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>;
     }
   };
 
@@ -90,8 +113,8 @@ const App: React.FC = () => {
         )}
       </nav>
 
-      {/* Enhanced Hero Section */}
-      <header className="relative bg-corporate-900 text-white overflow-hidden min-h-[680px] flex items-center">
+      {/* Enhanced Hero Section - Added bottom padding for overlap */}
+      <header className="relative bg-corporate-900 text-white overflow-hidden min-h-[680px] flex items-center pb-24 md:pb-32">
         {/* Rich Background Layers */}
         <div className="absolute inset-0 z-0">
             {/* Deep Professional Base */}
@@ -252,6 +275,59 @@ const App: React.FC = () => {
         </div>
       </header>
 
+      {/* NEW SECTION: Life & Interests (Overlapping Bridge to remove whitespace) */}
+      {/* This negative margin pulls the section UP to overlap the header boundary */}
+      <div className="relative z-30 -mt-24 px-4 sm:px-6 lg:px-8 mb-12">
+        <div className="max-w-7xl mx-auto">
+          <div className="bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
+            <div className="flex flex-col lg:flex-row">
+              {/* Photo Column */}
+              <div className="lg:w-1/3 relative min-h-[320px] lg:min-h-full">
+                 <img
+                   src={content.life.photoUrl}
+                   alt="Joe Zhou Life"
+                   className="absolute inset-0 w-full h-full object-cover"
+                 />
+                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent flex items-end p-6 md:p-8">
+                    <div className="relative z-10">
+                      <div className="w-8 h-1 bg-accent-500 mb-3 rounded-full"></div>
+                      <p className="text-white italic font-medium text-lg leading-snug font-serif">
+                        "{content.life.quote}"
+                      </p>
+                    </div>
+                 </div>
+              </div>
+
+              {/* Content Column */}
+              <div className="lg:w-2/3 p-6 md:p-10 flex flex-col justify-center">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 border-b border-slate-100 pb-4">
+                   <h3 className="text-2xl font-bold text-corporate-900 flex items-center">
+                      <span className="w-2 h-2 bg-accent-500 mr-3 rounded-full"></span>
+                      {content.sectionTitles.life}
+                   </h3>
+                   <span className="text-xs text-slate-400 font-bold uppercase tracking-widest mt-2 md:mt-0 bg-slate-50 px-3 py-1 rounded-lg">
+                      {lang === 'en' ? 'Beyond The Resume' : '简历之外的精彩'}
+                   </span>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                   {content.life.items.map((item, idx) => (
+                     <div key={idx} className="flex items-start space-x-4 p-4 rounded-xl hover:bg-slate-50 transition-colors group border border-transparent hover:border-slate-100">
+                        <div className="flex-shrink-0 w-12 h-12 bg-accent-50 text-accent-600 rounded-xl flex items-center justify-center group-hover:bg-accent-600 group-hover:text-white transition-all shadow-sm">
+                           {getLifeIcon(item.icon)}
+                        </div>
+                        <div>
+                           <h4 className="font-bold text-slate-800 text-sm mb-1">{item.title}</h4>
+                           <p className="text-xs text-slate-500 leading-relaxed">{item.description}</p>
+                        </div>
+                     </div>
+                   ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <main className="flex-grow">
         
         {/* Experience Section */}
@@ -346,6 +422,12 @@ const App: React.FC = () => {
                         <div>
                           <h3 className="font-bold text-lg text-slate-900 leading-tight mb-1">{edu.school}</h3>
                           <p className="text-sm text-slate-500 font-medium">{edu.degree} • {edu.major}</p>
+                          {(edu.gpa || edu.duration) && (
+                            <p className="text-xs text-slate-400 mt-1">
+                              {edu.gpa && <span className="mr-3">📊 {edu.gpa}</span>}
+                              {edu.duration && <span>📅 {edu.duration}</span>}
+                            </p>
+                          )}
                         </div>
                       </div>
                       <ul className="space-y-3 text-sm text-slate-600 bg-slate-50/50 p-4 rounded-xl border border-slate-100/80">
@@ -398,11 +480,21 @@ const App: React.FC = () => {
                           {skillGroup.category}
                         </h3>
                         <div className="flex flex-wrap gap-2">
-                          {skillGroup.items.map((item, i) => (
-                            <span key={i} className="text-xs font-bold text-slate-700 bg-white px-3 py-1.5 rounded-lg border border-slate-200 shadow-sm hover:text-accent-600 hover:border-accent-200 transition-colors cursor-default">
-                              {item}
-                            </span>
-                          ))}
+                          {skillGroup.items.map((item, i) => {
+                            const isHighlighted = isHighlightHardSkill(item);
+                            return (
+                              <span
+                                key={i}
+                                className={`text-xs font-bold px-3 py-1.5 rounded-lg border shadow-sm hover:shadow-md transition-all cursor-default ${
+                                  isHighlighted
+                                    ? 'bg-gradient-to-br from-indigo-50 to-purple-50 text-indigo-900 border-indigo-200 hover:border-indigo-400'
+                                    : 'text-slate-700 bg-white border border-slate-200 hover:text-accent-600 hover:border-accent-200'
+                                }`}
+                              >
+                                {item}
+                              </span>
+                            );
+                          })}
                         </div>
                       </div>
                     ))}
@@ -419,12 +511,22 @@ const App: React.FC = () => {
                       {lang === 'en' ? 'SOFT SKILLS & LEADERSHIP' : '核心软技能'}
                     </h3>
                     <div className="flex flex-wrap gap-3">
-                      {content.skills.soft.map((skill, i) => (
-                        <span key={i} className="px-4 py-2 bg-gradient-to-br from-accent-50 to-white text-accent-700 text-xs font-bold rounded-lg border border-accent-100/60 hover:shadow-md transition-all cursor-default flex items-center">
-                          <svg className="w-4 h-4 mr-2 text-accent-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-                          {skill}
-                        </span>
-                      ))}
+                      {content.skills.soft.map((skill, i) => {
+                        const isHighlighted = isHighlightSoftSkill(skill);
+                        return (
+                          <span
+                            key={i}
+                            className={`px-4 py-2 text-xs font-bold rounded-lg border hover:shadow-md transition-all cursor-default flex items-center ${
+                              isHighlighted
+                                ? 'bg-gradient-to-br from-indigo-50 to-purple-50 text-indigo-900 border-indigo-200 hover:border-indigo-400'
+                                : 'bg-gradient-to-br from-accent-50 to-white text-accent-700 border border-accent-100/60'
+                            }`}
+                          >
+                            <svg className={`w-4 h-4 mr-2 ${isHighlighted ? 'text-indigo-500' : 'text-accent-500'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                            {skill}
+                          </span>
+                        );
+                      })}
                     </div>
                   </div>
                 </div>

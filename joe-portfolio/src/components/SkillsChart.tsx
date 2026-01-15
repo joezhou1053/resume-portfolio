@@ -10,18 +10,18 @@ const SkillsChart: React.FC<Props> = ({ language }) => {
   const radarData = [
     { subject: language === 'en' ? 'Finance' : '金融知识', A: 90, fullMark: 100 },
     { subject: language === 'en' ? 'Data Analysis' : '数据分析', A: 85, fullMark: 100 },
-    { subject: language === 'en' ? 'Communication' : '沟通能力', A: 95, fullMark: 100 },
+    { subject: language === 'en' ? 'Communication' : '沟通能力', A: 85, fullMark: 100 },
     { subject: language === 'en' ? 'English' : '英语能力', A: 90, fullMark: 100 },
-    { subject: language === 'en' ? 'Product Design' : '产品设计', A: 80, fullMark: 100 },
+    { subject: language === 'en' ? 'Product Design' : '产品设计', A: 90, fullMark: 100 },
     { subject: language === 'en' ? 'Tech Stack' : '技术栈', A: 75, fullMark: 100 },
   ];
 
   const toolsData = [
     { name: 'SQL', level: 85 },
     { name: 'Excel', level: 95 },
-    { name: 'Tableau', level: 80 },
+    { name: 'Tableau', level: 90 },
     { name: 'Visio', level: 90 },
-    { name: 'Python', level: 60 },
+    { name: 'Python', level: 75 },
   ];
 
   return (

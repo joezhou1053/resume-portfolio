@@ -59,12 +59,20 @@ export interface Education {
   degree: string;
   major: string;
   period: string;
+  gpa?: string;
+  duration?: string;
   details: string[];
 }
 
 export interface SkillSet {
   category: string;
   items: string[];
+}
+
+export interface LifeItem {
+  title: string;
+  description: string;
+  icon: 'book' | 'camera' | 'globe' | 'activity';
 }
 
 export interface AppContent {
@@ -88,6 +96,7 @@ export interface AppContent {
     skills: string;
     portfolio: string;
     documents: string;
+    life: string;
   };
   experience: Experience[];
   education: Education[];
@@ -95,5 +104,10 @@ export interface AppContent {
     hard: SkillSet[];
     soft: string[];
     languages: string[];
+  };
+  life: {
+    items: LifeItem[];
+    photoUrl: string;
+    quote: string;
   };
 }

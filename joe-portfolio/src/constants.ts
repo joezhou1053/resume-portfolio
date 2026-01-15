@@ -19,7 +19,8 @@ export const CONTENT_EN: AppContent = {
     education: "Education",
     skills: "Technical & Professional Competency",
     portfolio: "Project Highlights",
-    documents: "Documents & Certifications"
+    documents: "Documents & Certifications",
+    life: "Life & Interests"
   },
   experience: [
     {
@@ -68,6 +69,8 @@ export const CONTENT_EN: AppContent = {
       school: "The Ohio State University (OSU)",
       degree: "Bachelor of Science",
       major: "Finance",
+      gpa : "3.88/4.00",
+      duration: "2018.08-2022.05",
       period: "Graduated",
       details: [
         "Core Coursework: Options & Futures, Corporate Finance, Financial Data Analysis.",
@@ -78,12 +81,22 @@ export const CONTENT_EN: AppContent = {
   ],
   skills: {
     hard: [
-      { category: "Business Analysis", items: ["Requirement Gathering", "UML/Visio", "Axure RP", "Agile/Scrum"] },
-      { category: "Data & Finance", items: ["SQL", "Excel (Advanced)", "Financial Modeling", "Data Auditing"] },
-      { category: "Development", items: ["API Integration", "Intermediate Python", "System Testing", "Vibe Coding"] }
+      { category: "Business Analysis", items: ["Requirement Gathering", "Visio", "Axure RP", "XMind"] },
+      { category: "Data & Finance", items: ["SQL", "Excel VBA", 'Tableau', "Financial Modeling", "Data Auditing"] },
+      { category: "Development", items: ["API Integration Testing", "Intermediate Python", "System Integration Testing", "Vibe Coding"] }
     ],
-    soft: ["Cross-functional Communication", "Stakeholder Management", "Problem Solving", "Team Leadership"],
+    soft: ["Cross-functional Communication", "Stakeholder Management", "Problem Solving", "English Communication", "Team Leadership"],
     languages: ["English (Professional/Academic)", "Mandarin (Native)"]
+  },
+  life: {
+    photoUrl: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=800&auto=format&fit=crop",
+    quote: "I can do all this through him who gives me strength. (Philippians 4:13)",
+    items: [
+      { title: "Continuous Learning", description: "Exploring financial technology trends and AI applications.", icon: 'graduation-cap' },
+      { title: "Reading Enthusiast", description: "Systematic reading to expand knowledge boundaries and enhance thinking depth.", icon: 'book' },
+      { title: "Global Mindset", description: "Listen to CNBC financial news and podcasts related to AI applications every day", icon: 'globe' },
+      { title: "Active Lifestyle", description: "YOLO Believer & Fitness enthusiast.", icon: 'activity' }
+    ]
   }
 };
 
@@ -106,7 +119,8 @@ export const CONTENT_ZH: AppContent = {
     education: "教育背景",
     skills: "核心竞争力",
     portfolio: "项目亮点",
-    documents: "文档与证书管理"
+    documents: "文档与证书管理",
+    life: "生活与兴趣"
   },
   experience: [
     {
@@ -155,6 +169,8 @@ export const CONTENT_ZH: AppContent = {
       school: "美国俄亥俄州立大学 (OSU)",
       degree: "本科学士",
       major: "金融学",
+      gpa: "3.88/4.00",
+      duration: "2018.08-2022.05",
       period: "毕业",
       details: [
         "核心课程：期权与期货、公司金融、金融数据分析。",
@@ -165,12 +181,22 @@ export const CONTENT_ZH: AppContent = {
   ],
   skills: {
     hard: [
-      { category: "商业分析", items: ["需求调研", "流程图/UML", "Axure 原型", "敏捷开发"] },
-      { category: "数据与金融", items: ["SQL 查询", "Excel (高级)", "金融建模", "数据稽核"] },
-      { category: "技术能力", items: ["API 接口联调", "Python 熟练", "系统测试", "氛围编程"] }
+      { category: "商业分析", items: ["需求调研", "Visio流程图", "Axure 原型", "XMind 思维导图"] },
+      { category: "数据与金融", items: ["SQL 查询", "Excel VBA", "Tableau 数据可视化", "金融建模", "数据稽核"] },
+      { category: "技术能力", items: ["API 接口联调", "Python 熟练", "系统集成测试", "氛围编程"] }
     ],
-    soft: ["团队协作", "跨部门沟通", "逻辑思维", "英语沟通"],
+    soft: ["团队协作", "跨部门沟通", "逻辑思维", "英语沟通", "团队领导力"],
     languages: ["英语 (专业流利)", "中文 (母语)"]
+  },
+  life: {
+    photoUrl: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=800&auto=format&fit=crop",
+    quote: "我靠着那加给我力量的，凡事都能做。 (腓立比书 4:13)",
+    items: [
+      { title: "终身学习", description: "热衷学习探索金融科技趋势和AI应用。", icon: 'graduation-cap' },
+      { title: "热衷阅读", description: "热衷系统性阅读，持续拓展知识边界与思维深度。", icon: 'book' },
+      { title: "全球视野", description: "每日收听CNBC财经新闻及AI应用相关播客分享。", icon: 'globe' },
+      { title: "积极生活", description: "YOLO主义信仰者，健身爱好者。", icon: 'activity' }
+    ]
   }
 };
 
@@ -204,196 +230,184 @@ export const INITIAL_DOCUMENTS: DocumentCategory[] = [
     coverImage: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=600&auto=format&fit=crop",
     items: [
       {
-        id: 'port-financial-data-analysis',
-        title: { en: "Financial Data Analysis with LSTM", zh: "金融数据分析与LSTM应用" },
-        subtitle: { en: "Deep Learning & Quantitative Trading", zh: "项目：深度学习与量化交易" },
+        id: 'port-wsd-property-management',
+        title: { en: "Watershed Property Management Analytics", zh: "物业管理数据分析 Capstone 项目" },
+        subtitle: { en: "Data-Driven Profit Optimization", zh: "数据驱动的利润优化策略" },
         type: "portfolio",
-        thumbnailUrl: "/portfolio/financial-data-analysis/Image1.png",
+        thumbnailUrl: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?q=80&w=600&auto=format&fit=crop",
         projectSummary: {
-          en: "Applied deep learning techniques to financial time series forecasting using LSTM neural networks, achieving 93.7% prediction accuracy and developing a quantitative trading strategy with backtested returns.",
-          zh: "运用LSTM深度神经网络进行金融时间序列预测，准确率达93.7%，并基于预测结果开发量化交易策略进行回测验证。"
+          en: "Full-stack analytics capstone project from MySQL extraction to Tableau visualization. Developed profit optimization strategies through sensitivity analysis, delivering White Paper and executive presentation for stakeholder approval.",
+          zh: "全栈数据分析 Capstone 项目，从 MySQL 提取到 Tableau 可视化。通过敏感性分析开发利润优化策略，交付白皮书和高管演示，获得利益相关者批准。"
         },
         highlights: {
           en: [
-            "LSTM model achieved 93.7% accuracy in gold price prediction using 10 years of historical data",
-            "Implemented complete ML workflow: data preprocessing, feature engineering, model training, and evaluation",
-            "Developed and backtested trading strategy with cumulative returns of $11,612",
-            "Mastered TensorFlow/Keras framework for time series forecasting in financial markets"
+            "Built analytics pipeline: MySQL → Excel modeling → Tableau dashboard with sensitivity analysis for pricing scenarios",
+            "Developed interactive dashboard enabling property managers to simulate pricing strategies and optimize revenue while managing risk",
+            "Delivered White Paper documenting analysis methodology and recommendations, plus executive presentation securing stakeholder buy-in"
           ],
           zh: [
-            "使用10年历史数据训练LSTM模型，黄金价格预测准确率达93.7%",
-            "实现完整机器学习工作流：数据预处理、特征工程、模型训练与评估",
-            "开发并回测交易策略，累计收益达11,612美元",
-            "掌握TensorFlow/Keras框架在金融市场时间序列预测中的应用"
+            "构建数据分析管道：MySQL → Excel 建模 → Tableau 仪表板，配备敏感性分析用于定价情景模拟",
+            "开发交互式仪表板，使物业经理能够模拟定价策略并优化收入，同时管理风险敞口",
+            "交付记录分析方法论和建议的白皮书，以及获得利益相关者认可的高管演示文稿"
           ]
         },
         assets: [
-          { id: 'fda1', name: { en: "LSTM Gold Price Prediction Model", zh: "LSTM黄金价格预测模型" }, type: "notebook", size: "5.1 MB", description: { en: "Complete implementation with data preprocessing, LSTM architecture design, training process, and performance visualization.", zh: "完整实现，包含数据预处理、LSTM架构设计、训练过程和性能可视化。" }, url: "/portfolio/financial-data-analysis/LSTM_Gold_Price_Prediction_Joe.ipynb" },
-          { id: 'fda2', name: { en: "Financial Data Cleaning Pipeline", zh: "金融数据清洗流程" }, type: "notebook", size: "95 KB", description: { en: "Data quality assessment, missing value handling, and feature engineering for financial time series.", zh: "金融时间序列数据质量评估、缺失值处理和特征工程。" }, url: "/portfolio/financial-data-analysis/Data_Cleaning.ipynb" },
-          { id: 'fda3', name: { en: "Model Performance Visualization", zh: "模型性能可视化结果" }, type: "image", size: "299 KB", description: { en: "Visual comparison showing actual vs predicted gold prices with 93.7% accuracy.", zh: "预测值与实际值的可视化对比，展示93.7%的预测准确率。" }, url: "/portfolio/financial-data-analysis/Image1.png" },
-          { id: 'fda4', name: { en: "Prediction Results Chart", zh: "预测结果图表" }, type: "image", size: "338 KB", description: { en: "Training and testing data split with model prediction trends over time.", zh: "训练测试集划分及模型预测趋势的时间序列展示。" }, url: "/portfolio/financial-data-analysis/Image2.png" }
+          { id: 'wsd1', name: { en: "Final Presentation Recording", zh: "最终演示录制" }, type: "tableau-url", size: "Link", description: { en: "Complete presentation showcasing data-driven profit optimization strategy recommendations for Watershed Property Management executives.", zh: "向 Watershed Property Management 高管展示数据驱动的利润优化战略建议的完整演示。" }, url: "https://app.screencast.com/CruSBGtVhcFIS" },
+          { id: 'wsd2', name: { en: "Tableau Interactive Dashboard", zh: "Tableau 交互式仪表板" }, type: "tableau-url", size: "Link", description: { en: "Interactive dashboard with sensitivity analysis, property metrics, and profit optimization scenarios.", zh: "包含敏感性分析、物业绩效指标和利润优化情景的交互式仪表板。" }, url: "https://public.tableau.com/views/FinalProject_V1_9/WSDashboard?:language=zh-CN&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link" },
+          { id: 'wsd3', name: { en: "White Paper", zh: "白皮书" }, type: "pdf", size: "338 KB", description: { en: "Complete analysis methodology, data extraction process, and strategic recommendations for increasing property management profits.", zh: "完整分析方法论、数据提取流程及提高物业管理利润的战略建议。" }, url: "/portfolio/tableau-wsd-project/White_Paper.pdf" },
+          { id: 'wsd4', name: { en: "Executive Presentation", zh: "高管演示文稿" }, type: "pptx", size: "1.8 MB", description: { en: "Professional deck with data visualizations, sensitivity analysis results, and implementation roadmap.", zh: "包含数据可视化、敏感性分析结果和实施路线图的专业演示文稿。" }, url: "/portfolio/tableau-wsd-project/Final_Presentation.pptx" }
+        ],
+        versions: [{ version: 1, date: "2025-01-13", name: "watershed_property_management_capstone.zip", size: "8.3 MB", isCurrent: true }]
+      },
+      {
+        id: 'port-dognition-analytics',
+        title: { en: "Dognition User Behavior Analysis", zh: "Dognition 用户行为数据分析" },
+        subtitle: { en: "Data-Driven Business Process Change", zh: "数据驱动的业务流程改进" },
+        type: "portfolio",
+        thumbnailUrl: "https://images.unsplash.com/photo-1587300003388-59208cc962cb?q=80&w=600&auto=format&fit=crop",
+        projectSummary: {
+          en: "Data visualization and business analysis project for Dognition (dog personality assessments). Used Tableau Story to analyze user engagement patterns and breed distributions, delivering a 5-minute business proposal presentation with data-driven marketing recommendations to increase test completion rates.",
+          zh: "为 Dognition（狗狗性格评估）进行数据可视化和商业分析。使用 Tableau Story 分析用户参与模式和品种分布，通过5分钟商业提案演示提供数据驱动的营销建议，提高测试完成率。"
+        },
+        highlights: {
+          en: [
+            "Analyzed user behavior across 9 personality dimensions using Tableau Story, discovering Socialite and Charmer types show 1.3-1.86x higher completion rates",
+            "Identified market opportunity through breed analysis revealing mixed breeds represent 48% of users but lower completion rates, presenting potential for targeted campaigns",
+            "Delivered 5-minute business proposal with interactive Tableau Story, providing breed-specific personalization strategies to drive engagement improvement"
+          ],
+          zh: [
+            "使用 Tableau Story 分析 9 个性格维度的全面用户行为数据，发现社交型和魅力型性格类型展现出显著更高的参与度，完成率高出 1.3-1.86 倍",
+            "通过品种分析识别关键市场机会，揭示混种狗占用户基础 48% 但完成率较低，为有针对性的营销活动呈现巨大的未开发潜力",
+            "通过交互式 Tableau Story 可视化支持，提供引人入胜的 5 分钟在线商业提案演示，提供可执行的特定品种内容个性化策略，以推动 25-35% 的参与度提升"
+          ]
+        },
+        assets: [
+          { id: 'da1', name: { en: "Live Presentation Recording", zh: "在线演示录制" }, type: "tableau-url", size: "Link", description: { en: "5-minute business proposal presentation to Dognition management team with data analysis and recommendations.", zh: "向 Dognition 管理层进行的 5 分钟商业提案演示，包含数据分析和建议。" }, url: "https://app.screencast.com/G3UHjWv7nx0G1" },
+          { id: 'da2', name: { en: "Tableau Interactive Story", zh: "Tableau 交互式故事板" }, type: "tableau-url", size: "Link", description: { en: "Interactive visualization with bar charts, pie charts, bubble charts supporting business recommendations.", zh: "包含条形图、饼图、气泡图的交互式可视化，支持商业建议。" }, url: "https://public.tableau.com/views/doginition_17681907474040/Story?:language=zh-CN&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link" },
+          { id: 'da3', name: { en: "Project Requirements", zh: "项目需求文档" }, type: "markdown", size: "12 KB", description: { en: "Complete project requirements including objectives, company background, and evaluation criteria.", zh: "完整的项目需求，包括目标、公司背景和评估标准。" }, url: "/portfolio/dognition/项目需求.md" },
+          { id: 'da4', name: { en: "Analytics Methodology", zh: "数据分析方法论" }, type: "markdown", size: "15 KB", description: { en: "7-step data analysis framework covering requirement analysis, data cleaning, Tableau implementation, and storytelling.", zh: "7步数据分析框架，涵盖需求分析、数据清洗、Tableau 实施和叙事方法。" }, url: "/portfolio/dognition/数据分析方法论.md" }
+        ],
+        versions: [{ version: 1, date: "2025-01-12", name: "dognition_analytics_project.zip", size: "0.1 MB", isCurrent: true }]
+      },
+      {
+        id: 'port-financial-data-analysis',
+        title: { en: "Financial Data Analysis with LSTM", zh: "金融数据分析与LSTM应用" },
+        subtitle: { en: "Deep Learning & Quantitative Trading", zh: "深度学习与量化交易" },
+        type: "portfolio",
+        thumbnailUrl: "/portfolio/financial-data-analysis/Image1.png",
+        projectSummary: {
+          en: "Applied deep learning LSTM networks to financial time series forecasting, using the historical price data from the previous 60 days, predict the price on the 61st day. Developed ML workflow from data preprocessing to model evaluation, implementing quantitative trading strategy with backtested returns.",
+          zh: "运用深度学习LSTM网络进行金融时间序列预测，用前60天的历史价格数据，去预测第61天的价格。开发从数据预处理到模型评估的ML工作流程，实现带回测的量化交易策略。"
+        },
+        highlights: {
+          en: [
+            "Achieved 93.7% prediction accuracy using 10 years of gold price data through optimized LSTM architecture for financial forecasting",
+            "Developed and backtested quantitative trading strategy generating $11,612 cumulative returns, validating practical trading value",
+            "Implemented end-to-end ML workflow with data preprocessing notebook, model training notebook, and performance visualization"
+          ],
+          zh: [
+            "使用 10 年黄金价格数据通过优化的 LSTM 架构达到 93.7% 的预测准确率",
+            "开发并回测量化交易策略，产生 11,612 美元的累计收益，验证实际交易价值",
+            "实现端到端 ML 工作流程，包括数据预处理 notebook、模型训练 notebook 和性能可视化"
+          ]
+        },
+        assets: [
+          { id: 'fda1', name: { en: "LSTM Gold Price Model", zh: "LSTM黄金价格预测模型" }, type: "notebook", size: "5.1 MB", description: { en: "Complete implementation with data preprocessing, LSTM architecture, training, and visualization.", zh: "完整实现，包含数据预处理、LSTM架构、训练和可视化。" }, url: "/portfolio/financial-data-analysis/LSTM_Gold_Price_Prediction_Joe.ipynb" },
+          { id: 'fda2', name: { en: "Data Munging", zh: "数据清洗" }, type: "notebook", size: "95 KB", description: { en: "Data quality assessment, missing value handling, and feature engineering for financial time series.", zh: "金融时间序列数据质量评估、缺失值处理和特征工程。" }, url: "/portfolio/financial-data-analysis/Data_Cleaning.ipynb" },
+          { id: 'fda3', name: { en: "Model Performance", zh: "模型性能可视化" }, type: "image", size: "299 KB", description: { en: "Actual vs predicted gold prices with 93.7% accuracy visualization.", zh: "预测值与实际值的可视化对比，展示93.7%准确率。" }, url: "/portfolio/financial-data-analysis/Image2.png" },
+          { id: 'fda4', name: { en: "Training/Testing Split", zh: "训练集-测试集划分" }, type: "image", size: "338 KB", description: { en: "Training/testing Split.", zh: "训练测试集划分。" }, url: "/portfolio/financial-data-analysis/Image1.png" }
         ],
         versions: [{ version: 1, date: "2025-01-05", name: "financial_data_analysis_bundle.zip", size: "5.8 MB", isCurrent: true }]
       },
       {
-        id: 'port-bl-backtest',
-        title: { en: "Black-Litterman Model Backtest System", zh: "Black-Litterman模型回测系统" },
-        subtitle: { en: "Quantitative Portfolio Optimization Platform", zh: "项目：量化投资组合优化平台" },
+        id: 'port-tableau-superstore',
+        title: { en: "Tableau Superstore Data Visualization", zh: "Tableau 超市数据可视化分析" },
+        subtitle: { en: "Interactive Business Analytics Dashboard", zh: "交互式商业分析仪表板" },
         type: "portfolio",
-        thumbnailUrl: "/portfolio/bl-business-model-canvas/Image1.png",
+        thumbnailUrl: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=600&auto=format&fit=crop",
         projectSummary: {
-          en: "An interactive web application implementing the Black-Litterman asset allocation model for portfolio optimization. Combines market equilibrium returns with investor views through Bayesian methods, providing comprehensive backtesting capabilities with advanced performance metrics and visual analytics.",
-          zh: "实现Black-Litterman资产配置模型的交互式Web应用，通过贝叶斯方法将市场均衡收益与投资者观点相结合，提供全面的回测功能、高级绩效指标和可视化分析。"
+          en: "Data visualization project using Tableau to analyze Superstore sales performance across multiple business dimensions. Implemented user-centered design creating detailed personas, delivering interactive Story with connected dashboards and complete design documentation.",
+          zh: "使用 Tableau 对超市销售业绩进行多维度数据可视化分析。实施以用户为中心的设计创建详细用户画像，交付包含关联仪表板的交互式故事板和完整设计文档。"
         },
         highlights: {
           en: [
-            "Full-featured parameter configuration: Risk aversion coefficient (δ) and prior uncertainty (τ) with real-time adjustment",
-            "Flexible view builder supporting both absolute return views and relative performance views with confidence levels",
-            "Comprehensive backtest metrics: Sharpe ratio, max drawdown, VaR, CVaR, information ratio, and 10+ advanced indicators",
-            "Interactive visualizations: Cumulative return charts, portfolio weight evolution, and performance comparison with benchmarks"
+            "Built interactive Tableau Story with connected dashboards analyzing sales across regions, categories, and segments",
+            "Applied user-centered design creating personas including Terrence (Operations Manager) and Sylvia (VP of Sales) to guide visualization decisions",
+            "Delivered Design Checklist documenting visualization process and best practices, plus persona documentation ensuring reproducible workflows"
           ],
           zh: [
-            "完整参数配置系统：风险厌恶系数(δ)和先验不确定性(τ)实时调整，支持多种市场环境",
-            "灵活观点构建器：支持绝对收益观点和相对表现观点，可设置信心水平和不确定性矩阵",
-            "全面回测指标：夏普比率、最大回撤、VaR、CVaR、信息比率等10+项高级绩效评估指标",
-            "交互式可视化：累计收益曲线、投资组合权重演变、与基准策略对比分析图表"
+            "构建交互式 Tableau 故事板，包含关联仪表板分析跨地区、产品类别和客户细分的销售绩效",
+            "应用以用户为中心的设计，创建 Terrence（运营经理）和 Sylvia（销售副总裁）用户画像以指导可视化决策",
+            "交付设计检查清单记录可视化流程和最佳实践，以及用户画像文档确保可复用的工作流程"
           ]
         },
         assets: [
-          { id: 'bl1', name: { en: "Strategy Introduction", zh: "策略介绍" }, type: "image", size: "450 KB", description: { en: "Comprehensive overview of Black-Litterman model theory, comparing with traditional Markowitz optimization and explaining the Bayesian approach to combining market equilibrium with investor views.", zh: "Black-Litterman模型理论完整介绍，对比传统Markowitz优化方法，阐述如何通过贝叶斯方法将市场均衡与投资者观点结合。" }, url: "/portfolio/bl-business-model-canvas/Image1.png" },
-          { id: 'bl2', name: { en: "Parameter Configuration", zh: "参数配置" }, type: "image", size: "420 KB", description: { en: "Interactive parameter tuning interface for risk aversion coefficient (δ: 1-5) and uncertainty scalar (τ: 0.01-0.1) with contextual guidance and typical value recommendations.", zh: "交互式参数调优界面，配置风险厌恶系数(δ: 1-5)和不确定性标量(τ: 0.01-0.1)，提供上下文指导和典型值推荐。" }, url: "/portfolio/bl-business-model-canvas/Image2.png" },
-          { id: 'bl3', name: { en: "View Construction", zh: "观点构建" }, type: "image", size: "380 KB", description: { en: "Advanced view builder enabling absolute and relative views with dual uncertainty quantification methods: confidence level (0-100%) or He-Litterman multiplier (0.1x-5x).", zh: "高级观点构建器，支持绝对观点和相对观点，提供双重不确定性量化方法：信心水平(0-100%)或He-Litterman乘数(0.1x-5x)。" }, url: "/portfolio/bl-business-model-canvas/Image3.png" },
-          { id: 'bl4', name: { en: "Results Analysis", zh: "结果分析" }, type: "image", size: "400 KB", description: { en: "Comprehensive performance dashboard with cumulative return charts, weight distribution analysis, and 13 key metrics including Sharpe ratio, max drawdown, VaR, CVaR, Calmar ratio, and turnover rate.", zh: "综合绩效仪表盘，包含累计收益曲线、权重分布分析以及13项关键指标：夏普比率、最大回撤、VaR、CVaR、Calmar比率和换手率等。" }, url: "/portfolio/bl-business-model-canvas/Image4.png" }
+          { id: 'ts1', name: { en: "Tableau Interactive Story", zh: "Tableau 交互式故事板" }, type: "tableau-url", size: "Link", description: { en: "Interactive Story with dashboards for sales, profit, segments, and geographical analysis.", zh: "包含销售、利润、客户细分和地理分析仪表板的交互式故事板。" }, url: "https://public.tableau.com/app/profile/joe.zhou4877/viz/superstore_project_JoeZhou/Story" },
+          { id: 'ts2', name: { en: "Design Checklist", zh: "设计检查清单" }, type: "pdf", size: "450 KB", description: { en: "Complete design checklist documenting process, best practices, and quality criteria.", zh: "完整的设计检查清单，记录流程、最佳实践和质量标准。" }, url: "/portfolio/tableau-superstore/Design Checklist_JoeZhou.pdf" },
+          { id: 'ts3', name: { en: "User Persona: Terrence", zh: "用户画像：Terrence" }, type: "pdf", size: "320 KB", description: { en: "Operations stakeholder persona defining inventory and logistics information needs.", zh: "面向运营利益相关者的画像，定义库存和物流信息需求。" }, url: "/portfolio/tableau-superstore/Persona 2 Terrence.pdf" },
+          { id: 'ts4', name: { en: "User Persona: Sylvia", zh: "用户画像：Sylvia" }, type: "pdf", size: "290 KB", description: { en: "Executive management persona defining strategic decision-making needs.", zh: "面向高层管理的画像，定义战略决策需求。" }, url: "/portfolio/tableau-superstore/Sylvia-Persona.pdf" }
+        ],
+        versions: [{ version: 1, date: "2025-01-09", name: "tableau_superstore_project.zip", size: "2.2 MB", isCurrent: true }]
+      },
+      {
+        id: 'port-bl-backtest',
+        title: { en: "Black-Litterman Model Backtest System", zh: "Black-Litterman模型回测系统" },
+        subtitle: { en: "Quantitative Portfolio Optimization", zh: "量化投资组合优化平台" },
+        type: "portfolio",
+        thumbnailUrl: "/portfolio/bl-business-model-canvas/Image1.png",
+        projectSummary: {
+          en: "Interactive web application implementing Black-Litterman asset allocation model combining market equilibrium returns with investor views through Bayesian methods. Used forportfolio optimization.",
+          zh: "实现 Black-Litterman 资产配置模型的交互式 Web 应用，通过贝叶斯方法将市场均衡收益与投资者观点结合。用于投资组合优化。"
+        },
+        highlights: {
+          en: [
+            "Implemented parameter configuration enabling real-time adjustment of risk aversion coefficient (δ: 1-5) and uncertainty scalar (τ: 0.01-0.1) for adaptive portfolio optimization",
+            "Developed view builder supporting absolute and relative return views with dual uncertainty quantification (confidence level or He-Litterman multiplier) incorporating market insights",
+            "Delivered performance dashboard analyzing 13 metrics including Sharpe ratio, maximum drawdown, VaR, CVaR, and etc."
+          ],
+          zh: [
+            "实现参数配置系统，支持风险厌恶系数（δ: 1-5）和不确定性标量（τ: 0.01-0.1）的实时调整，用于动态投资组合优化",
+            "开发观点构建器，支持绝对收益和相对表现观点，提供双重不确定性量化方法（信心水平或 He-Litterman 乘数）",
+            "交付绩效仪表板，分析 13 项关键指标包括夏普比率、最大回撤、VaR、CVaR、Calmar 比率、信息比率、换手率和累计收益"
+          ]
+        },
+        assets: [
+          { id: 'bl1', name: { en: "Strategy Introduction", zh: "策略介绍" }, type: "image", size: "450 KB", description: { en: "Black-Litterman model theory, comparing with Markowitz optimization and Bayesian approach.", zh: "Black-Litterman模型理论，对比Markowitz优化和贝叶斯方法。" }, url: "/portfolio/bl-business-model-canvas/Image1.png" },
+          { id: 'bl2', name: { en: "Parameter Configuration", zh: "参数配置" }, type: "image", size: "420 KB", description: { en: "Interactive parameter tuning for risk aversion (δ: 1-5) and uncertainty (τ: 0.01-0.1).", zh: "交互式参数调优，配置风险厌恶系数(δ: 1-5)和不确定性标量(τ: 0.01-0.1)。" }, url: "/portfolio/bl-business-model-canvas/Image2.png" },
+          { id: 'bl3', name: { en: "View Construction", zh: "观点构建" }, type: "image", size: "380 KB", description: { en: "Advanced view builder with absolute and relative views, dual uncertainty quantification methods.", zh: "高级观点构建器，支持绝对/相对观点和双重不确定性量化。" }, url: "/portfolio/bl-business-model-canvas/Image3.png" },
+          { id: 'bl4', name: { en: "Results Analysis", zh: "结果分析" }, type: "image", size: "400 KB", description: { en: "Performance dashboard with cumulative returns, weight distribution, and 13 key metrics.", zh: "综合绩效仪表盘，包含累计收益、权重分布及13项关键指标。" }, url: "/portfolio/bl-business-model-canvas/Image4.png" }
         ],
         versions: [{ version: 1, date: "2025-01-05", name: "black_litterman_backtest_system.zip", size: "2.1 MB", isCurrent: true }]
       },
       {
         id: 'port-diamond-hands',
-        title: { en: "Diamond Hands Protocol - GameFi Application", zh: "钻石手协议 - GameFi 储蓄游戏" },
-        subtitle: { en: "Solana Blockchain Game", zh: "项目：Solana 区块链游戏" },
+        title: { en: "Diamond Hands Protocol - GameFi Application MVP", zh: "钻石手协议 - GameFi 储蓄游戏 MVP" },
+        subtitle: { en: "Solana Blockchain Game", zh: "Solana 区块链游戏" },
         type: "portfolio",
         thumbnailUrl: "/portfolio/diamond-hands/Image1.png",
         projectSummary: {
-          en: "A gamified savings application built on Solana blockchain featuring a prisoner's dilemma-style challenge. Players lock SOL for 60 seconds while deciding whether to panic-sell with penalties or hold as 'Diamond Hands' to share pool rewards. Includes real-time panic events, avalanche periods, and dynamic reward mechanisms.",
-          zh: "基于 Solana 区块链的游戏化储蓄应用，采用囚徒困境式挑战机制。玩家锁定 SOL 60秒，期间可选择恐慌卖出（支付惩罚）或坚持作为'钻石手'（分享奖池奖励）。包含实时恐慌事件、雪崩期机制和动态奖励分配系统。"
+          en: "Gamified savings application built on the Solana blockchain, demonstrating the principles of game theory in the context of GameFi. Support connecting to the Phantom wallet and obtaining test SOL.",
+          zh: "基于 Solana 区块链构建的游戏化储蓄应用，在 GameFi 语境中展示博弈论原理。支持连接 Phantom 钱包并获取测试SOL币"
         },
         highlights: {
           en: [
-            "Prisoner's dilemma game mechanics: 60-second lockup with panic-sell options (20% normal / 40% avalanche penalty)",
-            "Three-phase system: Normal period (0-60s), Panic Peak (15-25s, 30% panic rate), Avalanche period (20-30s, 75% panic rate)",
-            "Real-time activity feed and dynamic reward pool with visual feedback (color changes, pulse effects, vibration)",
-            "User manual documenting game theory mechanics, ROI calculations, and strategy guides for different player levels"
+            "Implemented prisoner's dilemma mechanics with 60-second SOL lockup featuring dynamic panic-sell penalties (20% normal, 40% avalanche) creating strategic decision-making under time pressure",
+            "Developed three-phase game system including normal period, panic peak, and avalanche with visual effects, real-time activity feed, and dynamic reward pool calculations",
+            "Created player strategy guide documenting game mechanics, ROI calculation comparing panic-sell versus hold scenarios, and optimal tactics for different risk profiles demonstrating game theory"
           ],
           zh: [
-            "囚徒困境游戏机制：60秒锁定期，提供恐慌卖出选项（正常期20%惩罚 / 雪崩期40%惩罚）",
-            "三阶段系统：正常期（0-60秒）、恐慌高峰期（15-25秒，30%恐慌率）、雪崩期（20-30秒，75%恐慌率）",
-            "实时活动流和动态奖池，配备视觉反馈系统（颜色变化、脉冲效果、震动提醒）",
-            "完整的玩家指南文档，涵盖博弈论机制、ROI计算公式和不同玩家级别的策略建议"
+            "实现囚徒困境游戏机制，60 秒 SOL 锁定期内具备动态恐慌卖出惩罚（正常期 20%，雪崩期 40%），在时间压力下创造战略决策情景",
+            "开发三阶段游戏系统，含正常期、恐慌高峰期、雪崩期，配备视觉效果，实时活动流和动态奖池计算",
+            "创建玩家策略指南，记录游戏机制、比较恐慌卖出与持有情景的 ROI 计算，以及针对不同风险偏好的最优战术，展示博弈论应用"
           ]
         },
         assets: [
-          { id: 'dh1', name: { en: "Game Interface Overview", zh: "游戏界面总览" }, type: "image", size: "947 KB", description: { en: "Main interface showing the countdown timer, reward pool, panic indicator, and real-time activity feed with player actions.", zh: "游戏主界面，展示倒计时器、奖池金额、恐慌指标和实时玩家活动流。" }, url: "/portfolio/diamond-hands/Image1.png" },
-          { id: 'dh2', name: { en: "Avalanche Period Visualization", zh: "雪崩期视觉效果" }, type: "image", size: "531 KB", description: { en: "Red border with dual pulse effects during avalanche period (20-30s), showing panic-sell penalties and 'per second loss' indicators.", zh: "雪崩期（20-30秒）的红色边框和双重脉冲效果，显示恐慌卖出惩罚和'每秒损失'指标。" }, url: "/portfolio/diamond-hands/Image2.png" },
-          { id: 'dh3', name: { en: "ROI Calculation Card", zh: "收益计算卡片" }, type: "image", size: "707 KB", description: { en: "Real-time comparison card showing 'Panic Now' vs. 'Hold 60s' scenarios with dynamic reward projections.", zh: "实时对比卡片，展示'现在恐慌'与'坚持60秒'两种情景的收益预测。" }, url: "/portfolio/diamond-hands/Image3.png" },
-          { id: 'dh4', name: { en: "Player Strategy Guide", zh: "玩家策略指南" }, type: "markdown", size: "5 KB", description: { en: "Comprehensive guide covering game mechanics, three-phase system, ROI examples, and beginner/advanced strategies.", zh: "完整玩家指南，涵盖游戏机制、三阶段系统、收益计算示例和初级/进阶策略建议。" }, url: "/portfolio/diamond-hands/玩家指南.md" }
+          { id: 'dh1', name: { en: "Game Interface", zh: "游戏界面总览" }, type: "image", size: "947 KB", description: { en: "Main interface with current balance, Phantom wallet, reward pool,  real-time player activities.", zh: "游戏主界面，展示当前余额、 Phantom 钱包、奖池、实时玩家活动。" }, url: "/portfolio/diamond-hands/Image1.png" },
+          { id: 'dh2', name: { en: "Avalanche Period", zh: "雪崩期视觉效果" }, type: "image", size: "531 KB", description: { en: "Red border with dual pulse effects during avalanche period (20-30s) showing panic-sell penalties.", zh: "雪崩期（20-30秒）红色边框和双重脉冲效果，显示恐慌卖出惩罚。" }, url: "/portfolio/diamond-hands/Image2.png" },
+          { id: 'dh3', name: { en: "Join the Game", zh: "参与协议游戏" }, type: "image", size: "707 KB", description: { en: "The pledge operation interface supports 'panic selling' and 'successful collection'. It is equipped with user-friendly operation instructions.", zh: "质押操作界面，支持 ‘恐慌卖出’ 和 ‘成功领取’。 配有 用户友好的 操作指引。" }, url: "/portfolio/diamond-hands/Image3.png" },
+          { id: 'dh4', name: { en: "Strategy Guide", zh: "玩家策略指南" }, type: "markdown", size: "5 KB", description: { en: "Comprehensive guide covering game mechanics, three-phase system, ROI examples, and strategies.", zh: "完整玩家指南，涵盖游戏机制、三阶段系统、收益示例和策略。" }, url: "/portfolio/diamond-hands/玩家指南.md" }
         ],
         versions: [{ version: 1, date: "2025-01-08", name: "diamond_hands_protocol.zip", size: "2.2 MB", isCurrent: true }]
-      },
-      {
-        id: 'port-tableau-superstore',
-        title: { en: "Tableau Superstore Data Visualization", zh: "Tableau 超市数据可视化分析" },
-        subtitle: { en: "Interactive Business Analytics Dashboard", zh: "项目：交互式商业分析仪表板" },
-        type: "portfolio",
-        thumbnailUrl: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=600&auto=format&fit=crop",
-        projectSummary: {
-          en: "Comprehensive data visualization project using Tableau to analyze Superstore sales performance. Features an interactive Story format with multiple dashboards showing sales trends, regional performance, product category analysis, and customer segmentation. Includes user persona research and data-driven design process documentation.",
-          zh: "使用Tableau对超市销售业绩进行全面数据可视化分析的项目。采用交互式故事格式，包含多个仪表板，展示销售趋势、区域表现、产品类别分析和客户细分。包含用户画像研究和数据驱动设计流程文档。"
-        },
-        highlights: {
-          en: [
-            "Interactive Tableau Story with 5+ connected dashboards for multi-dimensional business analysis",
-            "User-centered design: Created detailed personas (Terrence & Sylvia) to guide visualization strategy",
-            "Comprehensive data exploration covering sales, profit, customer segments, and geographical performance",
-            "Design checklist and best practices documentation for reproducible analytics workflows"
-          ],
-          zh: [
-            "交互式Tableau故事板，包含5+个关联仪表板，支持多维度商业分析",
-            "以用户为中心的设计：创建详细用户画像（Terrence & Sylvia）指导可视化策略",
-            "全面的数据探索，涵盖销售、利润、客户细分和地理绩效分析",
-            "完整的设计检查清单和最佳实践文档，支持可复用的分析工作流"
-          ]
-        },
-        assets: [
-          { id: 'ts1', name: { en: "Tableau Public Interactive Story", zh: "Tableau Public 交互式故事板" }, type: "tableau-url", size: "Link", description: { en: "Interactive Tableau Story with 5+ connected dashboards for sales, profit, customer segments, and geographical performance analysis.", zh: "交互式 Tableau 故事板，包含5+个关联仪表板，展示销售、利润、客户细分和地理绩效分析。" }, url: "https://public.tableau.com/app/profile/joe.zhou4877/viz/superstore_project_JoeZhou/Story" },
-          { id: 'ts2', name: { en: "Design Checklist & Documentation", zh: "设计检查清单与文档" }, type: "pdf", size: "450 KB", description: { en: "Complete design checklist documenting the visualization design process, best practices, and quality assurance criteria.", zh: "完整的设计检查清单，记录可视化设计流程、最佳实践和质量保证标准。" }, url: "/portfolio/tableau-superstore/Design Checklist_JoeZhou.pdf" },
-          { id: 'ts3', name: { en: "User Persona 1: Terrence", zh: "用户画像1：Terrence" }, type: "pdf", size: "320 KB", description: { en: "Detailed persona for operations-focused stakeholders. Defines information needs for inventory, logistics, and operational efficiency.", zh: "面向运营利益相关者的详细画像。定义了库存、物流和运营效率的信息需求。" }, url: "/portfolio/tableau-superstore/Persona 2 Terrence.pdf" },
-          { id: 'ts4', name: { en: "User Persona 2: Sylvia", zh: "用户画像2：Sylvia" }, type: "pdf", size: "290 KB", description: { en: "Detailed persona for executive management. Defines strategic information needs for high-level business decision making.", zh: "面向高层管理的详细画像。定义了高层业务决策的战略信息需求。" }, url: "/portfolio/tableau-superstore/Sylvia-Persona.pdf" }
-        ],
-        versions: [{ version: 1, date: "2025-01-09", name: "tableau_superstore_project.zip", size: "2.2 MB", isCurrent: true }]
-      },
-      {
-        id: 'port-dognition-analytics',
-        title: { en: "Dognition User Behavior Analysis", zh: "Dognition 用户行为数据分析" },
-        subtitle: { en: "Data-Driven Business Process Change Proposal", zh: "项目：数据驱动的业务流程改进提案" },
-        type: "portfolio",
-        thumbnailUrl: "https://images.unsplash.com/photo-1587300003388-59208cc962cb?q=80&w=600&auto=format&fit=crop",
-        projectSummary: {
-          en: "Data visualization and business analysis project for Dognition, a company that provides dog personality assessments. Used Tableau Story to analyze user test completion patterns, breed type distributions, and personality dimension correlations. Delivered data-driven recommendations to increase user engagement and test completion rates through targeted marketing and content personalization.",
-          zh: "为 Dognition（一家提供狗狗性格评估的公司）进行的数据可视化和商业分析项目。使用 Tableau Story 分析用户测试完成模式、品种类型分布和性格维度相关性。通过有针对性的营销和内容个性化，提出数据驱动的建议以提高用户参与度和测试完成率。"
-        },
-        highlights: {
-          en: [
-            "Identified key engagement patterns: Socialite/Charmer personality types show 1.3-1.86x higher test completion rates",
-            "Breed analysis revealed purebred dogs dominate completed tests (52%), but mixed breeds represent 48% untapped potential",
-            "Developed data-driven recommendations for targeted marketing and breed-specific content strategies",
-            "Presented compelling 5-minute business proposal with supporting Tableau Story visualization"
-          ],
-          zh: [
-            "识别关键参与模式：社交型/魅力型性格的测试完成率高出 1.3-1.86 倍",
-            "品种分析显示纯种狗主导已完成测试（52%），但混种狗代表 48% 的未开发潜力",
-            "开发有针对性的营销和特定品种内容策略的数据驱动建议",
-            "通过 Tableau Story 可视化支持，进行了 5 分钟的引人入胜的商业提案演示"
-          ]
-        },
-        assets: [
-          { id: 'da1', name: { en: "Live Presentation Recording", zh: "在线演示录制" }, type: "tableau-url", size: "Link", description: { en: "Screen recording of the 5-minute business proposal presentation to Dognition management team, including data analysis and recommendations.", zh: "向 Dognition 管理层进行 5 分钟商业提案演示的屏幕录制，包含数据分析和建议。" }, url: "https://app.screencast.com/G3UHjWv7nx0G1" },
-          { id: 'da2', name: { en: "Tableau Public Interactive Story", zh: "Tableau Public 交互式故事板" }, type: "tableau-url", size: "Link", description: { en: "Interactive Tableau Story featuring bar charts, pie charts, bubble charts, and horizontal bar graphs supporting the business recommendations.", zh: "交互式 Tableau 故事板，包含支持商业建议的条形图、饼图、气泡图和水平条形图。" }, url: "https://public.tableau.com/views/doginition_17681907474040/Story?:language=zh-CN&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link" },
-          { id: 'da3', name: { en: "Project Requirements Document", zh: "项目需求文档" }, type: "markdown", size: "12 KB", description: { en: "Complete project requirements including objectives, Dognition company background, presentation format guidelines, and evaluation criteria.", zh: "完整的项目需求，包括目标、Dognition 公司背景、演示格式指南和评估标准。" }, url: "/portfolio/dognition/项目需求.md" },
-          { id: 'da4', name: { en: "Data Analytics Methodology", zh: "数据分析方法论" }, type: "markdown", size: "15 KB", description: { en: "Comprehensive 7-step data analysis framework covering requirement analysis, data cleaning, Tableau implementation, visualization design, and the 3C storytelling methodology.", zh: "完整的7步数据分析框架，涵盖需求分析、数据清洗、Tableau 实施、可视化设计和 3C 叙事方法论。" }, url: "/portfolio/dognition/数据分析方法论.md" }
-        ],
-        versions: [{ version: 1, date: "2025-01-12", name: "dognition_analytics_project.zip", size: "0.1 MB", isCurrent: true }]
-      },
-      {
-        id: 'port-wsd-property-management',
-        title: { en: "Watershed Property Management Analytics", zh: "物业管理数据分析 Capstone 项目" },
-        subtitle: { en: "Data-Driven Profit Optimization Strategy", zh: "项目：数据驱动的利润优化策略" },
-        type: "portfolio",
-        thumbnailUrl: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?q=80&w=600&auto=format&fit=crop",
-        projectSummary: {
-          en: "Comprehensive data analytics capstone project for Watershed Property Management, Inc. involving full-stack analysis from MySQL database extraction to Excel modeling and Tableau visualization. Developed a data-driven strategy to increase profits for thousands of residential rental properties across the United States through sensitivity analysis and risk assessment.",
-          zh: "为 Watershed Property Management, Inc. 进行的全面数据分析 Capstone 项目，涵盖从 MySQL 数据库提取到 Excel 建模和 Tableau 可视化的全栈分析流程。通过敏感性分析和风险评估，为美国数千个住宅租赁物业开发了数据驱动的利润增长策略。"
-        },
-        highlights: {
-          en: [
-            "End-to-end data pipeline: MySQL database extraction → Excel analysis → Tableau dashboard visualization",
-            "Sensitivity analysis dashboard identifying optimal revenue opportunities while managing risk exposure",
-            "Comprehensive White Paper documenting business process change recommendations",
-            "Executive presentation with strategic proposals for profit maximization"
-          ],
-          zh: [
-            "端到端数据管道：MySQL 数据库提取 → Excel 分析 → Tableau 仪表板可视化",
-            "敏感性分析仪表板，在管理风险敞口的同时识别最佳收入机会",
-            "完整的白皮书文档，详细说明业务流程变更建议",
-            "面向高管的战略提案演示，提供利润最大化建议"
-          ]
-        },
-        assets: [
-          { id: 'wsd1', name: { en: "Final Presentation Recording", zh: "最终演示录制" }, type: "tableau-url", size: "Link", description: { en: "Complete presentation recording showcasing data-driven profit optimization strategy recommendations for Watershed Property Management executives.", zh: "完整的演示录制，向 Watershed Property Management 高管展示数据驱动的利润优化战略建议。" }, url: "https://app.screencast.com/CruSBGtVhcFIS" },
-          { id: 'wsd2', name: { en: "Tableau Public Interactive Dashboard", zh: "Tableau Public 交互式仪表板" }, type: "tableau-url", size: "Link", description: { en: "Interactive Tableau dashboard featuring sensitivity analysis, property performance metrics, and profit optimization scenarios for Watershed Management.", zh: "交互式 Tableau 仪表板，包含敏感性分析、物业绩效指标和 Watershed 管理的利润优化情景。" }, url: "https://public.tableau.com/views/FinalProject_V1_9/WSDashboard?:language=zh-CN&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link" },
-          { id: 'wsd3', name: { en: "White Paper - Strategic Analysis", zh: "白皮书 - 战略分析" }, type: "pdf", size: "338 KB", description: { en: "Comprehensive white paper documenting the complete analysis methodology, data extraction process, statistical findings, and strategic recommendations for increasing property management profits.", zh: "完整的白皮书，记录了分析方法论、数据提取流程、统计发现以及提高物业管理利润的战略建议。" }, url: "/portfolio/tableau-wsd-project/White_Paper.pdf" },
-          { id: 'wsd4', name: { en: "Executive Presentation Slides", zh: "高管演示文稿" }, type: "pptx", size: "1.8 MB", description: { en: "Professional presentation deck prepared for Watershed executive team, featuring data visualizations, sensitivity analysis results, and profit optimization implementation roadmap.", zh: "为 Watershed 管理团队准备的专业演示文稿，包含数据可视化、敏感性分析结果和利润优化实施路线图。" }, url: "/portfolio/tableau-wsd-project/Final_Presentation.pptx" }
-        ],
-        versions: [{ version: 1, date: "2025-01-13", name: "watershed_property_management_capstone.zip", size: "8.3 MB", isCurrent: true }]
       }
     ]
   },
@@ -544,6 +558,14 @@ export const INITIAL_DOCUMENTS: DocumentCategory[] = [
         type: "certificate",
         thumbnailUrl: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=400&auto=format&fit=crop",
         versions: [{ version: 1, date: "2025-01-13", name: "Data_Visualization_and_Communication_with_Tableau.pdf", size: "1.5 MB", isCurrent: true }]
+      },
+      {
+        id: 'cert-real-estate-analytics-duke',
+        title: { en: "Increasing Real Estate Management Profits: Harnessing Data Analytics", zh: "房地产管理利润提升：数据分析应用" },
+        subtitle: { en: "Duke University / Coursera", zh: "机构: Duke University" },
+        type: "certificate",
+        thumbnailUrl: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?q=80&w=400&auto=format&fit=crop",
+        versions: [{ version: 1, date: "2025-01-14", name: "Increasing_Real_Estate_Management_Profits_Harnessing_Data_Analytics.pdf", size: "311 KB", isCurrent: true }]
       }
     ]
   }

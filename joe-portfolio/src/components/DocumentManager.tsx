@@ -6,6 +6,7 @@ import type { DocumentCategory, DocumentItem, ProjectAsset, Language } from '../
 import * as StorageService from '../services/storageService';
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
+import NotebookViewer from './NotebookViewer';
 
 interface Props {
   language: Language;
@@ -24,6 +25,9 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
   const [portfolioPage, setPortfolioPage] = useState(1);
   const [previewDoc, setPreviewDoc] = useState<DocumentItem | null>(null);
   const [previewAsset, setPreviewAsset] = useState<ProjectAsset | null>(null);
+  const [currentProject, setCurrentProject] = useState<DocumentItem | null>(null);
+  const [currentAssetIndex, setCurrentAssetIndex] = useState<number>(-1);
+  const [currentAssetList, setCurrentAssetList] = useState<ProjectAsset[]>([]);
   const [notebookContent, setNotebookContent] = useState<string>('');
   const [loadingNotebook, setLoadingNotebook] = useState(false);
   const [markdownContent, setMarkdownContent] = useState<string>('');
@@ -121,12 +125,23 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
   const closePreview = () => {
     setPreviewAsset(null);
     setPreviewDoc(null);
+    setCurrentProject(null);
+    setCurrentAssetIndex(-1);
+    setCurrentAssetList([]);
   };
 
-  const openPreviewAsset = (asset: ProjectAsset) => {
+  const openPreviewAsset = (asset: ProjectAsset, project?: DocumentItem, assetList?: ProjectAsset[]) => {
     // Save scroll position BEFORE opening preview
     scrollPositionRef.current = window.pageYOffset || document.documentElement.scrollTop;
     setPreviewAsset(asset);
+
+    // Store project and asset list for navigation
+    if (project && assetList) {
+      setCurrentProject(project);
+      setCurrentAssetList(assetList);
+      const index = assetList.findIndex(a => a.id === asset.id);
+      setCurrentAssetIndex(index);
+    }
   };
 
   const openPreviewDoc = (doc: DocumentItem) => {
@@ -134,6 +149,61 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
     scrollPositionRef.current = window.pageYOffset || document.documentElement.scrollTop;
     setPreviewDoc(doc);
   };
+
+  const navigateAsset = (direction: 'prev' | 'next') => {
+    if (currentAssetList.length === 0) return;
+
+    let newIndex = currentAssetIndex;
+    if (direction === 'prev') {
+      if (currentAssetIndex > 0) {
+        newIndex = currentAssetIndex - 1;
+      } else {
+        return; // Already at first, don't wrap
+      }
+    } else {
+      if (currentAssetIndex < currentAssetList.length - 1) {
+        newIndex = currentAssetIndex + 1;
+      } else {
+        return; // Already at last, don't wrap
+      }
+    }
+
+    const nextAsset = currentAssetList[newIndex];
+    if (nextAsset) {
+      setPreviewAsset(nextAsset);
+      setCurrentAssetIndex(newIndex);
+    }
+  };
+
+  // Handle keyboard navigation
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if (!previewAsset || !currentProject || currentAssetList.length === 0) return;
+
+      if (e.key === 'ArrowLeft') {
+        if (currentAssetIndex > 0) {
+          const prevAsset = currentAssetList[currentAssetIndex - 1];
+          if (prevAsset) {
+            setPreviewAsset(prevAsset);
+            setCurrentAssetIndex(currentAssetIndex - 1);
+          }
+        }
+      } else if (e.key === 'ArrowRight') {
+        if (currentAssetIndex < currentAssetList.length - 1) {
+          const nextAsset = currentAssetList[currentAssetIndex + 1];
+          if (nextAsset) {
+            setPreviewAsset(nextAsset);
+            setCurrentAssetIndex(currentAssetIndex + 1);
+          }
+        }
+      } else if (e.key === 'Escape') {
+        closePreview();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, [previewAsset, currentProject, currentAssetIndex, currentAssetList]);
 
   const handleDownload = (url: string | undefined, filename: string) => {
     if (!url) return;
@@ -276,62 +346,93 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
 
     return (
       <div className="fixed inset-0 z-[60] bg-slate-900/95 flex flex-col animate-fade-in p-4 md:p-8">
-        <div className="flex justify-between items-center mb-4 text-white">
-          <div className="flex items-center space-x-3">
+        <div className="flex justify-between items-start mb-4 text-white">
+          <div className="flex items-start space-x-3">
              <div className="bg-white/10 p-2 rounded">
                 {previewAsset ? getAssetIcon(previewAsset.type) : <svg className="w-6 h-6 text-accent-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>}
              </div>
              <div>
                <h3 className="text-xl font-bold leading-tight">{title}</h3>
                <p className="text-xs text-slate-400">{filename}</p>
+               {currentProject && currentAssetList.length > 1 && (
+                 <div className="mt-2 flex items-center space-x-2">
+                   <span className="px-2 py-1 bg-indigo-500/30 border border-indigo-400/50 rounded text-xs font-medium text-indigo-200">
+                     {currentProject.title[language]}
+                   </span>
+                   <span className="text-xs text-blue-400">
+                     {currentAssetIndex + 1} / {currentAssetList.length}
+                   </span>
+                 </div>
+               )}
              </div>
           </div>
-          <button onClick={closePreview} className="p-2 hover:bg-white/10 rounded-full transition-colors text-slate-300">
-            <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
-          </button>
+          <div className="flex items-center space-x-2">
+            {/* Navigation buttons - only show for assets in portfolio projects */}
+            {currentProject && currentAssetList.length > 1 && (
+              <>
+                <button
+                  onClick={() => navigateAsset('prev')}
+                  disabled={currentAssetIndex === 0}
+                  className={`p-2 rounded-full transition-all group relative ${
+                    currentAssetIndex === 0
+                      ? 'text-slate-600 cursor-not-allowed opacity-50'
+                      : 'text-slate-300 hover:bg-white/10 hover:scale-110'
+                  }`}
+                  title={language === 'en' ? 'Previous in this project (←)' : '本项目内上一个 (←)'}
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                  </svg>
+                  <span className="absolute top-full mt-1 left-1/2 -translate-x-1/2 text-xs bg-black/80 px-2 py-1 rounded opacity-0 group-hover:opacity-100 whitespace-nowrap pointer-events-none">
+                    {language === 'en' ? 'Previous in project' : '项目内上一个'}
+                  </span>
+                </button>
+                <button
+                  onClick={() => navigateAsset('next')}
+                  disabled={currentAssetIndex === currentAssetList.length - 1}
+                  className={`p-2 rounded-full transition-all group relative ${
+                    currentAssetIndex === currentAssetList.length - 1
+                      ? 'text-slate-600 cursor-not-allowed opacity-50'
+                      : 'text-slate-300 hover:bg-white/10 hover:scale-110'
+                  }`}
+                  title={language === 'en' ? 'Next in this project (→)' : '本项目内下一个 (→)'}
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                  <span className="absolute top-full mt-1 left-1/2 -translate-x-1/2 text-xs bg-black/80 px-2 py-1 rounded opacity-0 group-hover:opacity-100 whitespace-nowrap pointer-events-none">
+                    {language === 'en' ? 'Next in project' : '项目内下一个'}
+                  </span>
+                </button>
+              </>
+            )}
+            <button onClick={closePreview} className="p-2 hover:bg-white/10 rounded-full transition-colors text-slate-300 hover:scale-110" title={language === 'en' ? 'Close (Esc)' : '关闭 (Esc)'}>
+              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
+          </div>
         </div>
 
         {/* Image Preview */}
         {isImagePreview ? (
-          <div className="flex-grow flex flex-col bg-white rounded-xl shadow-2xl overflow-hidden">
-            <div className="flex-grow flex items-center justify-center p-4 md:p-8 overflow-auto" style={{ maxHeight: 'calc(100vh - 200px)' }}>
-              <img
-                src={previewAsset.url}
-                alt={title}
-                className="w-auto h-auto max-w-full object-contain"
-                style={{ maxHeight: '100%' }}
-                onError={(e) => {
-                  (e.currentTarget as HTMLImageElement).src = 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?q=80&w=1200&auto=format&fit=crop';
-                }}
-              />
-            </div>
-            <div className="p-4 bg-slate-50 border-t border-slate-200 flex justify-center flex-shrink-0">
-              <button
-                className="px-6 py-3 bg-corporate-800 text-white rounded-lg hover:bg-corporate-900 transition-all font-semibold shadow-lg"
-                onClick={() => handleDownload(previewAsset.url!, filename)}
-              >
-                {language === 'en' ? 'Download Image' : '下载图片'}
-              </button>
-            </div>
+          <div className="flex-grow flex items-center justify-center bg-white rounded-xl shadow-2xl overflow-hidden">
+            <img
+              src={previewAsset.url}
+              alt={title}
+              className="w-auto h-auto max-w-full max-h-[calc(100vh-180px)] object-contain p-4 md:p-8"
+              onError={(e) => {
+                (e.currentTarget as HTMLImageElement).src = 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?q=80&w=1200&auto=format&fit=crop';
+              }}
+            />
           </div>
         ) : isPdfPreview ? (
           /* PDF Preview with iframe */
-          <div className="flex-grow flex flex-col bg-white rounded-xl shadow-2xl overflow-hidden">
-            <div className="flex-grow overflow-hidden" style={{ maxHeight: 'calc(100vh - 180px)' }}>
-              <iframe
-                src={pdfUrl}
-                className="w-full h-full border-0"
-                title={title}
-              />
-            </div>
-            <div className="p-4 bg-slate-50 border-t border-slate-200 flex justify-center flex-shrink-0">
-              <button
-                className="px-6 py-3 bg-corporate-800 text-white rounded-lg hover:bg-corporate-900 transition-all font-semibold shadow-lg"
-                onClick={() => handleDownload(pdfUrl, filename)}
-              >
-                {language === 'en' ? 'Download PDF' : '下载 PDF'}
-              </button>
-            </div>
+          <div className="flex-grow bg-white rounded-xl shadow-2xl overflow-hidden">
+            <iframe
+              src={pdfUrl}
+              className="w-full h-full border-0"
+              style={{ height: 'calc(100vh - 180px)' }}
+              title={title}
+            />
           </div>
         ) : isPptxPreview ? (
           /* PowerPoint Preview */
@@ -409,7 +510,7 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
             )}
           </div>
         ) : isNotebookPreview ? (
-          /* Jupyter Notebook Preview with code viewer */
+          /* Jupyter Notebook Preview with rendered content */
           <div className="flex-grow flex flex-col bg-white rounded-xl shadow-2xl overflow-hidden">
             <div className="flex-grow overflow-auto p-6" style={{ maxHeight: 'calc(100vh - 180px)' }}>
               {loadingNotebook ? (
@@ -421,44 +522,42 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
                 </div>
               ) : notebookContent ? (
                 <div className="h-full">
-                  <div className="mb-4 p-3 bg-slate-50 rounded-lg border border-slate-200">
-                    <h4 className="text-sm font-bold text-slate-700 mb-2">
-                      {language === 'en' ? '📓 Jupyter Notebook Preview' : '📓 Jupyter Notebook 预览'}
+                  <div className="mb-4 p-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200">
+                    <h4 className="text-sm font-bold text-slate-700 mb-1 flex items-center">
+                      <svg className="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                      </svg>
+                      {language === 'en' ? '📓 Interactive Notebook Preview' : '📓 交互式笔记本预览'}
                     </h4>
-                    <p className="text-xs text-slate-500 mb-2">
+                    <p className="text-xs text-slate-600 mb-2">
                       {language === 'en'
-                        ? 'This is the raw JSON content of the notebook. For the best viewing experience, please download and open in Jupyter or VS Code.'
-                        : '这是笔记本的原始JSON内容。为了获得最佳查看体验，请下载后在Jupyter或VS Code中打开。'}
+                        ? 'Rendered notebook with syntax highlighting and formatted outputs. Code cells and outputs are displayed below.'
+                        : '带有语法高亮和格式化输出的渲染笔记本。代码单元格和输出显示在下方。'}
                     </p>
-                    <div className="flex items-center space-x-4 text-xs text-slate-600">
-                      <span className="px-2 py-1 bg-blue-100 text-blue-700 rounded">
-                        {notebookContent.split('\n').length} {language === 'en' ? 'lines' : '行'}
+                    <div className="flex items-center space-x-3 text-xs text-slate-600">
+                      <span className="px-2 py-1 bg-blue-100 text-blue-700 rounded flex items-center">
+                        <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
+                        </svg>
+                        {language === 'en' ? 'Syntax Highlighted' : '语法高亮'}
                       </span>
-                      <span className="px-2 py-1 bg-green-100 text-green-700 rounded">
-                        JSON Format
+                      <span className="px-2 py-1 bg-green-100 text-green-700 rounded flex items-center">
+                        <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                        </svg>
+                        {language === 'en' ? 'Formatted Output' : '格式化输出'}
                       </span>
                     </div>
                   </div>
-                  <pre className="bg-slate-900 text-slate-100 p-4 rounded-lg overflow-auto text-xs leading-relaxed font-mono" style={{ maxHeight: 'calc(100vh - 350px)' }}>
-                    <code>{notebookContent}</code>
-                  </pre>
+                  <div className="overflow-auto" style={{ maxHeight: 'calc(100vh - 280px)' }}>
+                    <NotebookViewer content={notebookContent} />
+                  </div>
                 </div>
               ) : (
                 <div className="flex items-center justify-center h-full">
                   <p className="text-red-500">{language === 'en' ? 'Failed to load notebook' : '加载笔记本失败'}</p>
                 </div>
               )}
-            </div>
-            <div className="p-4 bg-slate-50 border-t border-slate-200 flex justify-end flex-shrink-0">
-              <button
-                className="px-6 py-3 bg-corporate-800 text-white rounded-lg hover:bg-corporate-900 transition-all font-semibold shadow-lg"
-                onClick={() => {
-                  const extension = 'ipynb';
-                  handleDownload(notebookUrl, `${previewAsset?.name[language]}.${extension}`);
-                }}
-              >
-                {language === 'en' ? 'Download .ipynb File' : '下载 .ipynb 文件'}
-              </button>
             </div>
           </div>
         ) : isMarkdownPreview ? (
@@ -525,17 +624,6 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
                   <p className="text-red-500">{language === 'en' ? 'Failed to load markdown' : '加载 Markdown 失败'}</p>
                 </div>
               )}
-            </div>
-            <div className="p-4 bg-slate-50 border-t border-slate-200 flex justify-end flex-shrink-0">
-              <button
-                className="px-6 py-3 bg-corporate-800 text-white rounded-lg hover:bg-corporate-900 transition-all font-semibold shadow-lg"
-                onClick={() => {
-                  const extension = 'md';
-                  handleDownload(markdownUrl, `${previewAsset?.name[language]}.${extension}`);
-                }}
-              >
-                {language === 'en' ? 'Download .md File' : '下载 .md 文件'}
-              </button>
             </div>
           </div>
         ) : (
@@ -629,14 +717,10 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
             <div key={project.id} className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden flex flex-col lg:flex-row">
               {/* Left Column: Context (HR Attention) */}
               <div className="lg:w-1/3 p-8 bg-slate-50 border-r border-slate-100 flex flex-col">
-                 <div className="mb-6">
-                   <div className="flex items-center space-x-2 text-accent-600 font-bold text-xs uppercase tracking-widest mb-2">
-                     <span className="w-2 h-2 rounded-full bg-accent-600"></span>
-                     <span>{project.subtitle[language]}</span>
-                   </div>
+                 <div>
                    <h3 className="text-2xl font-black text-slate-900 leading-tight mb-4">{project.title[language]}</h3>
-                   <p className="text-slate-600 text-sm leading-relaxed mb-4 italic">
-                     "{project.projectSummary?.[language]}"
+                   <p className={`text-slate-600 text-sm mb-8 ${language === 'zh' ? 'leading-loose' : 'leading-relaxed'}`}>
+                     {project.projectSummary?.[language]}
                    </p>
 
                    {/* Live Demo Link */}
@@ -645,7 +729,7 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
                        href={project.liveUrl}
                        target="_blank"
                        rel="noopener noreferrer"
-                       className="mb-6 flex items-center justify-center space-x-2 py-3 px-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl hover:from-indigo-700 hover:to-purple-700 transition-all shadow-md hover:shadow-lg font-semibold text-sm"
+                       className="mb-8 flex items-center justify-center space-x-2 py-3 px-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl hover:from-indigo-700 hover:to-purple-700 transition-all shadow-md hover:shadow-lg font-semibold text-sm"
                      >
                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -658,13 +742,13 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
                      </a>
                    )}
 
-                   <div className="space-y-4">
+                   <div className="space-y-5">
                      <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest">
                        {language === 'en' ? 'Core Impact' : '核心价值/产出'}
                      </h4>
-                     <ul className="space-y-3">
+                     <ul className={language === 'zh' ? "space-y-5" : "space-y-3"}>
                        {project.highlights?.[language].map((h, i) => (
-                         <li key={i} className="flex items-start text-sm text-slate-700 font-medium">
+                         <li key={i} className={`flex items-start text-sm text-slate-700 font-medium ${language === 'zh' ? 'leading-loose' : ''}`}>
                            <svg className="w-4 h-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
                            {h}
                          </li>
@@ -705,7 +789,7 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
                               </a>
                             ) : (
                               <button
-                                onClick={() => openPreviewAsset(asset)}
+                                onClick={() => openPreviewAsset(asset, project, project.assets || [])}
                                 className="p-2 text-slate-400 hover:text-accent-600 hover:bg-accent-50 rounded-lg transition-all"
                                 title={language === 'en' ? 'Quick Look' : '快速预览'}
                               >
@@ -715,12 +799,12 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
                           </div>
                        </div>
                        <div>
-                         <h5 className={`font-bold text-sm mb-1 transition-colors ${asset.type === 'tableau-url' ? 'text-indigo-900 group-hover:text-indigo-700' : 'text-slate-800 group-hover:text-accent-700'}`}>{asset.name[language]}</h5>
-                         <p className={`line-clamp-2 leading-relaxed ${asset.type === 'tableau-url' ? 'text-xs text-indigo-700' : 'text-[11px] text-slate-500'}`}>{asset.description[language]}</p>
+                         <h5 className={`font-bold text-sm mb-2 transition-colors ${asset.type === 'tableau-url' ? 'text-indigo-900 group-hover:text-indigo-700' : 'text-slate-800 group-hover:text-accent-700'}`}>{asset.name[language]}</h5>
+                         <p className={`line-clamp-3 leading-relaxed ${asset.type === 'tableau-url' ? 'text-sm text-indigo-700 font-medium' : 'text-sm text-slate-600'}`}>{asset.description[language]}</p>
                        </div>
                        <div className="mt-3 pt-3 border-t border-slate-50 flex justify-between items-center">
-                         <span className={`font-bold uppercase ${asset.type === 'tableau-url' ? 'text-xs text-indigo-600' : 'text-[10px] text-slate-300'}`}>{asset.type}</span>
-                         <span className={`font-medium ${asset.type === 'tableau-url' ? 'text-xs text-indigo-600' : 'text-[10px] text-slate-400'}`}>{asset.size}</span>
+                         <span className={`font-bold uppercase ${asset.type === 'tableau-url' ? 'text-xs text-indigo-600' : 'text-xs text-slate-400'}`}>{asset.type}</span>
+                         <span className={`font-medium ${asset.type === 'tableau-url' ? 'text-xs text-indigo-600' : 'text-xs text-slate-400'}`}>{asset.size}</span>
                        </div>
                     </div>
                   ))}
@@ -821,7 +905,7 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
                       <div className="flex space-x-1">
                         {asset.url && asset.type === 'image' && (
                           <button
-                            onClick={() => openPreviewAsset(asset)}
+                            onClick={() => openPreviewAsset(asset, activeDocument, activeDocument.assets || [])}
                             className="p-2 text-slate-400 hover:text-accent-600 hover:bg-accent-50 rounded-lg transition-all"
                             title={language === 'en' ? 'Quick Look' : '快速预览'}
                           >
@@ -897,7 +981,7 @@ const DocumentManager: React.FC<Props> = ({ language, isAdmin }) => {
                     <button onClick={() => {
                       // If document has a single image asset, preview it directly
                       if (doc.assets && doc.assets.length === 1 && doc.assets[0].type === 'image') {
-                        openPreviewAsset(doc.assets[0]);
+                        openPreviewAsset(doc.assets[0], doc, doc.assets);
                       } else if (doc.assets && doc.assets.length > 0) {
                         setActiveDocument(doc);
                       } else {
