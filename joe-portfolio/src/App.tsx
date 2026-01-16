@@ -26,6 +26,17 @@ const App: React.FC = () => {
     return highlightSkillsEN.includes(skill) || highlightSkillsZH.includes(skill);
   };
 
+  // Helper function to check if a project role should have golden badge style
+  const isGoldenBadge = (projectName: string, role: string): boolean => {
+    const goldenProjectsEN = "CapEx Project Management System";
+    const goldenProjectsZH = "资本性支出项目管理系统";
+    const goldenRolesEN = "Lead Analyst";
+    const goldenRolesZH = "主分析师";
+
+    return (projectName === goldenProjectsEN || projectName === goldenProjectsZH) &&
+           (role === goldenRolesEN || role === goldenRolesZH);
+  };
+
   useEffect(() => {
     setContent(lang === 'en' ? CONTENT_EN : CONTENT_ZH);
     setIsAdmin(StorageService.checkAdmin());
@@ -54,6 +65,7 @@ const App: React.FC = () => {
       case 'camera': return <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" /></svg>;
       case 'globe': return <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>;
       case 'activity': return <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>;
+      case 'graduation-cap': return <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l9-5-9-5-9 5 9 5z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" /></svg>;
     }
   };
 
@@ -173,7 +185,7 @@ const App: React.FC = () => {
               </p>
 
               <div className="flex flex-wrap gap-4 pt-4">
-                <button onClick={() => scrollToSection('portfolio')} className="group relative px-8 py-4 bg-accent-600 hover:bg-accent-500 text-white font-bold rounded-xl shadow-xl shadow-accent-600/20 transition-all hover:-translate-y-0.5">
+                <button onClick={() => scrollToSection('experience')} className="group relative px-8 py-4 bg-accent-600 hover:bg-accent-500 text-white font-bold rounded-xl shadow-xl shadow-accent-600/20 transition-all hover:-translate-y-0.5">
                   <span className="flex items-center">
                     {content.hero.cta}
                     <svg className="w-5 h-5 ml-2 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
@@ -202,7 +214,7 @@ const App: React.FC = () => {
                         </div>
                       </div>
                       <div>
-                        <h3 className="text-white font-bold text-base">Joe Zhou</h3>
+                        <h3 className="text-white font-bold text-base">{lang === 'en' ? 'Joe Zhou' : '周永祥'}</h3>
                         <p className="text-accent-300 text-xs font-mono">{lang === 'en' ? 'FINANCE & DATA' : '金融 & 数据'}</p>
                       </div>
                     </div>
@@ -224,7 +236,7 @@ const App: React.FC = () => {
                              <p className="text-[10px] text-slate-400">{lang === 'en' ? 'Years Exp' : '工作年限'}</p>
                           </div>
                           <div className="bg-white/5 rounded-lg p-3 text-center">
-                             <p className="text-xl font-bold text-white">12<span className="text-xs text-accent-400">+</span></p>
+                             <p className="text-xl font-bold text-white">8<span className="text-xs text-accent-400">+</span></p>
                              <p className="text-[10px] text-slate-400">{lang === 'en' ? 'Projects' : '项目经验'}</p>
                           </div>
                        </div>
@@ -370,9 +382,19 @@ const App: React.FC = () => {
                       <div key={pIdx} className="bg-slate-50 rounded-xl p-6 border border-slate-100 hover:border-accent-200 hover:shadow-lg transition-all group">
                         <div className="flex justify-between items-start mb-3">
                           <h5 className="font-bold text-corporate-800 group-hover:text-accent-600 transition-colors">{proj.name}</h5>
-                          <span className="text-xs font-semibold bg-white text-slate-500 px-2 py-1 rounded border border-slate-200">
-                            {proj.role}
-                          </span>
+                          {isGoldenBadge(proj.name, proj.role) ? (
+                            <span className="relative inline-flex items-center px-3 py-1.5 text-xs font-extrabold rounded-full bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 text-amber-900 border-2 border-amber-300 shadow-lg shadow-amber-500/30">
+                              <span className="absolute inset-0 rounded-full bg-gradient-to-r from-transparent via-white/40 to-transparent opacity-50"></span>
+                              <svg className="w-3.5 h-3.5 mr-1.5 text-amber-700 relative z-10" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+                              </svg>
+                              <span className="relative z-10">{proj.role}</span>
+                            </span>
+                          ) : (
+                            <span className="text-xs font-semibold bg-white text-slate-500 px-2 py-1 rounded border border-slate-200">
+                              {proj.role}
+                            </span>
+                          )}
                         </div>
                         <ul className="text-sm text-slate-600 space-y-2 mb-4 min-h-[80px]">
                           {proj.description.map((d, di) => (

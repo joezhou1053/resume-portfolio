@@ -72,7 +72,7 @@ export interface SkillSet {
 export interface LifeItem {
   title: string;
   description: string;
-  icon: 'book' | 'camera' | 'globe' | 'activity';
+  icon: 'book' | 'camera' | 'globe' | 'activity' | 'graduation-cap';
 }
 
 export interface AppContent {

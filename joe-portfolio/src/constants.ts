@@ -29,37 +29,37 @@ export const CONTENT_EN: AppContent = {
       period: "2023.01 - Present",
       location: "Fuzhou, China",
       description: [
-        "Led requirements gathering and analysis for large-scale enterprise systems.",
-        "Acted as the primary liaison between business stakeholders and development teams.",
-        "Conducted data auditing and anomaly detection for critical operational data."
+        "Oversee the entire product requirement lifecycle. By standardizing backlog management, the average delivery cycle is reduced by 30%. The defect rate identified during UAT is only 5%, significantly improving release quality and stakeholder satisfaction.",
+        "Utilize tools including SQL and Excel VBA to establish an automated data audit SOP, improving manual verification efficiency by over 85% and accurately identifying/resolving an average of over 200 data anomalies annually.",
+        "Develop system manuals and FAQs, providing continuous post-launch operational support. Respond to and resolve an average of over 700 user inquiries promptly each year and iterate documentation through 3 major updates based on feedback, achieving a 97% overall user satisfaction rate."
       ],
       projects: [
         {
           name: "CapEx Project Management System",
           role: "Lead Analyst",
           description: [
-            "Designed workflows for capital expenditure tracking.",
-            "Reduced reporting latency by 30% through optimized data structures."
+            "Design and structure requirements for master and annual budget pools to enable full-process control over capital expenditures.",
+            "Establish closed-loop management from budget allocation to project closure through seamless SAP integration, achieving business-finance integration."
           ],
-          technologies: ["Visio", "SQL", "Axure", "XMind"]
+          technologies: ["Visio", "Axure", "XMind"]
         },
         {
-          name: "Field Management APP",
-          role: "Product Owner",
-          description: [
-            "Managed the lifecycle of a mobile app for field engineers.",
-            "Oversaw interface integration and joint debugging."
-          ],
-          technologies: ["Mobile UI/UX", "API Testing"]
-        },
-        {
-          name: "Construction Professional Dashboard",
+          name: "Construction-Specialized Dashboard",
           role: "Data Analyst",
           description: [
-            "Defined KPIs and visualized construction progress data.",
-            "Ensured data accuracy through rigorous verification processes."
+            "Collaborate with users to organize data dictionaries and define key performance indicators (KPIs).",
+            "Process and cleanse large volumes of construction data, performing audits to ensure data quality."
           ],
-          technologies: ["Tableau Date Visualization", "Excel", "Data Cleaning"]
+          technologies: ["MySQL", "Tableau Visualization", "EXCEL VBA", "Data Audit"]
+        },
+        {
+          name: "Construction On-Site Management APP",
+          role: "Assistant Analyst",
+          description: [
+            "Assist in designing a watermark camera feature by referring to successful domestic telecom cases.",
+            "Responsible for interaction design and functional iterations of the rectification order module."
+          ],
+          technologies: ["Mobile UE Design", "Product Design", "Competitive Product Analysis"]
         }
       ]
     }
@@ -129,37 +129,37 @@ export const CONTENT_ZH: AppContent = {
       period: "2023.01 - 至今",
       location: "中国 福州",
       description: [
-        "负责大型企业级系统的需求调研、分析与文档编写。",
-        "作为业务部门与开发团队的核心桥梁，确保需求准确落地。",
-        "负责机房搬迁验证、数据稽核及异常数据处理工作。"
+        "负责需求全生命周期管理。通过标准化需求池管理，将平均需求交付周期缩短了30%。 UAT阶段发现的缺陷率仅为5%，显著提升上线质量与业务方满意度。",
+        "运用SQL，Excel VBA等工具， 构建自动化数据稽核SOP，将人工核查效率提升85%以上，年均精准识别并推动解决数据异常逾200项。",
+        "编写系统操作手册及常见问题文档，上线后提供持续运营支持。年均及时响应并解决用户咨询逾700次，基于反馈迭代文档3版。用户综合满意度达97%。"
       ],
       projects: [
         {
           name: "资本性支出项目管理系统",
           role: "主分析师",
           description: [
-            "梳理并设计资本开支全流程管理功能。",
-            "通过优化数据流转逻辑，提升了报表生成效率。"
+            "梳理并设计总预算池和年度预算池如何对资本开支进行全流程管控的需求。",
+            "通过与SAP系统紧密交互，实现从预算下达到项目关闭的闭环管理，实现业财集成。"
           ],
-          technologies: ["Visio", "SQL", "Axure", "XMind"]
+          technologies: ["Visio", "Axure", "XMind"]
         },
         {
-          name: "现场管理 APP",
-          role: "需求负责人",
-          description: [
-            "负责外勤人员管理应用的功能迭代与设计。",
-            "主导接口联调测试，确保前后端数据一致性。"
-          ],
-          technologies: ["移动端交互设计", "接口测试"]
-        },
-        {
-          name: "建设专业 Dashboard",
+          name: "建设专业Dashboard",
           role: "数据分析",
           description: [
-            "定义关键绩效指标(KPI)，设计可视化大屏。",
-            "处理海量建设数据，进行清洗与稽核，确保数据质量。"
+            "协助用户梳理数据字典及定义关键绩效指标（KPI）。",
+            "处理海量建设数据，进行清洗和稽核，确保数据质量。"
           ],
-          technologies: ["Tableau数据可视化", "Excel", "数据清洗"]
+          technologies: ["MySQL", "Tableau 数据可视化", "EXCEL VBA", "数据稽核"]
+        },
+        {
+          name: "施工现场管理APP",
+          role: "助理分析师",
+          description: [
+            "参考国内电信成功案例，协助设计水印相机功能。",
+            "负责整改单模块的交互设计与功能迭代。"
+          ],
+          technologies: ["移动端交互设计", "产品设计", "竞品分析"]
         }
       ]
     }
